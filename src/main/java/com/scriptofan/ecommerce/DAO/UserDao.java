@@ -17,7 +17,19 @@ public class UserDao {
     public UserDao() {
         this.dummyUsers = new HashMap<String, User>(){
             {
-                put("00000000", new User("00000000", "somebody@gamil.com"));
+                put("00000000", new User(
+                        "00000000",
+                        "Frank",
+                        "Schnurr",
+                        "somebody@gmail.com")
+                );
+
+                put("00000000", new User(
+                        "00000001",
+                        "Jeff",
+                        "Bezos",
+                        "rich.guy@amazon.com")
+                );
             }
         };
     }
