@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
 public class UserCredentials {
 

@@ -1,11 +1,11 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
-import com.scriptofan.ecommerce.Exception.DuplicateSKUException;
-import com.scriptofan.ecommerce.Exception.InventoryAlreadyAssociatedException;
-import com.scriptofan.ecommerce.Exception.MalformedItemException;
-import com.scriptofan.ecommerce.Exception.NoSuchItemException;
+import com.scriptofan.ecommerce.internal.user.Exception.DuplicateSKUException;
+import com.scriptofan.ecommerce.internal.user.Exception.InventoryAlreadyAssociatedException;
+import com.scriptofan.ecommerce.internal.user.Exception.MalformedItemException;
+import com.scriptofan.ecommerce.internal.user.Exception.NoSuchItemException;
 
 public class Inventory {
 

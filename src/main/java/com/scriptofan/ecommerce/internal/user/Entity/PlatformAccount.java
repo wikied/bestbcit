@@ -1,7 +1,7 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
-import com.scriptofan.ecommerce.Exception.AccountAlreadyAssociatedException;
-import com.scriptofan.ecommerce.Exception.AccountIdAlreadySetException;
+import com.scriptofan.ecommerce.internal.user.Exception.AccountAlreadyAssociatedException;
+import com.scriptofan.ecommerce.internal.user.Exception.AccountIdAlreadySetException;
 
 /**
  * An account on a retail plaform (Etsy, Ebay).

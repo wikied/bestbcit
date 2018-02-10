@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
 /**
  * A Scriptofan Ecommerce User. Aggregates all components of a user.

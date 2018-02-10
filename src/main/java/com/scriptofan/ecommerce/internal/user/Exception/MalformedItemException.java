@@ -1,10 +1,9 @@
-package com.scriptofan.ecommerce.Exception;
+package com.scriptofan.ecommerce.internal.user.Exception;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import com.scriptofan.ecommerce.Entity.Item;
+import com.scriptofan.ecommerce.internal.user.Entity.Item;
 
 /**
  * An item was improperly formed. Contains an optional collection of

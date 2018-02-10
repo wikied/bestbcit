@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
 import java.net.URL;
 import java.util.List;

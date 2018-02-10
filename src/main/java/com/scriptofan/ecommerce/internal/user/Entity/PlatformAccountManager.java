@@ -1,11 +1,9 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
-import com.scriptofan.ecommerce.Exception.*;
-import javafx.application.Platform;
+import com.scriptofan.ecommerce.internal.user.Exception.*;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**

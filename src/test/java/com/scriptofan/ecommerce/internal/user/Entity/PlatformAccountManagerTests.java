@@ -1,8 +1,8 @@
-package com.scriptofan.ecommerce.Entity;
+package com.scriptofan.ecommerce.internal.user.Entity;
 
-import com.scriptofan.ecommerce.Exception.DuplicatePlatformAccountIdException;
-import com.scriptofan.ecommerce.Exception.MalformedPlatformAccountException;
-import com.scriptofan.ecommerce.Exception.ManagerAlreadyAssociatedException;
+import com.scriptofan.ecommerce.internal.user.Exception.DuplicatePlatformAccountIdException;
+import com.scriptofan.ecommerce.internal.user.Exception.MalformedPlatformAccountException;
+import com.scriptofan.ecommerce.internal.user.Exception.ManagerAlreadyAssociatedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
