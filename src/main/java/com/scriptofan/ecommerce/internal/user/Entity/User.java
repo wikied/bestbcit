@@ -14,7 +14,7 @@ public class User {
     // User Components
     // private UserCredentials         credentials;
     // private UserProfile             profile;
-    // private Inventory               inventory;
+    private Inventory               inventory;
     private PlatformAccountManager  platformAccountManager;
 
     // Constructors

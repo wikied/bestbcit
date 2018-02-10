@@ -91,14 +91,19 @@ public class Inventory {
      * @param item Item to add to Inventory.
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
      */
-    public void add(Item item) throws MalformedItemException {
+    public void add(SkuConflictOption skuConflictOption, Item item)
+        throws  MalformedItemException,
+                DuplicateSKUException
+    {
         String sku = item.getSKU();
 
-        if (sku != null && !sku.equals("")) {
-            this.contents.put(sku, item);
-        } else {
+        if (sku == null || sku.equals("")) {
             throw new MalformedItemException("SKU not specified");
         }
+
+        item = handleSkuConflict(skuConflictOption, item);
+
+        this.contents.put(sku, item);
     }
 
     /**
@@ -108,11 +113,11 @@ public class Inventory {
      * @throws DuplicateSKUException Duplicate SKUs detected in submission or in inventory.
      * @throws MalformedItemException Item SKU is not specified.
      */
-    public void add(Collection<Item> items)
+    public void add(SkuConflictOption skuConflictOption, Collection<Item> items)
         throws  DuplicateSKUException,
                 MalformedItemException
     {
-        this.add((Item[]) items.toArray());
+        this.add(skuConflictOption, (Item[]) items.toArray());
     }
 
     /**
@@ -122,7 +127,7 @@ public class Inventory {
      * @throws DuplicateSKUException Duplicate SKUs detected in submission or in inventory.
      * @throws MalformedItemException Item SKU is not specified.
      */
-    public void add(Item... items)
+    public void add(SkuConflictOption skuConflictOption, Item... items)
         throws  DuplicateSKUException,
                 MalformedItemException
     {
@@ -143,13 +148,53 @@ public class Inventory {
                 throw new DuplicateSKUException("Items with SKUs submitted.");
             }
 
-            if (this.contents.containsKey(sku)) {
-                throw new DuplicateSKUException("Duplicate SKU found in inventory.");
-            }
+            item = handleSkuConflict(skuConflictOption, item);
 
             itemBuffer.put(sku, item);
         }
 
         this.contents.putAll(itemBuffer);
+    }
+
+    /*
+     * Helper function. Decides what to do with items whose
+     * SKUs match an item already in inventory.
+     */
+    private Item handleSkuConflict(
+            SkuConflictOption   skuConflictOption,
+            Item                item)
+        throws
+            DuplicateSKUException
+    {
+        String sku = item.getSKU();
+
+        switch (skuConflictOption) {
+            case FAIL:
+                if (this.contents.containsKey(sku)) {
+                    throw new DuplicateSKUException();
+                }
+                break;
+            case OVERWRITE:
+                break;
+            case MERGE_QUANTITIES_AND_UPDATE:
+                if (this.contents.containsKey(sku)) {
+                    int quantity = item.getQuantity();
+                    quantity += this.contents.get(sku).getQuantity();
+                    item.setQuantity(quantity);
+                }
+                break;
+            default:
+        }
+
+        return item;
+    }
+
+    /**
+     * Defines what to do when an item with a duplicate SKU is added to the inventory.
+     */
+    public enum SkuConflictOption {
+        FAIL,
+        OVERWRITE,
+        MERGE_QUANTITIES_AND_UPDATE
     }
 }
