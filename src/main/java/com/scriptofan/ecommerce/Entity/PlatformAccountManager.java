@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce.Entity;
 
 import com.scriptofan.ecommerce.Exception.AccountAlreadyAssociatedException;
+import com.scriptofan.ecommerce.Exception.MalformedAccountMapException;
 import com.scriptofan.ecommerce.Exception.ManagerAlreadyAssociatedException;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ public class PlatformAccountManager {
     /**
      * Default constructor.
      */
-    public PlatformAccountManager() { }
+    public PlatformAccountManager() {}
 
     /**
      * Constructor. Associates a User with the PlatformAccountManager.
@@ -32,14 +33,17 @@ public class PlatformAccountManager {
      * Constructor. Associates a User with the PlatformAccountManager.
      *
      * @param associatedUser User to associate with this PlatformAccountManager.
-     * @param associatedUser User to associate with this PlatformAccountManager.
+     * @param accountMap Map of Platform Accounts to associate with this PlatformAccountManager.
+     * @throws MalformedAccountMapException Account map is malformed.
      */
-    public PlatformAccountManager(
-        User                            associatedUser,
-        Map<String, PlatformAccount>    accounts
-    ) {
+    public PlatformAccountManager(User                          associatedUser,
+                                  Map<String, PlatformAccount>  accountMap)
+        throws MalformedAccountMapException
+    {
+        validateAccountMap(accountMap);
+
         this.associatedUser = associatedUser;
-        this.accounts = accounts;
+        this.accounts       = accountMap;
     }
 
     /**
@@ -84,17 +88,39 @@ public class PlatformAccountManager {
      * Initializes this PlatformAccountManager's internal accounts
      * with a provided map.
      *
-     * @param accounts
+     * @param accountMap Map of accounts to add.
      * @throws AccountAlreadyAssociatedException
      */
-    public void setAccounts(Map<String, PlatformAccount> accounts)
-        throws AccountAlreadyAssociatedException
+    public void setAccounts(Map<String, PlatformAccount> accountMap)
+        throws  AccountAlreadyAssociatedException,
+                MalformedAccountMapException
     {
         if (this.accounts == null) {
-            // TODO: Add account validation.
-            this.accounts = accounts;
+            validateAccountMap(accountMap);
+            this.accounts = accountMap;
         } else {
             throw new AccountAlreadyAssociatedException();
+        }
+    }
+
+    /*
+     * Validates a map of accounts. Throws a MalformedAccountMapException if
+     * any of the keys are not equal to the associated PlatformAccount.accountId values.
+     */
+    private static void validateAccountMap(Map<String, PlatformAccount> accountMap)
+        throws MalformedAccountMapException
+    {
+        String keyId;
+        String accountId;
+
+        for (Map.Entry<String, PlatformAccount> entry : accountMap.entrySet()) {
+
+            keyId       = entry.getKey();
+            accountId   = entry.getValue().getPlatformAccountId();
+
+            if (!keyId.equals(accountId)) {
+                throw new MalformedAccountMapException();
+            }
         }
     }
 }
