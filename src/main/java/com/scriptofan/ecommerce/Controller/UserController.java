@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Controller;
 
 import com.scriptofan.ecommerce.Entity.Item;
 import com.scriptofan.ecommerce.Entity.User;
-import com.scriptofan.ecommerce.Service.InventoryService;
 import com.scriptofan.ecommerce.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +26,15 @@ public class UserController {
 
     @GetMapping("/{userId}/inventory")
     public Collection<Item> getEntireInventory(
-            @PathVariable("userId") String userId
+        @PathVariable("userId") String userId
     ) {
         return this.inventoryService.getEntireInventory(userId);
     }
 
     @GetMapping("/{userId}/inventory/{itemSKU}")
     public Item getItemBySKU(
-            @PathVariable("userId")     String userId,
-            @PathVariable("itemSKU")    String SKU
+        @PathVariable("userId")     String userId,
+        @PathVariable("itemSKU")    String SKU
     ) {
         return this.inventoryService.getItemBySKU(userId, SKU);
     }

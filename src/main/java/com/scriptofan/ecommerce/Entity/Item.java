@@ -5,16 +5,16 @@ import java.util.List;
 
 public class Item {
 
-    private String      SKU;
-    private int         quantity;
-    private double      price;
+    private String SKU;
+    private int quantity;
+    private double price;
 
-    private String      title;
-    private String      description;
-    private String      whoMade;
+    private String title;
+    private String description;
+    private String whoMade;
 
-    private Condition   condition;
-    private List<URL>   Images;
+    private Condition condition;
+    private List<URL> Images;
 
     /**
      * Primary constructor
@@ -32,29 +32,69 @@ public class Item {
     }
 
     // Accessors & Mutators
-    public String       getSKU()                            { return SKU; }
-    public void         setSKU(String SKU)                  { this.SKU = SKU; }
+    public String getSKU() {
+        return SKU;
+    }
 
-    public int          getQuantity()                       { return quantity; }
-    public void         setQuantity(int quantity)           { this.quantity = quantity; }
+    public void setSKU(String SKU) {
+        this.SKU = SKU;
+    }
 
-    public double       getPrice()                          { return price; }
-    public void         setPrice(double price)              { this.price = price; }
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public String       getTitle()                          { return title; }
-    public void         setTitle(String title)              { this.title = title; }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-    public String       getDescription()                    { return description; }
-    public void         setDescription(String description)  { this.description = description; }
+    public double getPrice() {
+        return price;
+    }
 
-    public String       getWhoMade()                        { return whoMade; }
-    public void         setWhoMade(String whoMade)          { this.whoMade = whoMade; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-    public Condition    getCondition()                      { return condition; }
-    public void         setCondition(Condition condition)   { this.condition = condition; }
+    public String getTitle() {
+        return title;
+    }
 
-    public List<URL>    getImages()                         { return Images; }
-    public void         setImages(List<URL> images)         { Images = images; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getWhoMade() {
+        return whoMade;
+    }
+
+    public void setWhoMade(String whoMade) {
+        this.whoMade = whoMade;
+    }
+
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Condition condition) {
+        this.condition = condition;
+    }
+
+    public List<URL> getImages() {
+        return Images;
+    }
+
+    public void setImages(List<URL> images) {
+        Images = images;
+    }
 
     /**
      * Represents an item's condition.

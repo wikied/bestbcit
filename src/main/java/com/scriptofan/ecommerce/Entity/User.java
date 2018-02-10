@@ -1,55 +1,22 @@
 package com.scriptofan.ecommerce.Entity;
 
+/**
+ * A Scriptofan Ecommerce User. Aggregates all components of a user.
+ */
 public class User {
 
-    private String  uuid;
-    private String  firstName;
-    private String  lastName;
-    private String  email;
+    // User ID
+    private String                  uuid;
+
+    // User Components
+    private UserCredentials         credentials;
+    private UserProfile             profile;
+    private Inventory               inventory;
+    private PlatformAccountManager  platformAccountManager;
 
     // Constructors
-    public User(
-        String      uuid,
-        String      firstName,
-        String      lastName,
-        String      email
-    ) {
-        this.uuid   = uuid;
-        this.email  = email;
-    }
-
     public User() {}
-
-    // Accessors & Mutators
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
+    public User(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 }
