@@ -3,6 +3,8 @@ package com.scriptofan.ecommerce.Entity;
 import com.scriptofan.ecommerce.Exception.AccountAlreadyAssociatedException;
 import com.scriptofan.ecommerce.Exception.MalformedAccountMapException;
 import com.scriptofan.ecommerce.Exception.ManagerAlreadyAssociatedException;
+import com.scriptofan.ecommerce.Exception.NoSuchPlatformAccountException;
+import javafx.application.Platform;
 
 import java.util.Collection;
 import java.util.Map;
@@ -121,6 +123,24 @@ public class PlatformAccountManager {
             if (!keyId.equals(accountId)) {
                 throw new MalformedAccountMapException();
             }
+        }
+    }
+
+    /**
+     * Returns platform account associated with specified accountId.
+     *
+     * @param accountId Account ID of account to retrieve.
+     * @return PlatformAccount associated with specified accountID.
+     * @throws NoSuchPlatformAccountException No account associated with
+     * specified accountId.
+     */
+    public PlatformAccount getPlatformAccountById(String accountId)
+        throws NoSuchPlatformAccountException
+    {
+        if (this.accounts.containsKey(accountId)) {
+            return this.accounts.get(accountId);
+        } else {
+            throw new NoSuchPlatformAccountException();
         }
     }
 }
