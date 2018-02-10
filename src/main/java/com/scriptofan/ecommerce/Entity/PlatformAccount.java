@@ -16,17 +16,35 @@ public abstract class PlatformAccount {
     public abstract String getAccessToken();
     public abstract void setAccessToken(String accessToken);
 
-    // Constructors
+    /**
+     * Default constructor.
+     */
     public PlatformAccount() {}
 
+    /**
+     * Constructor. Sets platform account unique ID.
+     *
+     * @param platformAccountId Unique ID to associate with platform account.
+     */
     public PlatformAccount(String platformAccountId) {
         this.platformAccountId = platformAccountId;
     }
 
+    /**
+     * Constructor. Sets associated user.
+     *
+     * @param associatedUser User to associate with platform account.
+     */
     public PlatformAccount(User associatedUser) {
         this.associatedUser = associatedUser;
     }
 
+    /**
+     * Constructor. Sets associated user and platform account.
+     *
+     * @param platformAccountId Unique ID to associate with platform account.
+     * @param associatedUser User to associate with platform account.
+     */
     public PlatformAccount(String platformAccountId, User associatedUser) {
         this.platformAccountId = platformAccountId;
         this.associatedUser = associatedUser;
