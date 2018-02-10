@@ -85,18 +85,12 @@ public class PlatformAccountManager {
      * @throws DuplicatePlatformAccountIdException Duplicate accountID found.
      */
     public void add(PlatformAccount account)
-        throws  MalformedPlatformAccountException,
-                DuplicatePlatformAccountIdException
+        throws  DuplicatePlatformAccountIdException
     {
         String accountId = account.getPlatformAccountId();
 
         if (this.accounts.containsKey(accountId)) {
             throw new DuplicatePlatformAccountIdException();
-        }
-
-        if (account.getAssociatedUser() != this.associatedUser) {
-            throw new MalformedPlatformAccountException(
-                "PlatformAccount User must be same as PlatformAccountManager user");
         }
 
         this.accounts.put(accountId, account);
@@ -110,8 +104,7 @@ public class PlatformAccountManager {
      * @throws DuplicatePlatformAccountIdException Duplicate accountIDs found.
      */
     public void add(PlatformAccount... accounts)
-        throws  MalformedPlatformAccountException,
-                DuplicatePlatformAccountIdException
+        throws  DuplicatePlatformAccountIdException
     {
         String                      accountId;
         Map<String,PlatformAccount> accountBuffer;
@@ -131,12 +124,6 @@ public class PlatformAccountManager {
             if (accountBuffer.containsKey(accountId)) {
                 throw new DuplicatePlatformAccountIdException(
                     "Accounts with duplicate accountIDs submitted: " + accountId);
-            }
-
-            // Associated user doesn't equal the PlatformAccountManager's user
-            if (account.getAssociatedUser() != this.associatedUser) {
-                throw new MalformedPlatformAccountException(
-                        "PlatformAccount User must be same as PlatformAccountManager user");
             }
 
             accountBuffer.put(accountId, account);
