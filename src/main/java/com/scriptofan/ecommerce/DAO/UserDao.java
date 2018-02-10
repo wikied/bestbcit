@@ -15,7 +15,7 @@ public class UserDao {
      * Default constructor. Creates collection of dummy users.
      */
     public UserDao() {
-        this.dummyUsers = new HashMap<String, User>(){
+       /*  this.dummyUsers = new HashMap<String, User>(){
             {
                 put("00000000", new User(
                         "00000000",
@@ -31,7 +31,7 @@ public class UserDao {
                         "rich.guy@amazon.com")
                 );
             }
-        };
+        }; */
     }
 
     /**
