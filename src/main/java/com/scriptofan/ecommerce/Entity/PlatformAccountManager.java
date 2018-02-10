@@ -4,9 +4,7 @@ import com.scriptofan.ecommerce.Exception.AccountAlreadyAssociatedException;
 import com.scriptofan.ecommerce.Exception.ManagerAlreadyAssociatedException;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Aggregate that manages all platform accounts for a user.
