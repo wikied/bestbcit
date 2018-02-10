@@ -1,12 +1,11 @@
 package com.scriptofan.ecommerce.Entity;
 
-import com.scriptofan.ecommerce.Exception.AccountAlreadyAssociatedException;
-import com.scriptofan.ecommerce.Exception.MalformedAccountMapException;
-import com.scriptofan.ecommerce.Exception.ManagerAlreadyAssociatedException;
-import com.scriptofan.ecommerce.Exception.NoSuchPlatformAccountException;
+import com.scriptofan.ecommerce.Exception.*;
 import javafx.application.Platform;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -20,7 +19,9 @@ public class PlatformAccountManager {
     /**
      * Default constructor.
      */
-    public PlatformAccountManager() {}
+    public PlatformAccountManager() {
+        accounts = new HashMap<String, PlatformAccount>();
+    }
 
     /**
      * Constructor. Associates a User with the PlatformAccountManager.
@@ -28,24 +29,8 @@ public class PlatformAccountManager {
      * @param associatedUser User to associate with this PlatformAccountManager.
      */
     public PlatformAccountManager(User associatedUser) {
+        this();
         this.associatedUser = associatedUser;
-    }
-
-    /**
-     * Constructor. Associates a User with the PlatformAccountManager.
-     *
-     * @param associatedUser User to associate with this PlatformAccountManager.
-     * @param accountMap Map of Platform Accounts to associate with this PlatformAccountManager.
-     * @throws MalformedAccountMapException Account map is malformed.
-     */
-    public PlatformAccountManager(User                          associatedUser,
-                                  Map<String, PlatformAccount>  accountMap)
-        throws MalformedAccountMapException
-    {
-        validateAccountMap(accountMap);
-
-        this.associatedUser = associatedUser;
-        this.accounts       = accountMap;
     }
 
     /**
@@ -76,71 +61,90 @@ public class PlatformAccountManager {
         }
     }
 
-    /**
-     * Returns a collection of all platform accounts managed by
-     * this PlatformAccountManager.
-     *
-     * @return All accounts managed by this PlatformAccountManager.
-     */
-    public Collection<PlatformAccount> getAccounts() {
-        return accounts.values();
-    }
+    public PlatformAccount getAccount( String id ) {
+        PlatformAccount returnAccount = null;
 
-    /**
-     * Initializes this PlatformAccountManager's internal accounts
-     * with a provided map.
-     *
-     * @param accountMap Map of accounts to add.
-     * @throws AccountAlreadyAssociatedException
-     */
-    public void setAccounts(Map<String, PlatformAccount> accountMap)
-        throws  AccountAlreadyAssociatedException,
-                MalformedAccountMapException
-    {
-        if (this.accounts == null) {
-            validateAccountMap(accountMap);
-            this.accounts = accountMap;
-        } else {
-            throw new AccountAlreadyAssociatedException();
+        if (this.accounts.containsKey(id)) {
+            returnAccount = this.accounts.get(id);
         }
+
+        return returnAccount;
     }
 
-    /*
-     * Validates a map of accounts. Throws a MalformedAccountMapException if
-     * any of the keys are not equal to the associated PlatformAccount.accountId values.
-     */
-    private static void validateAccountMap(Map<String, PlatformAccount> accountMap)
-        throws MalformedAccountMapException
-    {
-        String keyId;
-        String accountId;
+    public Collection<PlatformAccount> getAllAccounts() {
+        return this.accounts.values();
+    }
 
-        for (Map.Entry<String, PlatformAccount> entry : accountMap.entrySet()) {
-
-            keyId       = entry.getKey();
-            accountId   = entry.getValue().getPlatformAccountId();
-
-            if (!keyId.equals(accountId)) {
-                throw new MalformedAccountMapException();
-            }
-        }
+    public boolean containsAccount( String id ) {
+        return this.accounts.containsKey(id);
     }
 
     /**
-     * Returns platform account associated with specified accountId.
+     * Adds a PlatformAccount to this PlatformAccountManager.
      *
-     * @param accountId Account ID of account to retrieve.
-     * @return PlatformAccount associated with specified accountID.
-     * @throws NoSuchPlatformAccountException No account associated with
-     * specified accountId.
+     * @param account
+     * @throws MalformedPlatformAccountException PlatformAccount wasn't properly formed.
+     * @throws DuplicatePlatformAccountIdException Duplicate accountID found.
      */
-    public PlatformAccount getPlatformAccountById(String accountId)
-        throws NoSuchPlatformAccountException
+    public void add(PlatformAccount account)
+        throws  MalformedPlatformAccountException,
+                DuplicatePlatformAccountIdException
     {
+        String accountId = account.getPlatformAccountId();
+
         if (this.accounts.containsKey(accountId)) {
-            return this.accounts.get(accountId);
-        } else {
-            throw new NoSuchPlatformAccountException();
+            throw new DuplicatePlatformAccountIdException();
         }
+
+        if (account.getAssociatedUser() != this.associatedUser) {
+            throw new MalformedPlatformAccountException(
+                "PlatformAccount User must be same as PlatformAccountManager user");
+        }
+
+        this.accounts.put(accountId, account);
     }
+
+    /**
+     * Adds multiple PlatformAccounts to PlatformAccountManager.
+     *
+     * @param accounts Variable list of PlatformAccounts.
+     * @throws MalformedPlatformAccountException One of the PlatformAccounts wasn't properly formed.
+     * @throws DuplicatePlatformAccountIdException Duplicate accountIDs found.
+     */
+    public void add(PlatformAccount... accounts)
+        throws  MalformedPlatformAccountException,
+                DuplicatePlatformAccountIdException
+    {
+        String                      accountId;
+        Map<String,PlatformAccount> accountBuffer;
+
+        accountBuffer = new HashMap<String, PlatformAccount>();
+
+        for (PlatformAccount account : accounts) {
+            accountId = account.getPlatformAccountId();
+
+            // Duplicate ID already stored
+            if (this.accounts.containsKey(accountId)) {
+                throw new DuplicatePlatformAccountIdException(
+                    "Listed accountID " + accountId + " already exists in account.");
+            }
+
+            // Duplicate account IDs were submitted
+            if (accountBuffer.containsKey(accountId)) {
+                throw new DuplicatePlatformAccountIdException(
+                    "Accounts with duplicate accountIDs submitted: " + accountId);
+            }
+
+            // Associated user doesn't equal the PlatformAccountManager's user
+            if (account.getAssociatedUser() != this.associatedUser) {
+                throw new MalformedPlatformAccountException(
+                        "PlatformAccount User must be same as PlatformAccountManager user");
+            }
+
+            accountBuffer.put(accountId, account);
+        }
+
+        this.accounts.putAll(accountBuffer);
+    }
+
 }
