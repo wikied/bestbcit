@@ -90,6 +90,66 @@ public class Inventory {
      *
      * @param item Item to add to Inventory.
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory.
+     */
+    public void add(Item item)
+        throws  MalformedItemException,
+                DuplicateSKUException
+    {
+        this.add(SkuConflictOption.FAIL, item);
+    }
+
+    /**
+     * Adds a collection of Items to the Inventory. Throws an exception if SKU is not
+     * specified, or if there are any duplicate SKUs, either in the collection, or
+     * in the inventory.
+     *
+     * This method is transactional. Either all items are added, or none.
+     *
+     * @param items Item to add to Inventory.
+     * @throws MalformedItemException Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory.
+     */
+    public void add(Collection<Item> items)
+            throws  DuplicateSKUException,
+            MalformedItemException
+    {
+        this.add(SkuConflictOption.FAIL, (Item[]) items.toArray());
+    }
+
+    /**
+     * Adds an array or variable list of of Items to the Inventory. Throws an exception
+     * if SKU is not specified, or if there are any duplicate SKUs, either in the
+     * collection, or in the inventory.
+     *
+     * This method is transactional. Either all items are added, or none.
+     *
+     * @param items Item to add to Inventory.
+     * @throws MalformedItemException Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory.
+     */
+    public void add(Item... items)
+            throws  DuplicateSKUException,
+            MalformedItemException
+    {
+        this.add(SkuConflictOption.FAIL, items);
+    }
+
+    /**
+     * Adds an Item to the Inventory. If the item's SKU is already
+     * in the inventory, skuConflictOption determines how to handle
+     * that collision.
+     *
+     * SkuConflictOption.FAIL throws an exception at conflict.
+     * SkuConflictOption.OVERWRITE overwrites the existing item.
+     * SKuConflictOption.MERGE_QUANTITIES_AND_UPDATE adds the quantity
+     *                   of the existing item to the new item, then
+     *                   overwrites the conflicting item in the Inventory.
+     *
+     * @param skuConflictOption Determines how to handle duplicate SKUs.
+     * @param item Item to add to Inventory.
+     * @throws MalformedItemException Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory.
      */
     public void add(SkuConflictOption skuConflictOption, Item item)
         throws  MalformedItemException,
@@ -107,11 +167,26 @@ public class Inventory {
     }
 
     /**
-     * Adds items to inventory. Fails if duplicate SKUs are detected.
+     * Adds Items to the Inventory. If any item's SKUs are already
+     * in the inventory, skuConflictOption determines how to handle
+     * that collision.
      *
-     * @param items Collection of items.
-     * @throws DuplicateSKUException Duplicate SKUs detected in submission or in inventory.
-     * @throws MalformedItemException Item SKU is not specified.
+     * SkuConflictOption.FAIL throws an exception at conflict.
+     * SkuConflictOption.OVERWRITE overwrites the existing item.
+     * SKuConflictOption.MERGE_QUANTITIES_AND_UPDATE adds the quantity
+     *                   of the existing item to the new item, then
+     *                   overwrites the conflicting item in the Inventory.
+     *
+     * Regardless, if any duplicate SKUs are detected in the submitted
+     * collection, an exception is thrown and the entire operation is
+     * cancelled.
+     *
+     * This method is transactional. Either all items are written, or none.
+     *
+     * @param skuConflictOption Determines how to handle duplicate SKUs.
+     * @param items Collection of Items to add to Inventory.
+     * @throws MalformedItemException An Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory or in submission.
      */
     public void add(SkuConflictOption skuConflictOption, Collection<Item> items)
         throws  DuplicateSKUException,
@@ -121,11 +196,26 @@ public class Inventory {
     }
 
     /**
-     * Adds items to inventory. Fails if duplicate SKUs are detected.
+     * Adds Items to the Inventory. If any item's SKUs are already
+     * in the inventory, skuConflictOption determines how to handle
+     * that collision.
      *
-     * @param items Array or variable arguments set of items.
-     * @throws DuplicateSKUException Duplicate SKUs detected in submission or in inventory.
-     * @throws MalformedItemException Item SKU is not specified.
+     * SkuConflictOption.FAIL throws an exception at conflict.
+     * SkuConflictOption.OVERWRITE overwrites the existing item.
+     * SKuConflictOption.MERGE_QUANTITIES_AND_UPDATE adds the quantity
+     *                   of the existing item to the new item, then
+     *                   overwrites the conflicting item in the Inventory.
+     *
+     * Regardless, if any duplicate SKUs are detected in the submitted
+     * collection, an exception is thrown and the entire operation is
+     * cancelled.
+     *
+     * This method is transactional. Either all items are written, or none.
+     *
+     * @param skuConflictOption Determines how to handle duplicate SKUs.
+     * @param items Array or variable arguments list of Items to add to Inventory.
+     * @throws MalformedItemException An Item did not have SKU (or SKU was empty).
+     * @throws DuplicateSKUException Duplicate SKU found in Inventory or in submission.
      */
     public void add(SkuConflictOption skuConflictOption, Item... items)
         throws  DuplicateSKUException,
