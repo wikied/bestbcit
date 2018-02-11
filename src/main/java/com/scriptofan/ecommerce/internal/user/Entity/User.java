@@ -1,7 +1,9 @@
 package com.scriptofan.ecommerce.internal.user.Entity;
 
 import com.scriptofan.ecommerce.internal.user.Exception.AccountIdAlreadySetException;
+import com.scriptofan.ecommerce.internal.user.Exception.InventoryAlreadyAssociatedException;
 import com.scriptofan.ecommerce.internal.user.Exception.ManagerAlreadyAssociatedException;
+import com.scriptofan.ecommerce.internal.user.Exception.ProfileAlreadyAssociatedException;
 
 /**
  * A Scriptofan Ecommerce User. Aggregates all components of a user.
@@ -13,7 +15,7 @@ public class User {
 
     // User Components
     // private UserCredentials         credentials;
-    // private UserProfile             profile;
+    private UserProfile             profile;
     private Inventory               inventory;
     private PlatformAccountManager  platformAccountManager;
 
@@ -83,6 +85,31 @@ public class User {
         {
             throw new ManagerAlreadyAssociatedException(
                 "This User is already associated with a PlatformAccountManager");
+        }
+    }
+
+    public UserProfile getProfile() { return profile; }
+
+    public void setProfile(UserProfile profile)
+    throws ProfileAlreadyAssociatedException
+    {
+        if (this.profile != null) {
+            this.profile = profile;
+        } else {
+            throw new ProfileAlreadyAssociatedException();
+        }
+    }
+
+    public Inventory getInventory() { return inventory; }
+
+    public void setInventory(Inventory inventory)
+    throws InventoryAlreadyAssociatedException
+    {
+
+        if (this.inventory != null) {
+            this.inventory = inventory;
+        } else {
+            throw new InventoryAlreadyAssociatedException();
         }
     }
 }
