@@ -28,7 +28,6 @@ public class Offer {
 
     // Constructor
     public Offer() {
-
     }
 
     public String getSku() {

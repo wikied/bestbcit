@@ -16,6 +16,10 @@ public class ListingPolicies {
     // used once the offer is published
     String fulfillmentPolicyId;
 
+    public ListingPolicies() {
+
+    }
+
     public String getPaymentPolicyId() {
         return paymentPolicyId;
     }

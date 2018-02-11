@@ -6,6 +6,10 @@ public class PricingSummary {
     // Listing price of the offer
     Amount price;
 
+    // Constructor
+    public PricingSummary() {
+    }
+
     public Amount getPrice() {
         return price;
     }
