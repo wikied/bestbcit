@@ -39,6 +39,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- OpenCSV library needed to parse CSV files -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
