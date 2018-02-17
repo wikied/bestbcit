@@ -11,15 +11,15 @@ import com.scriptofan.ecommerce.internal.user.Exception.NoSuchItemException;
 public class Inventory {
 
     private User                associatedUser;
-    private Map<String, Item>   contents;
+    private Map<String, LocalItem>   contents;
 
     // Constructors
     public Inventory() {
-        this.contents = new HashMap<String, Item>();
+        this.contents = new HashMap<String, LocalItem>();
     }
     public Inventory(User associatedUser) {
         this.associatedUser = associatedUser;
-        this.contents       = new HashMap<String, Item>();
+        this.contents       = new HashMap<String, LocalItem>();
     }
 
     /**
@@ -53,7 +53,7 @@ public class Inventory {
      * Returns contents of inventory.
      * @return Contents of Inventory.
      */
-    public Collection<Item> getAll()
+    public Collection<LocalItem> getAll()
     {
         return this.contents.values();
     }
@@ -76,7 +76,7 @@ public class Inventory {
      * @return Item associated with SKU.
      * @throws NoSuchItemException No item exists with this SKU.
      */
-    public Item get(String sku) throws NoSuchItemException {
+    public LocalItem get(String sku) throws NoSuchItemException {
         if (this.contents.containsKey(sku)) {
             return this.contents.get(sku);
         } else {
@@ -92,7 +92,7 @@ public class Inventory {
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory.
      */
-    public void add(Item item)
+    public void add(LocalItem item)
         throws  MalformedItemException,
                 DuplicateSKUException
     {
@@ -110,11 +110,11 @@ public class Inventory {
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory.
      */
-    public void add(Collection<Item> items)
+    public void add(Collection<LocalItem> items)
             throws  DuplicateSKUException,
             MalformedItemException
     {
-        this.add(SkuConflictOption.FAIL, (Item[]) items.toArray());
+        this.add(SkuConflictOption.FAIL, (LocalItem[]) items.toArray());
     }
 
     /**
@@ -128,7 +128,7 @@ public class Inventory {
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory.
      */
-    public void add(Item... items)
+    public void add(LocalItem... items)
             throws  DuplicateSKUException,
             MalformedItemException
     {
@@ -151,7 +151,7 @@ public class Inventory {
      * @throws MalformedItemException Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory.
      */
-    public void add(SkuConflictOption skuConflictOption, Item item)
+    public void add(SkuConflictOption skuConflictOption, LocalItem item)
         throws  MalformedItemException,
                 DuplicateSKUException
     {
@@ -188,11 +188,11 @@ public class Inventory {
      * @throws MalformedItemException An Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory or in submission.
      */
-    public void add(SkuConflictOption skuConflictOption, Collection<Item> items)
+    public void add(SkuConflictOption skuConflictOption, Collection<LocalItem> items)
         throws  DuplicateSKUException,
                 MalformedItemException
     {
-        this.add(skuConflictOption, (Item[]) items.toArray());
+        this.add(skuConflictOption, (LocalItem[]) items.toArray());
     }
 
     /**
@@ -217,16 +217,16 @@ public class Inventory {
      * @throws MalformedItemException An Item did not have SKU (or SKU was empty).
      * @throws DuplicateSKUException Duplicate SKU found in Inventory or in submission.
      */
-    public void add(SkuConflictOption skuConflictOption, Item... items)
+    public void add(SkuConflictOption skuConflictOption, LocalItem... items)
         throws  DuplicateSKUException,
                 MalformedItemException
     {
         String              sku;
-        Map<String, Item>   itemBuffer;
+        Map<String, LocalItem>   itemBuffer;
 
-        itemBuffer = new HashMap<String, Item>();
+        itemBuffer = new HashMap<String, LocalItem>();
 
-        for (Item item : items)
+        for (LocalItem item : items)
         {
             sku = item.getSKU();
 
@@ -250,9 +250,9 @@ public class Inventory {
      * Helper function. Decides what to do with items whose
      * SKUs match an item already in inventory.
      */
-    private Item handleSkuConflict(
+    private LocalItem handleSkuConflict(
             SkuConflictOption   skuConflictOption,
-            Item                item)
+            LocalItem                item)
         throws
             DuplicateSKUException
     {

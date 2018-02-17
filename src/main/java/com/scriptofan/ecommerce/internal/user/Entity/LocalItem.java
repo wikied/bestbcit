@@ -7,7 +7,7 @@ public class LocalItem {
 
     private String          SKU;
     private int             quantity;
-    private Condition       condition;
+    private String          condition;
     private String          title;
     private String          description;
     private List<String>    images;
@@ -23,18 +23,10 @@ public class LocalItem {
     private double          price;
 
     /**
-     * Primary constructor
-     *
-     * @param SKU
-     * @param quantity
-     * @param price
-     * @param title
+     * Default constructor.
      */
-    public LocalItem(String SKU, int quantity, double price, String title) {
-        this.SKU = SKU;
-        this.quantity = quantity;
-        this.price = price;
-        this.title = title;
+    public LocalItem() {
+
     }
 
     // Accessors & Mutators
@@ -78,11 +70,11 @@ public class LocalItem {
         this.description = description;
     }
 
-    public Condition getCondition() {
+    public String getCondition() {
         return condition;
     }
 
-    public void setCondition(Condition condition) {
+    public void setCondition(String condition) {
         this.condition = condition;
     }
 
@@ -142,10 +134,16 @@ public class LocalItem {
         this.weightUnit = weightUnit;
     }
 
-    /**
-     * Represents an item's condition.
-     */
-    public enum Condition {
-        // TODO: Fill
+    public void setDimensions(double length, double width, double height, String unit) {
+        this.setLength(length);
+        this.setWidth(width);
+        this.setHeight(height);
+        this.setDimensionUnit(unit);
     }
+
+    public void setWeight(double weight, String unit) {
+        this.setWeight(weight);
+        this.setWeightUnit(unit);
+    }
+
 }

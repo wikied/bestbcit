@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.internal.user.Exception;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.scriptofan.ecommerce.internal.user.Entity.Item;
+import com.scriptofan.ecommerce.internal.user.Entity.LocalItem;
 
 /**
  * An item was improperly formed. Contains an optional collection of
@@ -12,13 +12,13 @@ import com.scriptofan.ecommerce.internal.user.Entity.Item;
  */
 public class MalformedItemException extends Exception {
 
-    private Collection<Item> malformedItems;
+    private Collection<LocalItem> malformedItems;
 
     /**
      * Default constructor.
      */
     public MalformedItemException() {
-        malformedItems = new ArrayList<Item>();
+        malformedItems = new ArrayList<LocalItem>();
     }
 
     /**
@@ -28,7 +28,7 @@ public class MalformedItemException extends Exception {
      */
     public MalformedItemException(String message) {
         super(message);
-        malformedItems = new ArrayList<Item>();
+        malformedItems = new ArrayList<LocalItem>();
     }
 
     /**
@@ -38,7 +38,7 @@ public class MalformedItemException extends Exception {
      *
      * @param malformedItems Collection of malformed items to throw with exception.
      */
-    public MalformedItemException(Collection<Item> malformedItems)
+    public MalformedItemException(Collection<LocalItem> malformedItems)
     {
         super();
         this.malformedItems = malformedItems;
@@ -52,7 +52,7 @@ public class MalformedItemException extends Exception {
      * @param message Message to include with the exception.
      * @param malformedItems Collection of malformed items to throw with exception.
      */
-    public MalformedItemException(String message, Collection<Item> malformedItems)
+    public MalformedItemException(String message, Collection<LocalItem> malformedItems)
     {
         super(message);
         this.malformedItems = malformedItems;
@@ -65,7 +65,7 @@ public class MalformedItemException extends Exception {
      *
      * @return collection of malformed items.
      */
-    public Collection<Item> getMalformedItems() {
+    public Collection<LocalItem> getMalformedItems() {
         return malformedItems;
     }
 
@@ -76,7 +76,7 @@ public class MalformedItemException extends Exception {
      *
      * @param item Item to add to the collection
      */
-    public void addMalformedItem(Item item) {
+    public void addMalformedItem(LocalItem item) {
         this.malformedItems.add(item);
     }
 }
