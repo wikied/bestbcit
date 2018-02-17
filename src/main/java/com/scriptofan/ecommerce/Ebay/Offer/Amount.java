@@ -11,8 +11,9 @@ public class Amount {
     // https://developer.ebay.com/api-docs/buy/feed/types/bas:CurrencyCodeEnum
     String currency;
 
-    public Amount() {
-
+    public Amount(String value, String currency) {
+        this.value = value;
+        this.currency = currency;
     }
 
     public String getValue() {
