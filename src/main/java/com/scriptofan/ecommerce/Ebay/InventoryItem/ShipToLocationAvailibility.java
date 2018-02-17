@@ -11,13 +11,18 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
  */
 public class ShipToLocationAvailibility {
 
+    /**
+     * Represents the default item quantity if none is specified.
+     */
+    public static final int DEFAULT_QUANTITY = 0;
+
     private int quantity;
 
     /**
      * Default constructor.
      */
     public ShipToLocationAvailibility() {
-        this.quantity = 0;
+        this.quantity = DEFAULT_QUANTITY;
     }
 
     /**
