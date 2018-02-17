@@ -5,16 +5,22 @@ import java.util.List;
 
 public class Item {
 
-    private String SKU;
-    private int quantity;
-    private double price;
+    private String      SKU;
+    private int         quantity;
+    private Condition   condition;
+    private String      title;
+    private String      description;
+    private List<URL>   images;
 
-    private String title;
-    private String description;
-    private String whoMade;
+    private double      height;
+    private double      length;
+    private double      width;
+    // private lengthUnitMeasureEnum dimensionUnit;
 
-    private Condition condition;
-    private List<URL> Images;
+    private double      weight;
+    // private weightUnitEnum weightUnit;
+
+    private double      price;
 
     /**
      * Primary constructor
@@ -72,14 +78,6 @@ public class Item {
         this.description = description;
     }
 
-    public String getWhoMade() {
-        return whoMade;
-    }
-
-    public void setWhoMade(String whoMade) {
-        this.whoMade = whoMade;
-    }
-
     public Condition getCondition() {
         return condition;
     }
@@ -89,11 +87,11 @@ public class Item {
     }
 
     public List<URL> getImages() {
-        return Images;
+        return images;
     }
 
     public void setImages(List<URL> images) {
-        Images = images;
+        images = images;
     }
 
     /**
