@@ -5,22 +5,22 @@ import java.util.List;
 
 public class LocalItem {
 
-    private String      SKU;
-    private int         quantity;
-    private Condition   condition;
-    private String      title;
-    private String      description;
-    private List<URL>   images;
+    private String          SKU;
+    private int             quantity;
+    private Condition       condition;
+    private String          title;
+    private String          description;
+    private List<String>    images;
 
-    private double      height;
-    private double      length;
-    private double      width;
+    private double          height;
+    private double          length;
+    private double          width;
     // private lengthUnitMeasureEnum dimensionUnit;
 
-    private double      weight;
+    private double          weight;
     // private weightUnitEnum weightUnit;
 
-    private double      price;
+    private double          price;
 
     /**
      * Primary constructor
@@ -86,11 +86,11 @@ public class LocalItem {
         this.condition = condition;
     }
 
-    public List<URL> getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(List<URL> images) {
+    public void setImages(List<String> images) {
         images = images;
     }
 
