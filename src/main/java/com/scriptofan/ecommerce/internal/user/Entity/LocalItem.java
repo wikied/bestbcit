@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.internal.user.Entity;
 import java.net.URL;
 import java.util.List;
 
-public class Item {
+public class LocalItem {
 
     private String      SKU;
     private int         quantity;
@@ -30,7 +30,7 @@ public class Item {
      * @param price
      * @param title
      */
-    public Item(String SKU, int quantity, double price, String title) {
+    public LocalItem(String SKU, int quantity, double price, String title) {
         this.SKU = SKU;
         this.quantity = quantity;
         this.price = price;
