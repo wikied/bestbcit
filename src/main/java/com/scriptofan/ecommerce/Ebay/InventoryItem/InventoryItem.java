@@ -8,13 +8,13 @@ import java.util.ArrayList;
 
 public class InventoryItem {
 
-    private Availability availability;
-    private ConditionEnum condition;
-    private String conditionDescription;
-    private PackageWeightAndSize packageWeightAndSize;
-    private Product product;
-    private String sku;
-    private ArrayList<String> groupids[];
+    private Availability            availability;
+    private ConditionEnum           condition;
+    private String                  conditionDescription;
+    private PackageWeightAndSize    packageWeightAndSize;
+    private Product                 product;
+    private String                  sku;
+    private ArrayList<String>       groupids[];
 
     //Constructor that accepts the end point SKU
     @RequestMapping(value = "{sku}")
