@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
 /**
- * Represents a unit of measurement for Ebay items.
+ * Represents a dimension (length/width/height) unit of measurement for Ebay items.
  *
  * @author  Jason Huang
  * @author  Patrick Charles-Lundaahl
@@ -50,6 +50,6 @@ public enum LengthUnitOfMeasureEnum{
             return LengthUnitOfMeasureEnum.METER;
         }
 
-        throw new IllegalArgumentException("Invalid unit of measurement string");
+        throw new IllegalArgumentException("String passed as a unit for measuring dimensions was invalid.");
     }
 }
