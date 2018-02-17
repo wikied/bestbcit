@@ -43,6 +43,23 @@ public class Dimension{
         this.unit   = unit;
     }
 
+    /**
+     * Initializer constructor. Sets the dimensions and unit.
+     *
+     * @param length Length.
+     * @param width  Width.
+     * @param height Height.
+     * @param unit   Unit of measurement.
+     */
+    public Dimension(
+            double length,
+            double width,
+            double height,
+            String unit
+    ) {
+        this(length, width, height, LengthUnitOfMeasureEnum.getUnit(unit));
+    }
+
     public double getHeight() {
         return height;
     }
