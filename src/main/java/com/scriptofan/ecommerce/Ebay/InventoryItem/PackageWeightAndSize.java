@@ -50,4 +50,14 @@ public class PackageWeightAndSize {
         this.weight = weight;
     }
 
+    /**
+     * Sets the package's weight.
+     *
+     * @param unit   String representing unit of measurement.
+     * @param weight Value of weight in specified unit.
+     */
+    public void setWeight(String unit, double weight) {
+        this.weight = new Weight(unit, weight);
+    }
+
 }
