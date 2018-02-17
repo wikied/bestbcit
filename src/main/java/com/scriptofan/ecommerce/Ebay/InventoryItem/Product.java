@@ -7,13 +7,16 @@ import java.util.List;
 
 public class Product {
 
-    private List<Object> aspects;
-    private String       brand;
+    // Required Attributes
+    private String       title;
     private String       description;
+    private List<Object> aspects;
     private List<String> imageUrls;
+
+    // Optional Attributes
+    private String       brand;
     private String       mpn;
     private String       subtitle;
-    private String       title;
     private List<String> isbn;
     private List<String> upc;
     private List<String> ean;

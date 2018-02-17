@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
 /**
  * Represents package dimensions for Ebay items.
  *
- * @author  Daniel Zhang
+ * @author  Jason Huang
  * @author  Patrick Charles-Lundaahl
  * @vesrion 1.1
  */

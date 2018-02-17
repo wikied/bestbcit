@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Container for the availability information associated with Ebay
  * items.
  *
- * @author  Daniel Zhang
+ * @author  Jason Huang
  * @author  Patrick Charles-Lundaahl
  * @version 1.1
  */

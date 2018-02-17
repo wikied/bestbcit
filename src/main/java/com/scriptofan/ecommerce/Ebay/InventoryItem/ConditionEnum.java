@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.scriptofan.ecommerce.internal.user.Entity.LocalItem;
+
 public enum ConditionEnum {
     NEW,
     LIKE_NEW,
