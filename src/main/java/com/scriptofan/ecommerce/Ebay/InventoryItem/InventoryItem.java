@@ -60,6 +60,15 @@ public class InventoryItem {
         this.availability = availability;
     }
 
+    /**
+     * Sets the available quantity of items to be shipped.
+     *
+     * @param availability int representing quantity.
+     */
+    public void setAvailability(int availability) {
+        this.setAvailability(new Availability(availability));
+    }
+
     public void setCondition(ConditionEnum condition) {
         this.condition = condition;
     }
