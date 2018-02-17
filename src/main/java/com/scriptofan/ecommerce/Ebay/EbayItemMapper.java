@@ -21,22 +21,24 @@ public class EbayItemMapper {
      * @return Ebay InventoryItem.
      */
     public InventoryItem createEbayItem(LocalItem item) {
-        InventoryItem           ebayItem = null;
+        InventoryItem           ebayItem;
         Product                 product;
         PackageWeightAndSize    packageWeightAndSize;
 
         // Container Ebay Item, with all the top-level attributes.
+        ebayItem = new InventoryItem();
         ebayItem.setSku(item.getSKU());
         ebayItem.setCondition(ITEM_DEFAULT_CONDITION);
         ebayItem.setConditionDescription(null);
         ebayItem.setAvailability(new Availability(item.getQuantity()));
 
         // Product. Contains all of the descriptive information.
+        // TODO: Add aspects
         product = new Product();
         product.setTitle(       item.getTitle());
         product.setDescription( item.getDescription());
         product.setImageUrls(   item.getImages());
-        // TODO: Aspects
+        ebayItem.setProduct(product);
 
         // Dimension Information
         packageWeightAndSize = new PackageWeightAndSize();
@@ -48,6 +50,7 @@ public class EbayItemMapper {
 
         packageWeightAndSize.setWeight(item.getWeightUnit(),
                                        item.getWeight());
+        ebayItem.setPackageWeightAndSize(packageWeightAndSize);
 
         return ebayItem;
     }
