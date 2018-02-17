@@ -1,8 +1,8 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
 public class Weight{
-        private WeightUnitOfMeasureEnum unit;
-        private double value;
+        private WeightUnitOfMeasureEnum     unit;
+        private double                      value;
 
     public WeightUnitOfMeasureEnum getUnit() {
         return unit;

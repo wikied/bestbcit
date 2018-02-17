@@ -2,10 +2,10 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
 
 public class Dimension{
-    private double height;
-    private double width;
-    private double length;
-    LengthUnitOfMeasureEnum unit;
+    private double              height;
+    private double              width;
+    private double              length;
+    LengthUnitOfMeasureEnum     unit;
 
     public double getHeight() {
         return height;

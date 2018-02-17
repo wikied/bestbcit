@@ -2,10 +2,10 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
 public class PickUpAtLocationAvailibility {
 
-    private AvailabilityTypeEnum availabilityTypeEnum;
-    private String merchantLocationKey;
-    private int quantity;
-    private TimeDuration fulfillmentTime;
+    private AvailabilityTypeEnum    availabilityTypeEnum;
+    private String                  merchantLocationKey;
+    private int                     quantity;
+    private TimeDuration            fulfillmentTime;
 
 
     public AvailabilityTypeEnum getAvailabilityTypeEnum() {

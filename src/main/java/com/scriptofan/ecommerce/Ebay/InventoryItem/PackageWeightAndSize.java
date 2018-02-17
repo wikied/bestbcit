@@ -2,9 +2,9 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
 public class PackageWeightAndSize {
 
-    private Dimension dimensions;
-    private PackageTypeEnum packageTypeEnum;
-    private Weight weight;
+    private Dimension           dimensions;
+    private PackageTypeEnum     packageTypeEnum;
+    private Weight              weight;
 
 
     public Dimension getDimensions() {

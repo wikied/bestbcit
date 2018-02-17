@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Availability {
 
-    private ArrayList<PickUpAtLocationAvailibility> pickUpAtLocationAvailibilities;
-    private ShipToLocationAvailibility shipToLocationAvailibility;
+    private ArrayList<PickUpAtLocationAvailibility>     pickUpAtLocationAvailibilities;
+    private ShipToLocationAvailibility                  shipToLocationAvailibility;
 
     public ArrayList<PickUpAtLocationAvailibility> getPickUpAtLocationAvailibilities() {
         return pickUpAtLocationAvailibilities;

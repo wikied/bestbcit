@@ -6,17 +6,17 @@ import java.util.ArrayList;
 
 public class Product {
 
-    private ArrayList<Object> aspects;
-    private String brand;
-    private String description;
-    private ArrayList<String> imageUrls;
-    private String mpn;
-    private String subtitle;
-    private String title;
-    private ArrayList<String> isbn;
-    private ArrayList<String> upc;
-    private ArrayList<String> ean;
-    private String epid;
+    private ArrayList<Object>   aspects;
+    private String              brand;
+    private String              description;
+    private ArrayList<String>   imageUrls;
+    private String              mpn;
+    private String              subtitle;
+    private String              title;
+    private ArrayList<String>   isbn;
+    private ArrayList<String>   upc;
+    private ArrayList<String>   ean;
+    private String              epid;
 
 
     public ArrayList<Object> getAspects() {
