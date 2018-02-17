@@ -3,27 +3,28 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
 import com.sun.xml.internal.xsom.impl.scd.Iterators;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Product {
 
-    private ArrayList<Object>   aspects;
-    private String              brand;
-    private String              description;
-    private ArrayList<String>   imageUrls;
-    private String              mpn;
-    private String              subtitle;
-    private String              title;
-    private ArrayList<String>   isbn;
-    private ArrayList<String>   upc;
-    private ArrayList<String>   ean;
-    private String              epid;
+    private List<Object> aspects;
+    private String       brand;
+    private String       description;
+    private List<String> imageUrls;
+    private String       mpn;
+    private String       subtitle;
+    private String       title;
+    private List<String> isbn;
+    private List<String> upc;
+    private List<String> ean;
+    private String       epid;
 
 
-    public ArrayList<Object> getAspects() {
+    public List<Object> getAspects() {
         return aspects;
     }
 
-    public void setAspects(ArrayList<Object> aspects) {
+    public void setAspects(List<Object> aspects) {
         this.aspects = aspects;
     }
 
@@ -43,11 +44,11 @@ public class Product {
         this.description = description;
     }
 
-    public ArrayList<String> getImageUrls() {
+    public List<String> getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(ArrayList<String> imageUrls) {
+    public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -75,27 +76,27 @@ public class Product {
         this.title = title;
     }
 
-    public ArrayList<String> getIsbn() {
+    public List<String> getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(ArrayList<String> isbn) {
+    public void setIsbn(List<String> isbn) {
         this.isbn = isbn;
     }
 
-    public ArrayList<String> getUpc() {
+    public List<String> getUpc() {
         return upc;
     }
 
-    public void setUpc(ArrayList<String> upc) {
+    public void setUpc(List<String> upc) {
         this.upc = upc;
     }
 
-    public ArrayList<String> getEan() {
+    public List<String> getEan() {
         return ean;
     }
 
-    public void setEan(ArrayList<String> ean) {
+    public void setEan(List<String> ean) {
         this.ean = ean;
     }
 
