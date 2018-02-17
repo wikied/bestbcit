@@ -9,7 +9,7 @@ import com.scriptofan.ecommerce.internal.user.Entity.LocalItem;
  * @author  Patrick Charles-Lundaahl
  * @version 0.1
  */
-public class EbayMapper {
+public class EbayItemMapper {
 
     public static final ConditionEnum ITEM_DEFAULT_CONDITION = ConditionEnum.NEW;
 
@@ -22,27 +22,32 @@ public class EbayMapper {
      */
     public InventoryItem createEbayItem(LocalItem item) {
         InventoryItem           ebayItem = null;
-
-        Availability            availability;
-        PackageWeightAndSize    packageWeightAndSize;
         Product                 product;
+        PackageWeightAndSize    packageWeightAndSize;
 
-        // Product. Contains specific product details.
+        // Container Ebay Item, with all the top-level attributes.
+        ebayItem.setSku(item.getSKU());
+        ebayItem.setCondition(ITEM_DEFAULT_CONDITION);
+        ebayItem.setConditionDescription(null);
+        ebayItem.setAvailability(new Availability(item.getQuantity()));
+
+        // Product. Contains all of the descriptive information.
         product = new Product();
         product.setTitle(       item.getTitle());
         product.setDescription( item.getDescription());
         product.setImageUrls(   item.getImages());
         // TODO: Aspects
 
-        availability = new Availability(item.getQuantity());
-
+        // Dimension Information
         packageWeightAndSize = new PackageWeightAndSize();
 
+        packageWeightAndSize.setDimensions(item.getLength(),
+                                           item.getWidth(),
+                                           item.getHeight(),
+                                           item.getDimensionUnit());
 
-        ebayItem.setSku(item.getSKU());
-        ebayItem.setCondition(ITEM_DEFAULT_CONDITION);
-        ebayItem.setConditionDescription(null);
-        ebayItem.setAvailability(availability);
+        packageWeightAndSize.setWeight(item.getWeightUnit(),
+                                       item.getWeight());
 
         return ebayItem;
     }
