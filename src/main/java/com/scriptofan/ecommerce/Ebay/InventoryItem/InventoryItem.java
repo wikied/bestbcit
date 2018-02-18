@@ -1,10 +1,12 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InventoryItem {
 
     private Availability            availability;

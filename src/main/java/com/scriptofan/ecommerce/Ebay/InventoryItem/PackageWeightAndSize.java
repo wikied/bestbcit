@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Represents the weight and size of an Ebay item.
  *
@@ -7,6 +9,7 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
  * @author  Patrick Charles-Lundaah
  * @version 1.1
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PackageWeightAndSize {
 
     private Dimension           dimensions;

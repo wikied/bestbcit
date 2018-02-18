@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Represents package dimensions for Ebay items.
  *
@@ -7,6 +9,7 @@ package com.scriptofan.ecommerce.Ebay.InventoryItem;
  * @author  Patrick Charles-Lundaahl
  * @vesrion 1.1
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dimension{
     private double              length;
     private double              width;

@@ -1,10 +1,12 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sun.xml.internal.xsom.impl.scd.Iterators;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 
     // Required Attributes

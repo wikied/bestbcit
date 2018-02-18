@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,7 @@ import java.util.ArrayList;
  * @author  Patrick Charles-Lundaahl
  * @version 1.1
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Availability {
 
     private ArrayList<PickUpAtLocationAvailibility>     pickUpAtLocationAvailibilities;
