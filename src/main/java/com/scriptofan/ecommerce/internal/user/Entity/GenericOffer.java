@@ -25,7 +25,7 @@ public abstract class GenericOffer {
      *
      * @return Platform Account Id associated with this offer.
      */
-    public String getPlatformAccountId() {
+    public final String getPlatformAccountId() {
         return platformAccountId;
     }
 }

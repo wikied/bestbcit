@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce.Ebay;
 import com.scriptofan.ecommerce.Ebay.Offer.*;
-import com.scriptofan.ecommerce.internal.user.Entity.LocalOffer;
+import com.scriptofan.ecommerce.Ebay.EbayOffer;
 
 /**
  * Provides functionality for mapping local objects to Ebay objects.
@@ -11,13 +11,13 @@ import com.scriptofan.ecommerce.internal.user.Entity.LocalOffer;
 public class EbayOfferMapper {
 
     /**
-     * Creates an Ebay Offer based on the passed LocalOffer. Maps
-     * LocalOffer
+     * Creates an Ebay Offer based on the passed EbayOffer. Maps
+     * EbayOffer
      *
      * @param offer
      * @return Ebay Offer.
      */
-    public Offer createEbayOffer(LocalOffer offer) {
+    public Offer createEbayOffer(EbayOffer offer) {
 
         Offer ebayOffer;
         Amount amount;

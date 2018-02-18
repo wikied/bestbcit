@@ -1,7 +1,11 @@
 package com.scriptofan.ecommerce.internal.user.Entity;
 
+import sun.net.www.content.text.Generic;
+
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LocalItem {
 
@@ -22,11 +26,13 @@ public class LocalItem {
 
     private double          price;
 
+    private Map<String, GenericOffer> offers;
+
     /**
      * Default constructor.
      */
     public LocalItem() {
-
+        this.offers = new HashMap<String, GenericOffer>();
     }
 
     // Accessors & Mutators
@@ -146,4 +152,22 @@ public class LocalItem {
         this.setWeightUnit(unit);
     }
 
+    /**
+     * Adds an offer to this item.
+     *
+     * @param offer Offer to add.
+     */
+    public void addOffer(GenericOffer offer) {
+        this.offers.put(offer.getPlatformAccountId(), offer);
+    }
+
+    /**
+     * Retrieves an offer for this item, specified by the linked platformAccountId.
+     *
+     * @param platformAccountId platformAccountId that is associated with the offer.
+     * @return The offer associated with this item and the specified platformAccountId.
+     */
+    public GenericOffer getOffer(String platformAccountId) {
+        return this.offers.get(platformAccountId);
+    }
 }

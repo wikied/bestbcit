@@ -1,6 +1,8 @@
-package com.scriptofan.ecommerce.internal.user.Entity;
+package com.scriptofan.ecommerce.Ebay;
 
-public class LocalOffer {
+import com.scriptofan.ecommerce.internal.user.Entity.GenericOffer;
+
+public class EbayOffer extends GenericOffer {
 
     private String sku;
     private String marketplaceId;
@@ -18,8 +20,8 @@ public class LocalOffer {
     /**
      * Default Constructor
      */
-    public LocalOffer() {
-
+    public EbayOffer(String platformAccountId) {
+        super(platformAccountId);
     }
 
     public String getSku() {
