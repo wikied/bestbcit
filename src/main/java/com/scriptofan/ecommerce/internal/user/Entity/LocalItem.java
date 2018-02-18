@@ -1,8 +1,5 @@
 package com.scriptofan.ecommerce.internal.user.Entity;
 
-import sun.net.www.content.text.Generic;
-
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

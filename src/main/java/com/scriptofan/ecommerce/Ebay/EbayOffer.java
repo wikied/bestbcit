@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce.Ebay;
 
 import com.scriptofan.ecommerce.internal.user.Entity.GenericOffer;
+import com.scriptofan.ecommerce.Ebay.Offer.*;
 
 public class EbayOffer extends GenericOffer {
 
@@ -10,12 +11,9 @@ public class EbayOffer extends GenericOffer {
     private String categoryId;
     private String merchantLocationKey;
 
-    private String paymentPolicyId;
-    private String returnPolicyId;
-    private String fulfillmentPolicyId;
+    private ListingPolicies listingPolicies;
+    private PricingSummary pricingSummary;
 
-    private String currency;
-    private String value;
 
     /**
      * Default Constructor
@@ -23,6 +21,10 @@ public class EbayOffer extends GenericOffer {
     public EbayOffer(String platformAccountId) {
         super(platformAccountId);
     }
+
+    /**
+     * Getters and Setters
+     */
 
     public String getSku() {
         return sku;
@@ -64,43 +66,19 @@ public class EbayOffer extends GenericOffer {
         this.merchantLocationKey = merchantLocationKey;
     }
 
-    public String getPaymentPolicyId() {
-        return paymentPolicyId;
+    public ListingPolicies getListingPolicies() {
+        return listingPolicies;
     }
 
-    public void setPaymentPolicyId(String paymentPolicyId) {
-        this.paymentPolicyId = paymentPolicyId;
+    public void setListingPolicies(ListingPolicies listingPolicies) {
+        this.listingPolicies = listingPolicies;
     }
 
-    public String getReturnPolicyId() {
-        return returnPolicyId;
+    public PricingSummary getPricingSummary() {
+        return pricingSummary;
     }
 
-    public void setReturnPolicyId(String returnPolicyId) {
-        this.returnPolicyId = returnPolicyId;
-    }
-
-    public String getFulfillmentPolicyId() {
-        return fulfillmentPolicyId;
-    }
-
-    public void setFulfillmentPolicyId(String fulfillemtPolicyId) {
-        this.fulfillmentPolicyId = fulfillemtPolicyId;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setPricingSummary(PricingSummary pricingSummary) {
+        this.pricingSummary = pricingSummary;
     }
 }

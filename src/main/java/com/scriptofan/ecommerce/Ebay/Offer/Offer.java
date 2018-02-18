@@ -22,6 +22,10 @@ public class Offer {
     // Contains information of the listing policies of the offer
     private ListingPolicies listingPolicies;
 
+    // Contains information on the price of the offer.
+    // Currency and value
+    private PricingSummary pricingSummary;
+
     // The unique identifier of a merchants inventory location
     private String merchantLocationKey;
 
@@ -75,5 +79,13 @@ public class Offer {
 
     public void setMerchantLocationKey(String merchantLocationKey) {
         this.merchantLocationKey = merchantLocationKey;
+    }
+
+    public PricingSummary getPricingSummary() {
+        return pricingSummary;
+    }
+
+    public void setPricingSummary(PricingSummary pricingSummary) {
+        this.pricingSummary = pricingSummary;
     }
 }
