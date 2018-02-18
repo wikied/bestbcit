@@ -6,15 +6,15 @@ public class ListingPolicies {
 
     // Unique identifier for the sellers payment policy that will be
     // used once the offer is published
-    String paymentPolicyId;
+    private String paymentPolicyId;
 
     // Unique identifier for the sellers return policy that will be
     // used once the offer is published
-    String returnPolicyId;
+    private String returnPolicyId;
 
     // Unique identifier for the sellers fulfillment policy that will be
     // used once the offer is published
-    String fulfillmentPolicyId;
+    private String fulfillmentPolicyId;
 
     public ListingPolicies() {
 

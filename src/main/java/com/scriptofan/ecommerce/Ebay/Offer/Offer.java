@@ -1,30 +1,29 @@
 package com.scriptofan.ecommerce.Ebay.Offer;
 
-//
 public class Offer {
 
     // The unique sku used for the item in the sellers inventory
-    String sku;
+    private String sku;
 
     // The id of the eBay marketplace that the offer will be placed in
     // All valid values are listed in the marketplaceEnum
     //https://developer.ebay.com/api-docs/sell/inventory/types/slr:MarketplaceEnum
-    String marketplaceId;
+    private String marketplaceId;
 
     // The listing format for the offer.
     // Currently only FIXED_PRICE is the only supported value for the Inventory API
     // Other values are in the FormatTypeEnum
     // https://developer.ebay.com/api-docs/sell/inventory/types/slr:FormatTypeEnum
-    final String FORMAT = "FIXED_PRICE";
+     private String format;
 
     // The unique identifier of the eBay category of the listing item
-    String categoryId;
+    private String categoryId;
 
     // Contains information of the listing policies of the offer
-    ListingPolicies listingPolicies;
+    private ListingPolicies listingPolicies;
 
     // The unique identifier of a merchants inventory location
-    String merchantLocationKey;
+    private String merchantLocationKey;
 
     // Constructor
     public Offer() {
@@ -46,8 +45,12 @@ public class Offer {
         this.marketplaceId = marketplaceId;
     }
 
-    public String getFORMAT() {
-        return FORMAT;
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public String getCategoryId() {
