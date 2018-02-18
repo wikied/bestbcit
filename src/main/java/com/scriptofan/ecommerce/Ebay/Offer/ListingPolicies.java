@@ -16,10 +16,8 @@ public class ListingPolicies {
     // used once the offer is published
     String fulfillmentPolicyId;
 
-    public ListingPolicies(String paymentPolicyId, String returnPolicyId, String fulfillmentPolicyId) {
-        this.paymentPolicyId = paymentPolicyId;
-        this.returnPolicyId = returnPolicyId;
-        this.fulfillmentPolicyId = fulfillmentPolicyId;
+    public ListingPolicies() {
+
     }
 
     public String getPaymentPolicyId() {

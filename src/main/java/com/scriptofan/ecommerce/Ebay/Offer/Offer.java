@@ -15,7 +15,7 @@ public class Offer {
     // Currently only FIXED_PRICE is the only supported value for the Inventory API
     // Other values are in the FormatTypeEnum
     // https://developer.ebay.com/api-docs/sell/inventory/types/slr:FormatTypeEnum
-    String format;
+    final String FORMAT = "FIXED_PRICE";
 
     // The unique identifier of the eBay category of the listing item
     String categoryId;
@@ -27,14 +27,7 @@ public class Offer {
     String merchantLocationKey;
 
     // Constructor
-    public Offer(String sku, String marketplaceId, String categoryId, ListingPolicies policies, String merchantLocationKey,
-                 String format) {
-        this.sku = sku;
-        this.marketplaceId = marketplaceId;
-        this.categoryId = categoryId;
-        this.listingPolicies = policies;
-        this.merchantLocationKey = merchantLocationKey;
-        this.format = format;
+    public Offer() {
     }
 
     public String getSku() {
@@ -53,8 +46,8 @@ public class Offer {
         this.marketplaceId = marketplaceId;
     }
 
-    public String getFormat() {
-        return format;
+    public String getFORMAT() {
+        return FORMAT;
     }
 
     public String getCategoryId() {

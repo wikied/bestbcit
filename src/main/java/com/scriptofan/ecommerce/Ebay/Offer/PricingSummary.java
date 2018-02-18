@@ -7,8 +7,7 @@ public class PricingSummary {
     Amount price;
 
     // Constructor
-    public PricingSummary(Amount price) {
-        this.price = price;
+    public PricingSummary() {
     }
 
     public Amount getPrice() {
