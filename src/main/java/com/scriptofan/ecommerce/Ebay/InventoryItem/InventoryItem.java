@@ -1,6 +1,5 @@
 package com.scriptofan.ecommerce.Ebay.InventoryItem;
 
-import com.sun.tools.classfile.ConstantPool;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,7 +13,7 @@ public class InventoryItem {
     private PackageWeightAndSize    packageWeightAndSize;
     private Product                 product;
     private String                  sku;
-    private ArrayList<String>       groupids[];
+    private ArrayList<String>       groupIds[];
 
     //Constructor that accepts the end point SKU
     @RequestMapping(value = "{sku}")
@@ -50,8 +49,8 @@ public class InventoryItem {
         return sku;
     }
 
-    public ArrayList<String>[] getGroupids() {
-        return groupids;
+    public ArrayList<String>[] getGroupIds() {
+        return groupIds;
     }
 
 
@@ -89,7 +88,7 @@ public class InventoryItem {
         this.sku = sku;
     }
 
-    public void setGroupids(ArrayList<String>[] groupids) {
-        this.groupids = groupids;
+    public void setGroupIds(ArrayList<String>[] groupIds) {
+        this.groupIds = groupIds;
     }
 }
