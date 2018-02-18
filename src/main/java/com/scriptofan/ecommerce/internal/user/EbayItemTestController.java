@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/ebay-json-test")
+@RequestMapping("/ebay-json-test/item")
 public class EbayItemTestController {
 
     private InventoryService inventoryService;
@@ -16,7 +16,7 @@ public class EbayItemTestController {
         inventoryService = new InventoryService();
     }
 
-    @GetMapping("/item")
+    @GetMapping
     public InventoryItem getTestEbayItem() {
         return inventoryService.getEbayItem("ITEM-0001");
     }
