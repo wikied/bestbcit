@@ -1,15 +1,18 @@
 package com.scriptofan.ecommerce;
 import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.scriptofan.ecommerce.upload.StorageService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @SpringBootApplication
 public class EcommerceApplication implements CommandLineRunner{
 
-	@Resource
+	@Autowired
 	StorageService storageService;
 
 	public static void main(String[] args) {
@@ -21,4 +24,5 @@ public class EcommerceApplication implements CommandLineRunner{
 		storageService.deleteAll();
 		storageService.init();
 	}
+
 }

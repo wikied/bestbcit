@@ -1,33 +1,38 @@
 package com.scriptofan.ecommerce.parsercsv;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
 public class ParserController {
 
     @Autowired
-    ParserService parserService;
+    ParserCsvService parserCsvService;
 
+    @Autowired
+    FIleConvertService fIleConvertService;
 
+    public void praseCsv(MultipartFile file){
+        File newFile;
 
-    @PostMapping("/parsecsv")
-    public void praseCsv(@RequestParam("file") MultipartFile file){
         try{
-            parserService.parseCsv(file);
+            newFile = fIleConvertService.convertFile(file);
+            parserCsvService.parseCsv(newFile);
+            fIleConvertService.deleteFile(); // need to delete the temp file
         } catch (IOException e){
-            System.err.println("Unable to parse the csv file");
+            System.err.println("Unable to create the new file");
         }
-
     }
 
-
+    @GetMapping("/get-list-of-items")
+    public List<Map<String, String>> getListOfItems(){
+       return  parserCsvService.getListOfItems();
+    }
 }

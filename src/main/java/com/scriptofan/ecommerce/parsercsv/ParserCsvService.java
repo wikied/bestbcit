@@ -12,17 +12,18 @@ import java.util.*;
 
 
 @Service
-public class ParserService {
+public class ParserCsvService {
 
+    List<Map<String, String>> list_of_items;
 
-    public void parseCsv(MultipartFile file) throws IOException {
-
+    public void parseCsv(File file) throws IOException {
+        list_of_items = new ArrayList<>();
         Reader in = new FileReader(file);
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
 
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String[] item_keys = bufferedReader.readLine().split(",");
-        List<Map<String, String>> list_of_items = new ArrayList<>();
+
 
 
         for(CSVRecord record : records){
@@ -35,7 +36,10 @@ public class ParserService {
                 }
                 list_of_items.add(tempMap);
         }
+    }
 
+    public  List<Map<String, String>> getListOfItems(){
+        return list_of_items;
     }
 
 }

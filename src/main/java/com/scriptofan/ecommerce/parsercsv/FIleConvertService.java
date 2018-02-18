@@ -11,12 +11,21 @@ import java.io.IOException;
 @Service
 public class FIleConvertService {
 
+    File convFile;
+
     public File convertFile(MultipartFile file) throws IOException{
-        File convFile = new File(file.getOriginalFilename());
+        convFile = new File(file.getOriginalFilename());
         convFile.createNewFile();
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
         return convFile;
+
     }
+
+    public void deleteFile(){
+        convFile.delete();
+    }
+
+
 }
