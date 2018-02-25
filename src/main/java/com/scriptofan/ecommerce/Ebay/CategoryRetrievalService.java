@@ -1,7 +1,8 @@
 package com.scriptofan.ecommerce.Ebay;
 
-import com.oracle.tools.packager.Log;
 import com.scriptofan.ecommerce.Ebay.Category.Category;
+import jdk.internal.org.xml.sax.Attributes;
+import jdk.internal.org.xml.sax.helpers.DefaultHandler;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,11 +64,47 @@ public class CategoryRetrievalService {
                     String.class);
 
 
-
-        return parseXmlResponse(response.getBody());
+        return parseXmlResponseWithSAX(response.getBody());
     }
 
-    private String parseXmlResponse(String xmlString) {
+    private String parseXmlResponseWithSAX(String xmlString) {
+        String      output;
+        InputStream stream;
+
+
+
+
+        try {
+            SAXParserFactory parserFactor = SAXParserFactory.newInstance();
+            javax.xml.parsers.SAXParser parser = parserFactor.newSAXParser();
+            SAXHandler handler = new SAXHandler();
+            stream      = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8));
+
+            parser.parse(stream, handler);
+
+            output = "";
+            // Printing the list of employees obtained from XML
+//            for ( Category category : handler.categories){
+//                output += category + " ";
+//            }
+
+            for (int i = 0; i < handler.categories.size() && i < 99; ++i ) {
+                output += handler.categories.get(i) + " ";
+            }
+
+            return output;
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private String parseXmlResponseWithDOM(String xmlString) {
         DocumentBuilderFactory  factory;
         DocumentBuilder         builder;
         InputStream             stream;
@@ -148,5 +182,65 @@ public class CategoryRetrievalService {
         }
 
         return null;
+    }
+}
+
+// Solution found: https://dzone.com/articles/parsing-xml-using-dom-sax-and
+class SAXHandler extends org.xml.sax.helpers.DefaultHandler {
+
+    List<Category> categories;
+    Category       category;
+    String         content;
+
+    public SAXHandler() {
+        categories  = new ArrayList<>();
+        category    = null;
+        content     = null;
+    }
+
+    @Override
+    public void startElement(String uri, String localName,
+                             String qName, org.xml.sax.Attributes attributes) {
+        switch(qName){
+            case "Category":
+                category = new Category();
+                break;
+        }
+    }
+
+    @Override
+    public void endElement(String uri, String localName,
+                           String qName) {
+        switch(qName){
+            //Add the employee to list once end tag is found
+            case "Category":
+                categories.add(category);
+                break;
+
+            //For all other end tags the employee has to be updated.
+            case "AutoPayEnabled":
+                category.setAutoPayEnabled(content);
+                break;
+            case "BestOfferEnabled":
+                category.setBestOfferEnabled(content);
+                break;
+            case "CategoryID":
+                category.setCategoryID(content);
+                break;
+            case "CategoryName":
+                category.setCategoryName(content);
+                break;
+            case "CategoryLevel":
+                category.setCategoryLevel(content);
+                break;
+            case "CategoryParentID":
+                category.setCategoryParentID(content);
+                break;
+        }
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        content = String.copyValueOf(ch, start, length).trim();
     }
 }
