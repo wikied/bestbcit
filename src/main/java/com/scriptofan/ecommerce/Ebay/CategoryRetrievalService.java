@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Ebay;
 
+import com.oracle.tools.packager.Log;
+import com.scriptofan.ecommerce.Ebay.Category.Category;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("get-categories")
@@ -16,12 +34,12 @@ public class CategoryRetrievalService {
 
     @GetMapping
     public String retrieveCategories() {
-        String                                  body;
-        HttpHeaders                             headers;
-        HttpEntity<String>                      request;
-        ResponseEntity<String>                  response;
-        RestTemplate                            template;
-        String[] categoriesString;
+        String                  body;
+        HttpHeaders             headers;
+        HttpEntity<String>      request;
+        ResponseEntity<String>  response;
+        RestTemplate            template;
+        List<Category>          categories;
 
         headers = new HttpHeaders();
         headers.add("X-EBAY-API-SITEID", "0");
@@ -47,6 +65,88 @@ public class CategoryRetrievalService {
                     request,
                     String.class);
 
-        return response.getBody();
+
+
+        return parseXmlResponse(response.getBody());
+    }
+
+    private String parseXmlResponse(String xmlString) {
+        DocumentBuilderFactory  factory;
+        DocumentBuilder         builder;
+        InputStream             stream;
+        Document                document;
+        List<Category>          categories;
+        NodeList                nodeList;
+
+        String                  output;
+
+        categories  = new ArrayList<>();
+
+        final String[] elements = {
+                "BestOfferEnabled",
+                "AutoPayEnabled",
+                "CategoryID",
+                "CategoryLevel",
+                "CategoryName",
+                "CategoryParentID"
+        };
+
+        try {
+            factory     = DocumentBuilderFactory.newInstance();
+            builder     = factory.newDocumentBuilder();
+            stream      = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8));
+            document    = builder.parse(stream);
+            nodeList    = document.getDocumentElement().getChildNodes();
+
+            output      = "";
+
+            // Iterate through all nodes
+
+            int i = 0;
+            while (!nodeList.item(i).getNodeName().equals("CategoryArray")) {
+                ++i;
+            }
+
+            NodeList categoryArray = nodeList.item(i).getChildNodes();
+
+            output += "CATEGORIES (" + categoryArray.getLength() + "):\n";
+
+            for (int j = 0; j < categoryArray.getLength() && j < 10; ++j) {
+                Category                    category;
+                NodeList                    categoryDetails;
+                HashMap<String, String>     attributes;
+
+                attributes                  = new HashMap<>();
+                categoryDetails             = categoryArray.item(i).getChildNodes();
+
+                for (int l = 0; l < categoryDetails.getLength(); ++l) {
+                    Node item = categoryDetails.item(l);
+
+                    attributes.put(item.getNodeName(), item.getTextContent());
+                }
+
+                category = new Category();
+
+                category.setBestOfferEnabled(   attributes.get("BestOfferEnabled")  );
+                category.setAutoPayEnabled(     attributes.get("AutoPayEnabled")    );
+                category.setCategoryID(         attributes.get("CategoryID")        );
+                category.setCategoryLevel(      attributes.get("CategoryLevel")     );
+                category.setCategoryName(       attributes.get("CategoryName")      );
+                category.setCategoryParentID(   attributes.get("CategoryParentID")  );
+
+                output += category + "\n";
+            }
+
+            return output;
+        }
+        catch (ParserConfigurationException e){
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
