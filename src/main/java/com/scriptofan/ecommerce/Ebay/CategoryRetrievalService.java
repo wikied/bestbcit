@@ -1,6 +1,5 @@
 package com.scriptofan.ecommerce.Ebay;
 
-import com.oracle.tools.packager.Log;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +16,12 @@ public class CategoryRetrievalService {
 
     @GetMapping
     public String retrieveCategories() {
-        String                  body;
-        HttpHeaders             headers;
-        HttpEntity<String>      request;
-        ResponseEntity<String>  response;
-        RestTemplate            template;
+        String                                  body;
+        HttpHeaders                             headers;
+        HttpEntity<String>                      request;
+        ResponseEntity<String>                  response;
+        RestTemplate                            template;
+        String[] categoriesString;
 
         headers = new HttpHeaders();
         headers.add("X-EBAY-API-SITEID", "0");
@@ -47,6 +47,6 @@ public class CategoryRetrievalService {
                     request,
                     String.class);
 
-        return response.toString();
+        return response.getBody();
     }
 }
