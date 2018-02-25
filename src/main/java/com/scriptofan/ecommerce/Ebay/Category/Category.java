@@ -11,12 +11,12 @@ public class Category {
 
     @Override
     public String toString() {
-        return "[Name: " + CategoryName + ", "
-             + "ID: "   + CategoryID + ", "
-             + "Level: " + CategoryLevel + ", "
-             + "Parent ID: " + CategoryParentID + ", "
-             + "BestOfferEnabled: " + BestOfferEnabled + ", "
-             + "AutoPayEnabled: " + AutoPayEnabled + "]"
+        return "[Name: "            + CategoryName      + ", "
+             + "ID: "               + CategoryID        + ", "
+             + "Level: "            + CategoryLevel     + ", "
+             + "Parent ID: "        + CategoryParentID  + ", "
+             + "BestOfferEnabled: " + BestOfferEnabled  + ", "
+             + "AutoPayEnabled: "   + AutoPayEnabled    + "]"
         ;
     }
 
