@@ -4,6 +4,9 @@ public class LocationDetails {
     private Address address;
     private GeoCoordinates geoCoordinates;
 
+    public LocationDetails(Address address){
+        setAddress(address);
+    }
     public Address getAddress() {
         return address;
     }

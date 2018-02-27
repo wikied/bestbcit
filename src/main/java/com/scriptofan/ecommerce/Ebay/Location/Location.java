@@ -12,6 +12,10 @@ public class Location {
     private String phone;
     private SpecialHours specialHours[];
 
+    public Location(LocationDetails locationDetails){
+        setLocationDetails(locationDetails);
+    }
+
     public LocationDetails getLocationDetails() {
         return locationDetails;
     }
