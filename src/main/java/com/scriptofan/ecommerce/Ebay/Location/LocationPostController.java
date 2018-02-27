@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.Ebay.Location;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,5 +13,10 @@ public class LocationPostController {
 
     public LocationPostController() {
         this.locationPostController = locationPostController;
+    }
+
+    @PostMapping
+    public String postLocation(){
+        return "success";
     }
 }
