@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.Ebay.Location;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,6 +14,7 @@ public class LocationBuilder {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             return objectMapper.writeValueAsString(location);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
