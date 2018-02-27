@@ -16,8 +16,9 @@ public class LocationPostController {
         this.locationPostController = locationPostController;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/my-location",method = RequestMethod.POST)
     public String postLocation(){
-        return "success";
+        LocationBuilder lb = new LocationBuilder();
+        return lb.dummyLocationData();
     }
 }
