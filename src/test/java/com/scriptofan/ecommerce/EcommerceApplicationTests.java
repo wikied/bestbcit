@@ -11,6 +11,7 @@ public class EcommerceApplicationTests {
 
 	@Test
 	public void contextLoads() {
+
 	}
 
 }
