@@ -4,9 +4,15 @@ import com.scriptofan.ecommerce.Ebay.Location.Location;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 @Service
 public class LocationService {
@@ -17,7 +23,7 @@ public class LocationService {
     public LocationService() {
     }
 
-    /*public Location[] getInventoryLocations(String token) {
+    public Location[] getInventoryLocations(String token) {
 
         Location[]           inventoryLocations;
         RestTemplate                restTemplate;
@@ -29,43 +35,72 @@ public class LocationService {
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpEntity      = new HttpEntity<>("parameters", httpHeaders);
 
-//        inventoryLocations = restTemplate
-//                .exchange(
-//                        GET_LOCATIONS_URL,
-//                        HttpMethod.GET,
-//                        httpEntity,
-//                        GetLocationsRequestWrapper.class)
-//                .getBody()
-//                .getLocations();
+        inventoryLocations = restTemplate
+                .exchange(
+                        GET_LOCATIONS_URL,
+                        HttpMethod.GET,
+                        httpEntity,
+                        Location[].class)
+                .getBody();
 
-        return null;
-    }*/
+        return inventoryLocations;
+    }
 
-    public String postLocation(Location location, String token) {
+    public String createInventoryLocation(Location location, String token) {
 
         String              merchantLocationId;
         String              completeUrl;
         String              response;
         RestTemplate        restTemplate;
         HttpHeaders         httpHeaders;
-        HttpEntity<String>  httpEntity;
+        HttpEntity<Location>  httpEntity;
 
         merchantLocationId  = sanitizeSpaces(location.getName());
         completeUrl         = GET_LOCATIONS_URL + "/" + merchantLocationId;
 
         httpHeaders         = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
-        httpEntity          = new HttpEntity<>("parameters", httpHeaders);
+        httpHeaders.set("Content-Type", "application/json");
+        httpEntity = new HttpEntity<>(location, httpHeaders);
 
         restTemplate        = new RestTemplate();
+        restTemplate.setErrorHandler(new MyErrorHandler());
+
         try {
             restTemplate.exchange(completeUrl, HttpMethod.POST, httpEntity, Location.class);
+            response = "success";
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = ex.getMessage();
         }
 
         return response;
+    }
+
+    public class MyErrorHandler implements ResponseErrorHandler {
+        @Override
+        public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
+            // Extract error body
+            String          line;
+            BufferedReader  bufferReader;
+            StringBuilder   stringBuilder;
+
+            bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
+            stringBuilder = new StringBuilder();
+
+            while ((line = bufferReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            // Print results to err log
+            System.err.println("clientHttpResponse error:");
+            System.err.println(clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText());
+            System.err.println(stringBuilder.toString());
+            return false;
+        }
+
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException { }
     }
 
     private String sanitizeSpaces(String str) {

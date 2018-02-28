@@ -1,8 +1,11 @@
 package com.scriptofan.ecommerce.Ebay.Location;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Location {
-    private LocationDetails locationDetails;
+    private LocationDetails location;
     private String locationAdditionalInformation;
     private String locationInstructions;
     private StoreTypeEnum locationTypes[];
@@ -14,15 +17,15 @@ public class Location {
     private SpecialHours specialHours[];
 
     public Location(LocationDetails locationDetails){
-        setLocationDetails(locationDetails);
+        setLocation(locationDetails);
     }
 
-    public LocationDetails getLocationDetails() {
-        return locationDetails;
+    public LocationDetails getLocation() {
+        return location;
     }
 
-    public void setLocationDetails(LocationDetails locationDetails) {
-        this.locationDetails = locationDetails;
+    public void setLocation(LocationDetails location) {
+        this.location = location;
     }
 
     public String getLocationAdditionalInformation() {

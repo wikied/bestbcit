@@ -5,7 +5,7 @@ public class Address {
     private String addressLine2;
     private String city;
     //ENUM CLASS AS STRING FOR NOW
-    private String CountryCodeEnum;
+    private String country;
     private String county;
     private String postalCode;
     private String stateOrProvince;
@@ -34,12 +34,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getCountryCodeEnum() {
-        return CountryCodeEnum;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountryCodeEnum(String countryCodeEnum) {
-        CountryCodeEnum = countryCodeEnum;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getCounty() {

@@ -15,8 +15,9 @@ public class LocationBuilder {
         Location location = locationObjectCreator(locationDetails);
 
         return location;
+    }
 
-        /*
+    public String getLocationAsString(Location location) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -25,7 +26,6 @@ public class LocationBuilder {
             e.printStackTrace();
         }
         return null;
-        */
     }
 
     public Address addressObjectCreator(){
@@ -35,7 +35,7 @@ public class LocationBuilder {
         address.setCity("Burnaby");
         address.setStateOrProvince("BC");
         address.setPostalCode("V5G 3H2");
-        address.setCountryCodeEnum("CA");
+        address.setCountry("CA");
         return address;
     }
 

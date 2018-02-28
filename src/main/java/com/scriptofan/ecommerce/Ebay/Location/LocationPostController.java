@@ -17,13 +17,13 @@ public class LocationPostController {
     private LocationService locationService;
 
     @PostMapping("/my-location")
-    public String postLocation(){
+    public String postInventoryLocation(){
         Location    location;
         String      response;
 
         location = locationBuilder.dummyLocationData();
-        response = locationService.postLocation(location, DummyEbayUserService.TOKEN);
+        response = locationService.createInventoryLocation(location, DummyEbayUserService.TOKEN);
 
-        return "Hi!";
+        return response;
     }
 }
