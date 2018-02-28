@@ -19,7 +19,7 @@ public class ValidateService {
     private ParserCsvService parserCsvService;
     private List<Map<String, String>> list;
     private String[] requiredKeys;
-    private String   errors;
+    private String   errors = "";
     private BufferedReader bufferedReader;
 
     public void openFile(File file){
@@ -33,40 +33,34 @@ public class ValidateService {
     }
 
     public void validate() throws IOException{
+
         list = parserCsvService.getListOfItems();
         requiredKeys = bufferedReader.readLine().split(",");
 
 
         for (Map<String, String> map : list) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
                 for(String required : requiredKeys){
-                    checkKeys(required, entry.getKey());
+                    if(!map.containsKey(required)){
+                       this.errors += "Your missing the column " + required;
+                    }
                 }
 
-                //String value = entry.getValue();
-                //String key   = entry.getKey();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    String value = entry.getValue();
+                    String key   = entry.getKey();
 
+                    if(value.isEmpty()){
+                        this.errors += "\nYour are missing a value for " + key;
+                    }
+                }
             }
         }
-    }
-
-    public void checkKeys(String required, String given){
-
-        if(required.isEmpty()){
-           errors += "Your missing " + required + "\n";
-        }
-
-        if(!given.equals(required)){
-            errors += given + " does not equal " + required + "\n";
-        }
-    }
 
     public String getErrors() {
         if(this.errors.isEmpty()){
-            this.errors = "There are no errors !";
+            return "There are no errors";
         }
-
-        return errors;
+        return this.errors;
     }
 
     public String[] getRequiredKeys(){

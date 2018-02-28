@@ -34,7 +34,7 @@ public class ValidateController {
                 System.err.println("Failed to upload admin File");
             }
         }
-        return "You have successfully uploaded the file.";
+        return "You have successfully uploaded " + adminFile.getOriginalFilename() + " and set the requirements for the user.";
     }
 
     @GetMapping("/validate-ebay-csv")

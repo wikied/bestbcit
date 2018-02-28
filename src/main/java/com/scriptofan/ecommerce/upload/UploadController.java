@@ -26,7 +26,7 @@ public class UploadController {
             System.err.println("Failed to upload " + file.getOriginalFilename());
         }
 
-        return "file success";
+        return file.getOriginalFilename() + " uploaded successfully";
     }
 
 }
