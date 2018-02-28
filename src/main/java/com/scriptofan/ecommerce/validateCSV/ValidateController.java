@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 
 @RestController
 public class ValidateController {
@@ -19,23 +20,32 @@ public class ValidateController {
     @Autowired
     FileConvertService fileConvertService;
 
-    @PostMapping("/example-csv")
-    public void getList(@RequestParam("file") MultipartFile multipartFile){
+    @PostMapping("/admin-upload")
+    public String getList(@RequestParam("file") MultipartFile adminFile){
         File newFile;
 
-        try{
-            newFile = fileConvertService.convertFile(multipartFile);
-            validateService.requiredHeaders(newFile);
-            newFile.delete();
+        if(!adminFile.isEmpty()){
+            try{
+                newFile = fileConvertService.convertFile(adminFile);
+                validateService.openFile(newFile);
+                newFile.delete();
 
-        }catch (Exception e){
-            System.err.println("Failed to upload File");
+            }catch (Exception e){
+                System.err.println("Failed to upload admin File");
+            }
         }
+        return "You have successfully uploaded the file.";
     }
 
+    @GetMapping("/validate-ebay-csv")
+    public String validateEbayCSV() throws IOException{
+        validateService.validate();
+        return validateService.getErrors();
+    }
 
-    @GetMapping("/get-headers")
-        public String[] getHeaders(){
-            return validateService.printHeaders();
-        }
+    @GetMapping("/get-required-keys")
+    public String[] getRequiredKeys(){
+        return validateService.getRequiredKeys();
+    }
+
 }
