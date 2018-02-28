@@ -11,9 +11,9 @@ public class LocationPostController {
     @Autowired
     private LocationBuilder lb;
 
-    @GetMapping("/my-location/")
-    public String postLocation(){
-        String s = lb.dummyLocationData();
+    @PostMapping("/my-location/{s}")
+    public String postLocation(@PathVariable String s){
+        s = lb.dummyLocationData();
         return s;
     }
 }
