@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -57,7 +58,12 @@ public class LocationService {
         httpEntity          = new HttpEntity<>("parameters", httpHeaders);
 
         restTemplate        = new RestTemplate();
-        response            = restTemplate.exchange(completeUrl,HttpMethod.POST, httpEntity, String.class).toString();
+        try {
+            restTemplate.exchange(completeUrl, HttpMethod.POST, httpEntity, Location.class);
+        } catch (HttpServerErrorException ex) {
+            ex.printStackTrace();
+            response = ex.getMessage();
+        }
 
         return response;
     }

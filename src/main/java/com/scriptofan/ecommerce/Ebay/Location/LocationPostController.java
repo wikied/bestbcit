@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.Ebay.Location;
 
 
 
+import com.scriptofan.ecommerce.Ebay.DummyEbayUserService;
 import com.scriptofan.ecommerce.Ebay.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,14 @@ public class LocationPostController {
     @Autowired
     private LocationService locationService;
 
-    @PostMapping("/my-location/")
+    @PostMapping("/my-location")
     public String postLocation(){
         Location    location;
         String      response;
 
         location = locationBuilder.dummyLocationData();
-        response = locationService.postLocation(location, null);
+        response = locationService.postLocation(location, DummyEbayUserService.TOKEN);
 
-        return response;
+        return "Hi!";
     }
 }

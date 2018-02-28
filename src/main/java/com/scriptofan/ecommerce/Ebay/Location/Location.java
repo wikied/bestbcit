@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.Ebay.Location;
 
+
 public class Location {
     private LocationDetails locationDetails;
     private String locationAdditionalInformation;
