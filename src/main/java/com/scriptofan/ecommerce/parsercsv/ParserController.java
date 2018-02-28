@@ -14,12 +14,10 @@ import java.util.Map;
 public class ParserController {
 
     @Autowired
-    ParserCsvService parserCsvService;
+    private ParserCsvService parserCsvService;
 
     @Autowired
-    FileConvertService fileConvertService;
-
-    String fileName;
+    private FileConvertService fileConvertService;
 
     public void praseCsv(MultipartFile file){
         File newFile;
@@ -27,8 +25,6 @@ public class ParserController {
         try{
 
             newFile = fileConvertService.convertFile(file);
-            fileName = newFile.getName();
-
             parserCsvService.parseCsv(newFile);
             fileConvertService.deleteFile(); // need to delete the temp file
 
@@ -40,11 +36,6 @@ public class ParserController {
     @GetMapping("/get-list-of-items")
     public List<Map<String, String>> getListOfItems(){
        return  parserCsvService.getListOfItems();
-    }
-
-    @GetMapping("/get-filename")
-    public String getFileNam(){
-        return fileName;
     }
 
 }

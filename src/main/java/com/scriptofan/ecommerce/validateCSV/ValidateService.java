@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.scriptofan.ecommerce.parsercsv.ParserCsvService;
 
-import java.awt.image.ImagingOpException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

@@ -15,10 +15,10 @@ import java.io.IOException;
 public class ValidateController {
 
     @Autowired
-    ValidateService validateService;
+    private ValidateService validateService;
 
     @Autowired
-    FileConvertService fileConvertService;
+    private FileConvertService fileConvertService;
 
     @PostMapping("/admin-upload")
     public String getList(@RequestParam("file") MultipartFile adminFile){

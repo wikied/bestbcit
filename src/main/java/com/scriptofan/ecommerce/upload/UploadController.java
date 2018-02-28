@@ -11,10 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadController {
 
     @Autowired
-    ParserController parserController;
+    private ParserController parserController;
 
     @Autowired
-    StorageService storageService;
+    private StorageService storageService;
 
     @PostMapping("/upload-inventory")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {

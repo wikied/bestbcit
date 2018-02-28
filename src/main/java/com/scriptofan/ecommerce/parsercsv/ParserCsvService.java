@@ -4,17 +4,24 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.Reader;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 @Service
 public class ParserCsvService {
 
-    List<Map<String, String>> list_of_items;
+    private List<Map<String, String>> list_of_items;
 
     public void parseCsv(File file) throws IOException {
-        list_of_items = new ArrayList<>();
+        this.list_of_items = new ArrayList<>();
         Reader in = new FileReader(file);
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
 
@@ -29,12 +36,12 @@ public class ParserCsvService {
                     tempMap.put(item_keys[i], s);
                     i++;
                 }
-                list_of_items.add(tempMap);
+                this.list_of_items.add(tempMap);
         }
     }
 
     public List<Map<String, String>> getListOfItems(){
-        return list_of_items;
+        return this.list_of_items;
     }
 
 }
