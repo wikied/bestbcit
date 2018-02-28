@@ -2,23 +2,18 @@ package com.scriptofan.ecommerce.Ebay.Location;
 
 
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("post-location")
 public class LocationPostController {
-    private LocationPostController locationPostController;
 
-    public LocationPostController() {
-        this.locationPostController = locationPostController;
-    }
+    @Autowired
+    private LocationBuilder lb;
 
-    @RequestMapping(value = "/my-location",method = RequestMethod.POST)
+    @GetMapping("/my-location/")
     public String postLocation(){
-        LocationBuilder lb = new LocationBuilder();
-        return lb.dummyLocationData();
+        String s = lb.dummyLocationData();
+        return s;
     }
 }

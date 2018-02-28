@@ -3,7 +3,9 @@ package com.scriptofan.ecommerce.Ebay.Location;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LocationBuilder {
 
     public String dummyLocationData(){
