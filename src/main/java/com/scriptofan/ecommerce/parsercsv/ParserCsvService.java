@@ -1,11 +1,8 @@
 package com.scriptofan.ecommerce.parsercsv;
 
-
-import com.opencsv.CSVParser;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -24,8 +21,6 @@ public class ParserCsvService {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String[] item_keys = bufferedReader.readLine().split(",");
 
-
-
         for(CSVRecord record : records){
                 int i = 0;
                 Map<String, String> tempMap = new HashMap<>();
@@ -38,7 +33,7 @@ public class ParserCsvService {
         }
     }
 
-    public  List<Map<String, String>> getListOfItems(){
+    public List<Map<String, String>> getListOfItems(){
         return list_of_items;
     }
 

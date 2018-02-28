@@ -17,15 +17,21 @@ public class ParserController {
     ParserCsvService parserCsvService;
 
     @Autowired
-    FIleConvertService fIleConvertService;
+    FileConvertService fileConvertService;
+
+    String fileName;
 
     public void praseCsv(MultipartFile file){
         File newFile;
 
         try{
-            newFile = fIleConvertService.convertFile(file);
+
+            newFile = fileConvertService.convertFile(file);
+            fileName = newFile.getName();
+
             parserCsvService.parseCsv(newFile);
-            fIleConvertService.deleteFile(); // need to delete the temp file
+            fileConvertService.deleteFile(); // need to delete the temp file
+
         } catch (IOException e){
             System.err.println("Unable to create the new file");
         }
@@ -35,4 +41,10 @@ public class ParserController {
     public List<Map<String, String>> getListOfItems(){
        return  parserCsvService.getListOfItems();
     }
+
+    @GetMapping("/get-filename")
+    public String getFileNam(){
+        return fileName;
+    }
+
 }
