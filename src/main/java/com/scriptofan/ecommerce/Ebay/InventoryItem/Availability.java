@@ -7,6 +7,10 @@ public class Availability {
     private ArrayList<PickUpAtLocationAvailibility>     pickUpAtLocationAvailibilities;
     private ShipToLocationAvailibility                  shipToLocationAvailibility;
 
+    public Availability(ShipToLocationAvailibility shipToLocationAvailibility){
+        setShipToLocationAvailibility(shipToLocationAvailibility);
+    }
+
     public ArrayList<PickUpAtLocationAvailibility> getPickUpAtLocationAvailibilities() {
         return pickUpAtLocationAvailibilities;
     }

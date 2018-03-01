@@ -4,6 +4,10 @@ public class ShipToLocationAvailibility {
 
     private int quantity;
 
+    public ShipToLocationAvailibility(int quantity){
+        setQuantity(quantity);
+    }
+
     public int getQuantity() {
         return quantity;
     }

@@ -16,13 +16,6 @@ public class InventoryItem {
     private String sku;
     private ArrayList<String> groupids[];
 
-    //Constructor that accepts the end point SKU
-    @RequestMapping(value = "{sku}")
-    public InventoryItem inventoryItem(@PathVariable final int sku){
-        InventoryItem item = new InventoryItem();
-
-        return item;
-    }
 
     //Getters
 
