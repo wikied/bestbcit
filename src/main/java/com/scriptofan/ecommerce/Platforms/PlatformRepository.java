@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce.Platforms;
 
-import com.scriptofan.ecommerce.Platforms.Core.ItemBuilderRuleset;
+import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;

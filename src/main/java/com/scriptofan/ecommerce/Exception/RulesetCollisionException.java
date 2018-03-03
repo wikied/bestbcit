@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Core.Exception;
+package com.scriptofan.ecommerce.Exception;
 
 public class RulesetCollisionException extends Exception {
 

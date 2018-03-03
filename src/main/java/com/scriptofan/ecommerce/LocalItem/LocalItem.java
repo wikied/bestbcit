@@ -1,8 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
-import com.scriptofan.ecommerce.Platforms.Core.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.User.User;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.nio.channels.NotYetBoundException;
 import java.rmi.AlreadyBoundException;
