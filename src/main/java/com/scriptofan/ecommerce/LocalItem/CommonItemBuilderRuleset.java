@@ -8,6 +8,9 @@ public class CommonItemBuilderRuleset implements ItemBuilderRuleset {
 
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields) {
-        throw new NotImplementedException();
+
+        // TODO: Implement
+
+        return localItem;
     }
 }
