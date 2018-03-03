@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Platforms.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,8 @@ public class LocalItemFactory {
      * 4) Create the LocalItem's Offer placeholders
      * 5) Set the initial quantity
      */
-    public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection) {
+    public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection)
+            throws RulesetCollisionException {
         ArrayList<LocalItem> localItems = new ArrayList<>();
 
         if (itemFieldCollection == null) {
@@ -58,13 +60,16 @@ public class LocalItemFactory {
      * Creates a new local item and applies each ItemBuilderRuleset to it.
      * @return New LocalItem created from fields.
      */
-    private LocalItem createLocalItem(final Map<String, String> fields) {
+    private LocalItem createLocalItem(final Map<String, String> fields)
+            throws RulesetCollisionException {
         LocalItem localItem = new LocalItem();
 
+        // Guard against being passed a null value.
         if (fields == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("fields can't be null");
         }
 
+        // Run this item through each loaded Ruleset
         for (ItemBuilderRulesetFactory rulesetFactory : this.itemBuilderRulesetFactories) {
             ItemBuilderRuleset ruleset = rulesetFactory.getNewItemBuilderRuleset();
             localItem = ruleset.apply(localItem, fields);
