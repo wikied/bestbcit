@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Product {
 
-    private ArrayList<Object>   aspects;
     private String              brand;
     private String              description;
     private ArrayList<String>   imageUrls;
@@ -18,14 +17,6 @@ public class Product {
     private ArrayList<String>   ean;
     private String              epid;
 
-
-    public ArrayList<Object> getAspects() {
-        return aspects;
-    }
-
-    public void setAspects(ArrayList<Object> aspects) {
-        this.aspects = aspects;
-    }
 
     public String getBrand() {
         return brand;

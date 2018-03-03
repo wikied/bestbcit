@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class InventoryItemBuilder {
 
 
+
     public Availability availabilityObjectCreator(int quantity){
         ShipToLocationAvailibility shipToLocationAvailibility = new ShipToLocationAvailibility(quantity);
         Availability availability = new Availability(shipToLocationAvailibility);
@@ -22,7 +23,6 @@ public class InventoryItemBuilder {
         product.setBrand("GoPro");
         product.setMpn("CHDHX-401");
         product.setImageUrls(images);
-        product.setAspects();
         return product;
     }
 
