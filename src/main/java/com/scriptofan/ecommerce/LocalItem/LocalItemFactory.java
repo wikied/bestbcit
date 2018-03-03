@@ -4,6 +4,7 @@ import com.scriptofan.ecommerce.Platforms.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,10 +12,17 @@ import java.util.Map;
 
 public class LocalItemFactory {
 
-    Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
+    private Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
 
-    @Autowired
     private PlatformRepository platformRepository;
+
+
+
+    public LocalItemFactory() {
+        this.platformRepository = new PlatformRepository();
+    }
+
+
 
     /*
      * For each Map in the list of maps, this needs to:
@@ -26,8 +34,11 @@ public class LocalItemFactory {
      * 5) Set the initial quantity
      */
     public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection) {
-        ArrayList<LocalItem> localItems;
-        localItems = new ArrayList<>();
+        ArrayList<LocalItem> localItems = new ArrayList<>();
+
+        if (itemFieldCollection == null) {
+            throw new NullPointerException();
+        }
 
         getItemBuilderRulesets();
 
@@ -49,6 +60,10 @@ public class LocalItemFactory {
      */
     private LocalItem createLocalItem(final Map<String, String> fields) {
         LocalItem localItem = new LocalItem();
+
+        if (fields == null) {
+            throw new NullPointerException();
+        }
 
         for (ItemBuilderRulesetFactory rulesetFactory : this.itemBuilderRulesetFactories) {
             ItemBuilderRuleset ruleset = rulesetFactory.getNewItemBuilderRuleset();
