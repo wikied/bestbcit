@@ -12,4 +12,10 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
     public LocalItem apply(LocalItem localItem, Map<String, String> fields) {
         throw new NotImplementedException();
     }
+
+    private void createInventoryItemRuleset(LocalItem localItem, Map<String, String> fields) {
+        
+    }
+
+
 }
