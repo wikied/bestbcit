@@ -7,6 +7,9 @@ public class ItemLog {
 
     List<String> log;
 
+    /**
+     * Constructor.
+     */
     public ItemLog() {
         this.log = new ArrayList<String>();
     }
