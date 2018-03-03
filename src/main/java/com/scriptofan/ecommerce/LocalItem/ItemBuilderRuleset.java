@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Core;
+package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 
