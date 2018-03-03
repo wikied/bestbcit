@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class LocalItemFactory {
 
-    Collection<ItemBuilderRuleset>  itemBuilderRulesets;
+    Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
 
 
 
@@ -47,7 +47,8 @@ public class LocalItemFactory {
     private LocalItem createLocalItem(final Map<String, String> fields) {
         LocalItem localItem = new LocalItem();
 
-        for (ItemBuilderRuleset ruleset : this.itemBuilderRulesets) {
+        for (ItemBuilderRulesetFactory rulesetFactory : this.itemBuilderRulesetFactories) {
+            ItemBuilderRuleset ruleset = rulesetFactory.getNewItemBuilderRuleset();
             localItem = ruleset.apply(localItem, fields);
         }
 
@@ -60,9 +61,9 @@ public class LocalItemFactory {
 
 
     private void getItemBuilderRulesets() {
-        if (this.itemBuilderRulesets == null) {
+        if (this.itemBuilderRulesetFactories == null) {
 
-            this.itemBuilderRulesets = new ArrayList<ItemBuilderRuleset>();
+            this.itemBuilderRulesetFactories = new ArrayList<ItemBuilderRulesetFactory>();
 
         }
     }
