@@ -1,5 +1,9 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Platforms.PlatformRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,9 +13,8 @@ public class LocalItemFactory {
 
     Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
 
-
-
-
+    @Autowired
+    private PlatformRepository platformRepository;
 
     /*
      * For each Map in the list of maps, this needs to:
@@ -63,7 +66,7 @@ public class LocalItemFactory {
     private void getItemBuilderRulesets() {
         if (this.itemBuilderRulesetFactories == null) {
 
-            this.itemBuilderRulesetFactories = new ArrayList<ItemBuilderRulesetFactory>();
+            this.itemBuilderRulesetFactories = this.platformRepository.getItemBuilderRulesetFactories();
 
         }
     }
