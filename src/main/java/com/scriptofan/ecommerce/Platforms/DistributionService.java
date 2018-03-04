@@ -3,7 +3,6 @@ package com.scriptofan.ecommerce.Platforms;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.Offer;
 import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,10 @@ public class DistributionService {
      * item.
      */
     public List<LocalItem> distribute(List<LocalItem> items) {
-        throw new NotImplementedException();
+        for (LocalItem item : items) {
+            distribute(item);
+        }
+        return items;
     }
 
     /*
@@ -33,5 +35,4 @@ public class DistributionService {
 
         return item;
     }
-
 }

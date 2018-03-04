@@ -8,9 +8,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 import java.util.Map;
 
-public class EbayPublisherService implements PlatformPublishingService {
+public class EbayPublishingService implements PlatformPublishingService {
     @Override
-    public LocalItem publish(Map<String, String> fields, Offer offer) {
+    public Offer publish(Map<String, String> fields, Offer offer) {
         throw new NotImplementedException();
     }
 }

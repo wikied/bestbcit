@@ -35,7 +35,6 @@ public class DistributionServiceTests {
     }
 
 
-
     /*
      * Distribute should create call getPlatformPublishingService for each Offer
      * contained.
@@ -49,25 +48,29 @@ public class DistributionServiceTests {
             @Override
             public PlatformPublishingService getPlatformPublishingService() {
                 methodWasCalled[0] = true;
-                return null; }});
+                return null;
+            }
+        });
         localItem.addOffer(new Offer() {
             @Override
             public PlatformPublishingService getPlatformPublishingService() {
                 methodWasCalled[1] = true;
-                return null; }});
+                return null;
+            }
+        });
         localItem.addOffer(new Offer() {
             @Override
             public PlatformPublishingService getPlatformPublishingService() {
                 methodWasCalled[2] = true;
-                return null; }});
+                return null;
+            }
+        });
 
         distributionService.distribute(localItem);
-        assert(methodWasCalled[0] == true);
-        assert(methodWasCalled[1] == true);
-        assert(methodWasCalled[2] == true);
+        assert (methodWasCalled[0] == true);
+        assert (methodWasCalled[1] == true);
+        assert (methodWasCalled[2] == true);
     }
-
-
 
 
     /*
@@ -86,8 +89,10 @@ public class DistributionServiceTests {
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[0] = true;
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
         localItem.addOffer(new Offer() {
             @Override
             public PlatformPublishingService getPlatformPublishingService() {
@@ -96,8 +101,10 @@ public class DistributionServiceTests {
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[1] = true;
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
         localItem.addOffer(new Offer() {
             @Override
             public PlatformPublishingService getPlatformPublishingService() {
@@ -106,15 +113,16 @@ public class DistributionServiceTests {
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[2] = true;
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
 
         distributionService.distribute(localItem);
-        assert(methodWasCalled[0] == true);
-        assert(methodWasCalled[1] == true);
-        assert(methodWasCalled[2] == true);
+        assert (methodWasCalled[0] == true);
+        assert (methodWasCalled[1] == true);
+        assert (methodWasCalled[2] == true);
     }
-
 
 
     /*
@@ -125,9 +133,8 @@ public class DistributionServiceTests {
         LocalItem initialLocalItem = new LocalItem();
         LocalItem returnedLocalItem;
         returnedLocalItem = this.distributionService.distribute(initialLocalItem);
-        assert(returnedLocalItem == initialLocalItem);
+        assert (returnedLocalItem == initialLocalItem);
     }
-
 
 
     /*
@@ -150,15 +157,16 @@ public class DistributionServiceTests {
                     @Override
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
                         for (Map.Entry<String, String> entry : fields.entrySet()) {
-                            assert(localItem.getField(entry.getKey()).equals(entry.getValue()));
+                            assert (localItem.getField(entry.getKey()).equals(entry.getValue()));
                         }
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
 
         this.distributionService.distribute(localItem);
     }
-
 
 
     /*
@@ -166,8 +174,8 @@ public class DistributionServiceTests {
      */
     @Test
     public void distributeShouldFeedOnlyCurrentOfferIntoPublish() {
-        LocalItem       localItem   = new LocalItem();
-        final Offer[]   offersList  = new Offer[2];
+        LocalItem localItem = new LocalItem();
+        final Offer[] offersList = new Offer[2];
 
         // Add two offers, which will each check their likeness in the publish() method
         localItem.addOffer(new Offer() {
@@ -177,10 +185,12 @@ public class DistributionServiceTests {
                 return new PlatformPublishingService() {
                     @Override
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
-                        assert(offer == offersList[0]);
+                        assert (offer == offersList[0]);
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
 
         localItem.addOffer(new Offer() {
             @Override
@@ -189,10 +199,12 @@ public class DistributionServiceTests {
                 return new PlatformPublishingService() {
                     @Override
                     public LocalItem publish(final Map<String, String> fields, Offer offer) {
-                        assert(offer == offersList[1]);
+                        assert (offer == offersList[1]);
                         return null;
-                    }};
-            }});
+                    }
+                };
+            }
+        });
 
         this.distributionService.distribute(localItem);
     }

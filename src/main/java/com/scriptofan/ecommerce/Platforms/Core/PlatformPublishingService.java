@@ -8,6 +8,6 @@ import java.util.Map;
 
 public interface PlatformPublishingService {
 
-    LocalItem publish(final Map<String, String> fields, Offer offer);
+    Offer publish(final Map<String, String> fields, Offer offer);
 
 }
