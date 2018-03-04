@@ -7,12 +7,10 @@ import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -271,6 +269,7 @@ public class DistributionServiceTests {
             localItems.add(localItem);
         }
 
+        // Call distribute on list and check callCount
         this.distributionService.distribute(localItems);
         assert(callCount[0] == numItems);
     }
