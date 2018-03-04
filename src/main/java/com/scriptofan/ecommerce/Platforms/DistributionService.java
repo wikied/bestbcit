@@ -1,6 +1,8 @@
 package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
+import com.scriptofan.ecommerce.LocalItem.Offer;
+import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -21,7 +23,15 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     public LocalItem distribute(LocalItem item) {
-        throw new NotImplementedException();
+
+        // Iterate through offers.
+        // For each offer, get the publishingService, then call its publish() method
+
+        for (Offer offer : item.getOffers()) {
+            PlatformPublishingService publisher = offer.getPlatformPublishingService();
+        }
+
+        return item;
     }
 
 }
