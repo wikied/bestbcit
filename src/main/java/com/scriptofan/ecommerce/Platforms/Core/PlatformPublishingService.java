@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface PlatformPublishingService {
 
-    LocalItem         publish(LocalItem localItem);
-    List<LocalItem>   publish(List<LocalItem> localItemList);
+    LocalItem publish(LocalItem localItem);
 
 }
