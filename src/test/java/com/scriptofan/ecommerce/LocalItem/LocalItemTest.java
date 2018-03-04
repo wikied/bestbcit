@@ -1,22 +1,14 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.LocalItem.Offer;
-import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
 import com.scriptofan.ecommerce.User.User;
-import org.apache.tomcat.util.digester.Rules;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.security.auth.callback.LanguageCallback;
 import java.nio.channels.NotYetBoundException;
 import java.rmi.AlreadyBoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -114,4 +106,13 @@ public class LocalItemTest {
         assert(localItem.getFullLog().size() == 3);
     }
 
+    //Retrieving all fields and modifying one should not affect original
+    @Test
+    public void getAllFieldsShouldReturnCopy() throws RulesetCollisionException {
+        localItem = new LocalItem();
+        localItem.addField("key1", "value1");
+        localItem.getAllFields().put("key1", "modifiedValue");
+
+        assert(localItem.getField("key1").equals("value1"));
+    }
 }
