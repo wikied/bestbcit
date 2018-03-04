@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.LocalItem;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.User.User;
 
+import javax.validation.constraints.Null;
 import java.nio.channels.NotYetBoundException;
 import java.rmi.AlreadyBoundException;
 import java.util.*;
@@ -33,6 +34,9 @@ public class LocalItem {
      */
     public void addField(String key, String value) throws RulesetCollisionException {
 
+        if(key == null){
+            throw new NullPointerException();
+        }
         // Make sure that the field being added to this LocalItem
         // doesn't conflict with one that already exists.
         if (this.fields.containsKey(key)
@@ -44,6 +48,9 @@ public class LocalItem {
     }
 
     public String getField(String key) {
+        if(this.fields.get(key) == null){
+            throw new NullPointerException();
+        }
         return this.fields.get(key);
     }
 
@@ -77,7 +84,6 @@ public class LocalItem {
         }
         return this.user;
     }
-
 
 
 
