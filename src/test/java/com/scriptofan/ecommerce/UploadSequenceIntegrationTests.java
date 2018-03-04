@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce;
 
+import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
@@ -36,7 +37,8 @@ public class UploadSequenceIntegrationTests {
     }
 
     @Test
-    public void completeUploadIntegrationTest() throws AlreadyBoundException {
+    public void completeUploadIntegrationTest()
+            throws AlreadyBoundException, RulesetCollisionException {
 
         File    csvFile = null;
         User    user    = new User();
@@ -45,7 +47,6 @@ public class UploadSequenceIntegrationTests {
         List<LocalItem>             localItems  = null;
 
         // Parse CSV
-
         // Create local items from parsed CSV file
         localItems = this.localItemFactory.createLocalItems(parsedCsv);
 
@@ -53,7 +54,6 @@ public class UploadSequenceIntegrationTests {
         for (LocalItem item : localItems) {
             item.associateUser(user);
         }
-
         // (Update local items based on db)
         localItems = itemSyncService.sync(localItems);
 

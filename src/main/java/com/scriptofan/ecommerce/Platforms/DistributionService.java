@@ -24,5 +24,9 @@ public class DistributionService {
         throw new NotImplementedException();
     }
 
+    // Distribute should create call getPlatformPublishingService for each Offer
+    // Distribute should call publish() for each returned platformPublishingService.
+    // Distribute should feed all of the current LocalItem's fields into publish()
+    // Distribute should feed only the current offer into publish()
 
 }
