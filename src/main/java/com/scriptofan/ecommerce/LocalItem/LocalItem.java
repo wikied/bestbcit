@@ -54,6 +54,13 @@ public class LocalItem {
         return this.fields.get(key);
     }
 
+    public Map<String, String> getAllFields() {
+        Map<String, String> returnMap;
+
+        returnMap = new HashMap<>();
+        returnMap.putAll(this.fields);
+        return returnMap;
+    }
 
 
 
