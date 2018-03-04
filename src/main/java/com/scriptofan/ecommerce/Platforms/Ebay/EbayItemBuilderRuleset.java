@@ -30,8 +30,9 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             throws RulesetCollisionException,
                    RulesetViolationException {
         // Quantity //
-        if( localItem.getField("quantity").equals(invalidQuantity)) {
-            throw new RulesetViolationException();
+        if( localItem.getField("quantity").equals(invalidQuantity)
+                || localItem.getField("quantity") == null) {
+            throw new RulesetViolationException("Invalid quantity");
         } else {
             localItem.addField("quantity", fields.get("quantity"));
         }
@@ -100,9 +101,19 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             localItem.addField("fulfillmentPolicy", fields.get("fulfillmentPolicy"));
         }
 
-        localItem.addField("paymentPolicy", fields.get("fulfillmentPolicy"));
-        localItem.addField("returnPolicy", fields.get("fulfillmentPolicy"));
+        if (fields.get("paymentPolicy") == null) {
+            throw new RulesetViolationException("payment policy is empty");
+        } else {
+            localItem.addField("paymentPolicy", fields.get("paymentPolicy"));
+        }
+
+        if(fields.get("returnPolicy") == null) {
+            throw new RulesetViolationException("return policy is empty");
+        } else {
+            localItem.addField("returnPolicy", fields.get("returnPolicy"));
+        }
         localItem.addField("currency", fields.get("currency"));
+
         localItem.addField("value", fields.get("value"));
     }
 
