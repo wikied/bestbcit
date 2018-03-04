@@ -13,7 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.constraints.Null;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -86,7 +88,7 @@ public class DistributionServiceTests {
             public PlatformPublishingService getPlatformPublishingService() {
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[0] = true;
                         return null;
                     }
@@ -98,7 +100,7 @@ public class DistributionServiceTests {
             public PlatformPublishingService getPlatformPublishingService() {
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[1] = true;
                         return null;
                     }
@@ -110,7 +112,7 @@ public class DistributionServiceTests {
             public PlatformPublishingService getPlatformPublishingService() {
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         methodWasCalled[2] = true;
                         return null;
                     }
@@ -155,7 +157,7 @@ public class DistributionServiceTests {
             public PlatformPublishingService getPlatformPublishingService() {
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         for (Map.Entry<String, String> entry : fields.entrySet()) {
                             assert (localItem.getField(entry.getKey()).equals(entry.getValue()));
                         }
@@ -184,7 +186,7 @@ public class DistributionServiceTests {
                 offersList[0] = this;
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         assert (offer == offersList[0]);
                         return null;
                     }
@@ -198,7 +200,7 @@ public class DistributionServiceTests {
                 offersList[1] = this;
                 return new PlatformPublishingService() {
                     @Override
-                    public LocalItem publish(final Map<String, String> fields, Offer offer) {
+                    public Offer publish(final Map<String, String> fields, Offer offer) {
                         assert (offer == offersList[1]);
                         return null;
                     }
@@ -207,5 +209,69 @@ public class DistributionServiceTests {
         });
 
         this.distributionService.distribute(localItem);
+    }
+
+
+
+    /*
+     * Distribute(LocalItem) should allow offers to be modified by the containing
+     * PlatformDistributionService.
+     */
+    @Test
+    public void distributeShouldLetOffersBeModified() {
+        // Stub offer
+        class DummyOffer implements Offer {
+            public boolean wasModified = false;
+
+            @Override
+            public PlatformPublishingService getPlatformPublishingService() {
+                return new PlatformPublishingService() {
+                    @Override
+                    public Offer publish(Map<String, String> fields, Offer offer) {
+                        ((DummyOffer) offer).wasModified = true;
+                        return offer;
+                    }
+                };
+            }
+        }
+
+        LocalItem localItem = new LocalItem();
+        localItem.addOffer(new DummyOffer());
+
+        this.distributionService.distribute(localItem);
+        assert(((DummyOffer) localItem.getOffers().toArray()[0]).wasModified == true);
+    }
+
+
+
+    /*
+     * Distribute(List) should call Distribute(LocalItem) on all items in list
+     */
+    @Test
+    public void distributeListShouldDistributeAllItems() {
+        final int       numItems    = 10;
+        final int[]     callCount   = {0};
+        List<LocalItem> localItems  = new ArrayList<LocalItem>();
+
+        // Create a bunch of local items, which will all increment callCount when
+        // they have publish() called on their offer
+        for (int i = 0; i < numItems; ++i) {
+            LocalItem localItem = new LocalItem();
+            localItem.addOffer(new Offer() {
+                @Override
+                public PlatformPublishingService getPlatformPublishingService() {
+                     return new PlatformPublishingService() {
+                        @Override
+                        public Offer publish(Map<String, String> fields, Offer offer) {
+                            callCount[0]++;
+                            return offer;
+                        }};
+                }});
+
+            localItems.add(localItem);
+        }
+
+        this.distributionService.distribute(localItems);
+        assert(callCount[0] == numItems);
     }
 }
