@@ -11,9 +11,4 @@ public class EbayPublisherService implements PlatformPublishingService {
     public LocalItem publish(LocalItem localItem) {
         throw new NotImplementedException();
     }
-
-    @Override
-    public List<LocalItem> publish(List<LocalItem> localItemList) {
-        throw new NotImplementedException();
-    }
 }
