@@ -7,10 +7,10 @@ import java.util.Map;
 public class CommonItemBuilderRuleset implements ItemBuilderRuleset {
 
     @Override
-    public LocalItem apply(LocalItem localItem, Map<String, String> fields) {
+    public LocalItem apply(LocalItem localItem, Map<String, String> fields) throws NotImplementedException {
 
         // TODO: Implement
 
-        return localItem;
+        throw new NotImplementedException();
     }
 }

@@ -4,7 +4,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 public class PricingSummary {
 
     // Listing price of the offer
-    Amount price;
+    private Amount price;
 
     // Constructor
     public PricingSummary() {
