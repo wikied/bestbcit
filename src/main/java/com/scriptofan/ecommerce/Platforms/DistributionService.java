@@ -6,6 +6,7 @@ import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
+import java.util.Map;
 
 public class DistributionService {
 
@@ -23,12 +24,11 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     public LocalItem distribute(LocalItem item) {
-
-        // Iterate through offers.
-        // For each offer, get the publishingService, then call its publish() method
+        final Map<String, String> fields = item.getAllFields();
 
         for (Offer offer : item.getOffers()) {
             PlatformPublishingService publisher = offer.getPlatformPublishingService();
+            publisher.publish(fields, offer);
         }
 
         return item;

@@ -5,12 +5,14 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.Offer;
 import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.constraints.Null;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +23,7 @@ public class DistributionServiceTests {
     private Map<String, String> testFields;
     private DistributionService distributionService;
 
-    @BeforeAll
+    @Before
     public void init() {
         this.distributionService = new DistributionService();
 
@@ -38,7 +40,7 @@ public class DistributionServiceTests {
      * Distribute should create call getPlatformPublishingService for each Offer
      * contained.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void shouldCallGetPlatformPublishingServiceForEachOffer() {
         final boolean[] methodWasCalled = {false, false, false};
 
