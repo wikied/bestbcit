@@ -26,13 +26,14 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
-            RulesetViolationException{
-        createItemRuleset(localItem, fields);
-        createOfferRuleset(localItem, fields);
+            RulesetViolationException {
+
+        applyItemRuleset(localItem, fields);
+        applyOfferRuleset(localItem, fields);
         return localItem;
     }
 
-    private void createItemRuleset(LocalItem localItem, Map<String, String> fields)
+    private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
         // Quantity //
@@ -47,6 +48,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         for (ConditionEnum conditionEnum : ConditionEnum.values()) {
             if(fields.get("condition").equals(conditionEnum.toString())) {
                  validCondition = true;
+                 break;
             }
         }
 
@@ -78,7 +80,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
     }
 
-    private void createOfferRuleset(LocalItem localItem, Map<String, String> fields)
+    private void applyOfferRuleset(LocalItem localItem, Map<String, String> fields)
         throws RulesetCollisionException,
                RulesetViolationException {
 
@@ -107,6 +109,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         for (MarketplaceEnum marketplaceEnum : MarketplaceEnum.values()) {
             if(fields.get("marketplaceId").equals(marketplaceEnum.toString())) {
                 validMarketPlaceId = true;
+                break;
             }
         }
 
@@ -141,6 +144,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         for (CurrencyCodeEnum currencyCodeEnum : CurrencyCodeEnum.values()) {
             if(fields.get("marketplaceId").equals(currencyCodeEnum.toString())) {
                 validCurrencyCode = true;
+                break;
             }
         }
 
@@ -157,5 +161,5 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             localItem.addField("value", fields.get("value"));
         }
     }
-    
+
 }
