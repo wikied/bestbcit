@@ -36,14 +36,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
     private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
-        // Quantity //
-        if( localItem.getField("quantity").equals(invalidQuantity)
-                || localItem.getField("quantity") == null) {
-            throw new RulesetViolationException("Invalid quantity");
-        } else {
-            localItem.addField("quantity", fields.get("quantity"));
-        }
-
+        
         // Condition //
         for (ConditionEnum conditionEnum : ConditionEnum.values()) {
             if(fields.get("condition").equals(conditionEnum.toString())) {
