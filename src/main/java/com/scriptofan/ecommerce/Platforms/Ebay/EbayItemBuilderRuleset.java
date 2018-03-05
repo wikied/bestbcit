@@ -4,6 +4,8 @@ import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ConditionEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCodeEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
 
 
 import java.util.Map;
@@ -16,6 +18,10 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
     private final String validFormat = "FIXED_PRICE";
 
     private boolean validCondition = false;
+
+    private boolean validMarketPlaceId = false;
+
+    private boolean validCurrencyCode = false;
 
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
@@ -76,45 +82,80 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         throws RulesetCollisionException,
                RulesetViolationException {
 
+        // sku
         if (fields.get("sku") == null) {
             throw new RulesetViolationException("sku is empty");
         } else {
             localItem.addField("sku", fields.get("sku"));
         }
 
+        // category id
         if (fields.get("categoryId") == null) {
             throw new RulesetViolationException("categoryId is empty");
         } else {
             localItem.addField("categoryId", fields.get("categoryId"));
         }
 
+        // format
         if (!(fields.get("format").equals(validFormat))) {
             throw new RulesetViolationException("Invalid format");
         } else {
             localItem.addField("format", fields.get("format"));
         }
-        localItem.addField("marketplaceId", fields.get("marketplaceId"));
 
+        // Marketplace Id
+        for (MarketplaceEnum marketplaceEnum : MarketplaceEnum.values()) {
+            if(fields.get("marketplaceId").equals(marketplaceEnum.toString())) {
+                validMarketPlaceId = true;
+            }
+        }
+
+        if (validMarketPlaceId == false) {
+            throw new RulesetViolationException("Invalid condition");
+        } else {
+            localItem.addField("marketplaceId", fields.get("marketplaceId"));
+        }
+
+        // Fulfillment Policy
         if(fields.get("fulfillmentPolicy") == null) {
             throw new RulesetViolationException("fulfillment policy is empty");
         } else {
             localItem.addField("fulfillmentPolicy", fields.get("fulfillmentPolicy"));
         }
 
+        // Payment Policy
         if (fields.get("paymentPolicy") == null) {
             throw new RulesetViolationException("payment policy is empty");
         } else {
             localItem.addField("paymentPolicy", fields.get("paymentPolicy"));
         }
 
-        if(fields.get("returnPolicy") == null) {
+        // Return Policy
+        if (fields.get("returnPolicy") == null) {
             throw new RulesetViolationException("return policy is empty");
         } else {
             localItem.addField("returnPolicy", fields.get("returnPolicy"));
         }
-        localItem.addField("currency", fields.get("currency"));
 
-        localItem.addField("value", fields.get("value"));
+        // Currency Id
+        for (CurrencyCodeEnum currencyCodeEnum : CurrencyCodeEnum.values()) {
+            if(fields.get("marketplaceId").equals(currencyCodeEnum.toString())) {
+                validCurrencyCode = true;
+            }
+        }
+
+        if (validCurrencyCode == false) {
+            throw new RulesetViolationException("Invalid condition");
+        } else {
+            localItem.addField("currency", fields.get("currency"));
+        }
+
+        // Value
+        if (fields.get("value") == null) {
+            throw new RulesetViolationException("value is empty");
+        } else {
+            localItem.addField("value", fields.get("value"));
+        }
     }
-
+    
 }
