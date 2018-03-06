@@ -4,24 +4,17 @@ import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ConditionEnum;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCodeEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
-
-
 import java.util.Map;
 
 public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
-
-
-    private String invalidQuantity = "0";
 
     private final String validFormat = "FIXED_PRICE";
 
     private boolean validCondition = false;
 
     private boolean validMarketPlaceId = false;
-
-    private boolean validCurrencyCode = false;
 
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
@@ -36,7 +29,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
     private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
-        
+
         // Condition //
         for (ConditionEnum conditionEnum : ConditionEnum.values()) {
             if(fields.get("condition").equals(conditionEnum.toString())) {
@@ -134,17 +127,10 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
 
         // Currency Id
-        for (CurrencyCodeEnum currencyCodeEnum : CurrencyCodeEnum.values()) {
-            if(fields.get("marketplaceId").equals(currencyCodeEnum.toString())) {
-                validCurrencyCode = true;
-                break;
-            }
-        }
-
-        if (validCurrencyCode == false) {
-            throw new RulesetViolationException("Invalid condition");
+        if (CurrencyCode.currencies.contains(fields.get("currencyCode")) == false) {
+            throw new RulesetViolationException("Invalid currency code");
         } else {
-            localItem.addField("currency", fields.get("currency"));
+            localItem.addField("currencyCode", fields.get("currencyCode"));
         }
 
         // Value
