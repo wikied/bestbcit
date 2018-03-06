@@ -1,11 +1,11 @@
-package com.scriptofan.ecommerce.LocalItem;
+package com.scriptofan.ecommerce.Platforms.Core;
 
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRulesetFactory;
 
-public class CommonItemBuilderRulesetFactory implements ItemBuilderRulesetFactory {
+public class CoreItemBuilderRulesetFactory implements ItemBuilderRulesetFactory {
     @Override
     public ItemBuilderRuleset getNewItemBuilderRuleset() {
-        return new CommonItemBuilderRuleset();
+        return new CoreItemBuilderRuleset();
     }
 }
