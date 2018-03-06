@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce.LocalItem;
 
-import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
+import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 
 public interface Offer {
 

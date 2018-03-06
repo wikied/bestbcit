@@ -1,9 +1,7 @@
-package com.scriptofan.ecommerce.Platforms.Core;
+package com.scriptofan.ecommerce.Platforms.Interface;
 
-import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.Offer;
 
-import java.util.List;
 import java.util.Map;
 
 public interface PlatformPublishingService {

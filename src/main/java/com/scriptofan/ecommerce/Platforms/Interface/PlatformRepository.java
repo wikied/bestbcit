@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Core;
+package com.scriptofan.ecommerce.Platforms.Interface;
 
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRulesetFactory;

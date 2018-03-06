@@ -5,7 +5,7 @@ import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.Offer;
-import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
+import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 
 import org.junit.Before;
 import org.junit.Test;

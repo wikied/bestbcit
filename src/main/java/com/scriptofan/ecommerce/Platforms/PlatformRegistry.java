@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Platforms;
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.LocalItem.ItemBuilderRulesetFactory;
-import com.scriptofan.ecommerce.Platforms.Core.PlatformRepository;
+import com.scriptofan.ecommerce.Platforms.Interface.PlatformRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
