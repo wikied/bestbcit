@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 
 import java.util.ArrayList;

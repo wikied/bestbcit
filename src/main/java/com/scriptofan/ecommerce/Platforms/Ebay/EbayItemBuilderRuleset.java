@@ -2,8 +2,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 
 import java.util.Map;
 

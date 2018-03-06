@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.LocalItem.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 
 import java.util.List;

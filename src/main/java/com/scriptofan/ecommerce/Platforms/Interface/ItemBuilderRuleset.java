@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.LocalItem;
+package com.scriptofan.ecommerce.Platforms.Interface;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;

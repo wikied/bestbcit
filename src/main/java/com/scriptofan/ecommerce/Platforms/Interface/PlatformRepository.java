@@ -1,8 +1,5 @@
 package com.scriptofan.ecommerce.Platforms.Interface;
 
-import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
-import com.scriptofan.ecommerce.LocalItem.ItemBuilderRulesetFactory;
-
 /**
  * Represents the entry point into a retail platform module (i.e.,
  * "EbayWrapper," "EtsyWrapper," etc.).
