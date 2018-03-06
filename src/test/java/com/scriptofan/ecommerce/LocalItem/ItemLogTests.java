@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Config;
+import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,9 @@ public class ItemLogTests {
      */
     @Before
     public void initializeItemLog() {
+        try {
+            Config.init();
+        } catch (AlreadyInitializedException e) { /* catch error */ }
         itemLog         = new ItemLog();
     }
 

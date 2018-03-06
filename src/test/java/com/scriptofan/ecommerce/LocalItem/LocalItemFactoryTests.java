@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Config;
+import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +24,9 @@ public class LocalItemFactoryTests {
 
     @Before
     public void initTestSubjects() {
+        try {
+            Config.init();
+        } catch (AlreadyInitializedException e) { /* catch error */ }
         this.localItemFactory = new LocalItemFactory();
     }
 

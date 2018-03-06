@@ -1,7 +1,10 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Config;
+import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.User.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +18,12 @@ import java.rmi.AlreadyBoundException;
 public class LocalItemTest {
     private LocalItem localItem;
 
+    @Before
+    public void init() {
+        try {
+            Config.init();
+        } catch (AlreadyInitializedException e) { /* catch error */ }
+    }
 
     //Should throw NullPointerException due to passed null parameter.
     @Test(expected = NullPointerException.class)

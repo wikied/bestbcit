@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Platforms;
 
+import com.scriptofan.ecommerce.Config;
+import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.Offer;
@@ -25,6 +27,10 @@ public class DistributionServiceTests {
 
     @Before
     public void init() {
+        try {
+            Config.init();
+        } catch (AlreadyInitializedException e) { /* catch error */ }
+
         this.distributionService = new DistributionService();
 
         this.testFields = new HashMap<>();
