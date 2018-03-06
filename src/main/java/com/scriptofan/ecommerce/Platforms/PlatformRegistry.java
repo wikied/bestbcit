@@ -8,6 +8,11 @@ import com.scriptofan.ecommerce.Platforms.Core.PlatformRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Provides a central access point to all registered retail platform
+ * modules, and provides a single place to register new retail platform
+ * modules with the application.
+ */
 public class PlatformRegistry {
     private static Collection<PlatformRepository> platformRepositories;
     static {
@@ -17,14 +22,21 @@ public class PlatformRegistry {
 
 
 
-    /*
+    /**
      * Registers a PlatformRegistry with the application.
+     *
+     * Please note: We recommend only registering platformRepositories in
+     * Config.init(). Doing so keeps everything in one place.
+     *
+     * @throws AlreadyRegisteredException the repository you're attempting
+     * to add is already registered.
      */
     public static void registerPlatformRepository(PlatformRepository repository)
             throws AlreadyRegisteredException {
 
         if (platformRepositories.contains(repository)) {
-            throw new AlreadyRegisteredException(repository + " is already registered with the application.");
+            throw new AlreadyRegisteredException(
+                    repository + " is already registered with the application.");
         }
         platformRepositories.add(repository);
     }
