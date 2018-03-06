@@ -1,12 +1,6 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
-import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
-import com.scriptofan.ecommerce.Platforms.Core.PlatformRepository;
-import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Configuration module. Try to centralize all build configurations here,
@@ -19,27 +13,25 @@ public class Config {
     /**
      * The platform initialization script.
      * Import all platform repositories here.
+     *
      * @throws AlreadyInitializedException if init() was already called.
      */
-    public static void init()
-            throws AlreadyInitializedException {
-        // Ensures init() is only run once per application.
-        if (Config.initialized) {
-            throw new AlreadyInitializedException();
-        }
+    public static void init() throws AlreadyInitializedException {
+        /* Ensures init() is only run once per application. */
+        if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
         Config.initialized = true;
 
 
 
-        // Import PlatformRepositories
-
+        // Import PlatformRepositories here
     }
 
 
 
 
-    /*
+    /**
      * Checks whether or not the application is initialized.
+     * @return whether or not the platform has been initialized.
      */
     public static boolean isInitialized() {
         return initialized;
