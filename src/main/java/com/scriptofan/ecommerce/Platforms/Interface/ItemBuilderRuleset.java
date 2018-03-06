@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.LocalItem;
+package com.scriptofan.ecommerce.Platforms.Interface;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;

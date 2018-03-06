@@ -1,22 +1,15 @@
 package com.scriptofan.ecommerce.LocalItem;
-
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
-import com.scriptofan.ecommerce.Platforms.PlatformRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
+import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
+
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class LocalItemFactory {
-
-    Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
-
-    @Autowired
-    private PlatformRepository platformRepository;
-
     /*
      * For each Map in the list of maps, this needs to:
      *
@@ -26,11 +19,14 @@ public class LocalItemFactory {
      * 4) Create the LocalItem's Offer placeholders
      * 5) Set the initial quantity
      */
-    public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection) throws RulesetViolationException, RulesetCollisionException {
-        ArrayList<LocalItem> localItems;
-        localItems = new ArrayList<>();
 
-        getItemBuilderRulesets();
+    public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection)
+            throws RulesetCollisionException, RulesetViolationException {
+        ArrayList<LocalItem> localItems = new ArrayList<>();
+
+        if (itemFieldCollection == null) {
+            throw new NullPointerException();
+        }
 
         for (Map<String, String> fields : itemFieldCollection) {
             LocalItem newLocalItem = createLocalItem(fields);
@@ -48,28 +44,22 @@ public class LocalItemFactory {
      * Creates a new local item and applies each ItemBuilderRuleset to it.
      * @return New LocalItem created from fields.
      */
-    private LocalItem createLocalItem(final Map<String, String> fields) throws RulesetViolationException, RulesetCollisionException {
+
+    private LocalItem createLocalItem(final Map<String, String> fields)
+            throws RulesetCollisionException, RulesetViolationException {
+
         LocalItem localItem = new LocalItem();
 
-        for (ItemBuilderRulesetFactory rulesetFactory : this.itemBuilderRulesetFactories) {
-            ItemBuilderRuleset ruleset = rulesetFactory.getNewItemBuilderRuleset();
+        // Guard against being passed a null value.
+        if (fields == null) {
+            throw new NullPointerException("fields can't be null");
+        }
+
+        // Run this item through each loaded Ruleset
+        for (ItemBuilderRuleset ruleset : PlatformRegistry.getItemBuilderRulesets()) {
             localItem = ruleset.apply(localItem, fields);
         }
 
         return localItem;
     }
-
-
-
-
-
-
-    private void getItemBuilderRulesets() {
-        if (this.itemBuilderRulesetFactories == null) {
-
-            this.itemBuilderRulesetFactories = this.platformRepository.getItemBuilderRulesetFactories();
-
-        }
-    }
-
 }

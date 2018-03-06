@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.LocalItem;
+package com.scriptofan.ecommerce.Platforms.Interface;
 
 public interface ItemBuilderRulesetFactory {
 

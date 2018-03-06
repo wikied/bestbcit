@@ -2,10 +2,13 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.LocalItem.ItemBuilderRuleset;
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ConditionEnum;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
+
+
+
 import java.util.Map;
 
 public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
