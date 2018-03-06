@@ -1,30 +1,13 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-import com.scriptofan.ecommerce.Platforms.PlatformRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class LocalItemFactory {
-
-    private Collection<ItemBuilderRulesetFactory>  itemBuilderRulesetFactories;
-
-    private PlatformRepository platformRepository;
-
-
-
-    public LocalItemFactory() {
-        this.platformRepository = new PlatformRepository();
-    }
-
-
-
     /*
      * For each Map in the list of maps, this needs to:
      *
@@ -42,8 +25,6 @@ public class LocalItemFactory {
         if (itemFieldCollection == null) {
             throw new NullPointerException();
         }
-
-        getItemBuilderRulesets();
 
         for (Map<String, String> fields : itemFieldCollection) {
             LocalItem newLocalItem = createLocalItem(fields);
@@ -72,25 +53,10 @@ public class LocalItemFactory {
         }
 
         // Run this item through each loaded Ruleset
-        for (ItemBuilderRulesetFactory rulesetFactory : this.itemBuilderRulesetFactories) {
-            ItemBuilderRuleset ruleset = rulesetFactory.getNewItemBuilderRuleset();
+        for (ItemBuilderRuleset ruleset : PlatformRegistry.getItemBuilderRulesets()) {
             localItem = ruleset.apply(localItem, fields);
         }
 
         return localItem;
     }
-
-
-
-
-
-
-    private void getItemBuilderRulesets() {
-        if (this.itemBuilderRulesetFactories == null) {
-
-            this.itemBuilderRulesetFactories = this.platformRepository.getItemBuilderRulesetFactories();
-
-        }
-    }
-
 }
