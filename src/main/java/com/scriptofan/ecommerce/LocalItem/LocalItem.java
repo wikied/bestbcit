@@ -74,9 +74,6 @@ public class LocalItem {
     }
 
 
-
-
-
     public void associateUser(User user) throws AlreadyBoundException{
         if (this.user == null) {
             this.user = user;
@@ -93,8 +90,6 @@ public class LocalItem {
     }
 
 
-
-
     public void setTotalQuantity(int totalQuantity) {
         if (totalQuantity < 0) {
             throw new IllegalArgumentException("Total quantity must not be negative");
@@ -105,10 +100,6 @@ public class LocalItem {
     public int getTotalQuantity() {
         return totalQuantity;
     }
-
-
-
-
 
     public void log(String message) {
         this.log.add(message);
