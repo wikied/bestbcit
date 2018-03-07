@@ -1,3 +1,4 @@
+
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
@@ -12,3 +13,6 @@ public class EbayPublishingService implements PlatformPublishingService {
         throw new NotImplementedException();
     }
 }
+
+
+
