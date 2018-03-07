@@ -35,11 +35,6 @@ public class LocalItemFactory {
         return localItems;
     }
 
-
-
-
-
-
     /**
      * Creates a new local item and applies each ItemBuilderRuleset to it.
      * @return New LocalItem created from fields.

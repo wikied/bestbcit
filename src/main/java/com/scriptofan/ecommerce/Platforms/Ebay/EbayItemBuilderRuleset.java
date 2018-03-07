@@ -41,7 +41,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             }
         }
 
-        if (validCondition == false) {
+        if (!validCondition) {
             throw new RulesetViolationException("Invalid condition");
         } else {
             localItem.addField("condition", fields.get("condition"));
@@ -102,7 +102,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             }
         }
 
-        if (validMarketPlaceId == false) {
+        if (!validMarketPlaceId) {
             throw new RulesetViolationException("Invalid condition");
         } else {
             localItem.addField("marketplaceId", fields.get("marketplaceId"));
@@ -130,7 +130,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
 
         // Currency Id
-        if (CurrencyCode.currencies.contains(fields.get("currencyCode")) == false) {
+        if (!CurrencyCode.currencies.contains(fields.get("currencyCode"))) {
             throw new RulesetViolationException("Invalid currency code");
         } else {
             localItem.addField("currencyCode", fields.get("currencyCode"));
