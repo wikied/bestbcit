@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.Controllers;
 
-import com.scriptofan.ecommerce.parsercsv.FileConvertService;
-import com.scriptofan.ecommerce.validateCSV.ValidateService;
+import com.scriptofan.ecommerce.CSVParser.FileConvertService;
+import com.scriptofan.ecommerce.ValidateCSVFile.ValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

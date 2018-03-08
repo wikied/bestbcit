@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.parsercsv;
+package com.scriptofan.ecommerce.CSVParser;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,8 +1,8 @@
-package com.scriptofan.ecommerce.validateCSV;
+package com.scriptofan.ecommerce.ValidateCSVFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.scriptofan.ecommerce.parsercsv.ParserCsvService;
+import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 
 import java.io.BufferedReader;
 import java.io.File;

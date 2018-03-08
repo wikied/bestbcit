@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.parsercsv;
+package com.scriptofan.ecommerce.CSVParser;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
