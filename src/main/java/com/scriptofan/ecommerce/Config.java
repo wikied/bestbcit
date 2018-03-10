@@ -1,6 +1,10 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
+import com.scriptofan.ecommerce.Platforms.Core.CoreRepository;
+import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,18 +12,24 @@ import org.springframework.stereotype.Repository;
  * particularly for handling the integration of new retail platform modules.
  */
 @Repository
-public final class Config {
+public class Config {
 
     private static boolean initialized = false;
+
+    @Autowired
+    private PlatformRegistry platformRegistry;
 
     /*
      * Constructor.
      */
     public Config() {
         try {
-            Config.init();
-        } catch (AlreadyInitializedException e) {
+            init();
+        } catch (AlreadyInitializedException | AlreadyRegisteredException e) {
             System.err.println("Configuration already initialized");
+        } catch (NullPointerException e) {
+            System.err.println("Null Pointer");
+            e.printStackTrace();
         }
     }
 
@@ -31,7 +41,10 @@ public final class Config {
      *
      * @throws AlreadyInitializedException if init() was already called.
      */
-    public static void init() throws AlreadyInitializedException {
+    public void init()
+            throws  AlreadyInitializedException,
+                    AlreadyRegisteredException
+    {
         /* Ensures init() is only run once per application. */
         if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
         Config.initialized = true;
@@ -39,6 +52,7 @@ public final class Config {
         System.err.println("Initializing config");
 
         // Import PlatformRepositories here
+        platformRegistry.registerPlatformRepository(new CoreRepository());
     }
 
 

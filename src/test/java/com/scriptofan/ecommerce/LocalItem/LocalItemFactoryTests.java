@@ -1,10 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
-import com.scriptofan.ecommerce.Exception.NotImplementedException;
-import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-import com.scriptofan.ecommerce.Exception.RulesetViolationException;
+import com.scriptofan.ecommerce.Exception.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,10 +22,13 @@ public class LocalItemFactoryTests {
     @Autowired
     private LocalItemFactory localItemFactory;
 
+    @Autowired
+    private Config config;
+
     @Before
-    public void initTestSubjects() {
+    public void initTestSubjects() throws AlreadyRegisteredException {
         try {
-            Config.init();
+            config.init();
         } catch (AlreadyInitializedException e) { /* catch error */ }
     }
 
