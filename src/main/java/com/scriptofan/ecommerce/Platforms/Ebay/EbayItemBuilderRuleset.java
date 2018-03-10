@@ -24,12 +24,12 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             throws RulesetCollisionException,
             RulesetViolationException {
 
-        applyItemRuleset(localItem, fields);
-        applyOfferRuleset(localItem, fields);
+        buildItems(localItem, fields);
+        buildOffers(localItem, fields);
         return localItem;
     }
 
-    private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
+    private void buildItems(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
 
@@ -69,7 +69,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
     }
 
-    private void applyOfferRuleset(LocalItem localItem, Map<String, String> fields)
+    private void buildOffers(LocalItem localItem, Map<String, String> fields)
         throws RulesetCollisionException,
                RulesetViolationException {
 
