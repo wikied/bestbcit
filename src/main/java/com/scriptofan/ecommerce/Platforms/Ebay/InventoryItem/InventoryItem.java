@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class InventoryItem {
 
     private Availability availability;
-    private ConditionEnum condition;
+    private String condition;
     private String conditionDescription;
     private PackageWeightAndSize packageWeightAndSize;
     private Product product;
@@ -29,7 +29,7 @@ public class InventoryItem {
         return availability;
     }
 
-    public ConditionEnum getCondition() {
+    public String getCondition() {
         return condition;
     }
 
@@ -59,7 +59,7 @@ public class InventoryItem {
         this.availability = availability;
     }
 
-    public void setCondition(ConditionEnum condition) {
+    public void setCondition(String condition) {
         this.condition = condition;
     }
 

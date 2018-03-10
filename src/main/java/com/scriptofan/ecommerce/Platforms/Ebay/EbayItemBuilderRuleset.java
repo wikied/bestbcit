@@ -24,12 +24,12 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             throws RulesetCollisionException,
             RulesetViolationException {
 
-        applyItemRuleset(localItem, fields);
-        applyOfferRuleset(localItem, fields);
+        buildItem(localItem, fields);
+        buildOffer(localItem, fields);
         return localItem;
     }
 
-    private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
+    private void buildItem(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
 
@@ -44,7 +44,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         if (!validCondition) {
             throw new RulesetViolationException("Invalid condition");
         } else {
-            localItem.addField("condition", fields.get("condition"));
+            localItem.addField("condition", fields.get("condition").toUpperCase());
         }
 
         // Product Title //
@@ -69,7 +69,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
     }
 
-    private void applyOfferRuleset(LocalItem localItem, Map<String, String> fields)
+    private void buildOffer(LocalItem localItem, Map<String, String> fields)
         throws RulesetCollisionException,
                RulesetViolationException {
 
