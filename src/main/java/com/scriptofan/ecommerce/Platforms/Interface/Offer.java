@@ -19,6 +19,11 @@ public abstract class Offer {
 
 
 
+    /*
+     * Posts this offer to the respective platform.
+     */
+    public abstract void post();
+
 
 
     /**
