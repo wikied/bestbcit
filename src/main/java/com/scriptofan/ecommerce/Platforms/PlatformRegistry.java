@@ -97,13 +97,13 @@ public class PlatformRegistry {
 
 
 
-    public static QuantityDistributionScheme getQuantityDistributionScheme() {
+    public QuantityDistributionScheme getQuantityDistributionScheme() {
         return quantityDistributionScheme;
     }
 
 
 
-    public static void setQuantityDistributionScheme(QuantityDistributionScheme quantityDistributionScheme)
+    public void setQuantityDistributionScheme(QuantityDistributionScheme quantityDistributionScheme)
             throws AlreadyBoundException
     {
         if (PlatformRegistry.quantityDistributionScheme == null) {

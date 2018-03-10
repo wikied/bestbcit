@@ -225,7 +225,7 @@ public class DistributionServiceTests {
     @Test
     public void distributeShouldLetOffersBeModified() {
         // Stub offer
-        class DummyOffer implements Offer {
+        class DummyOffer extends Offer {
             public boolean wasModified = false;
 
             @Override

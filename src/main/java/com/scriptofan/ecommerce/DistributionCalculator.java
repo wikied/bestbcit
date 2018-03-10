@@ -1,11 +1,11 @@
 package com.scriptofan.ecommerce;
 
-import com.scriptofan.ecommerce.ItemDistributor.QuantityDistributionInterface;
+import com.scriptofan.ecommerce.ItemDistributor.QuantityDistributionScheme;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 
 public class DistributionCalculator
-        implements QuantityDistributionInterface
+        implements QuantityDistributionScheme
 {
     /*
      * Distributes quantity among offers for a LocalItem.
