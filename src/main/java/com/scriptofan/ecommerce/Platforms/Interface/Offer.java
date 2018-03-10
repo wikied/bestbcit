@@ -1,21 +1,23 @@
 package com.scriptofan.ecommerce.Platforms.Interface;
 
+import com.scriptofan.ecommerce.LocalItem.LocalItem;
+
 public abstract class Offer {
 
-    private int quantity;
+    private int         quantity;
+    private LocalItem   localItem;
 
-    public Offer() {
-        quantity = 0;
+    public Offer(LocalItem localItem) {
+        this.quantity   = 0;
+        this.localItem  = localItem;
     }
 
 
 
     /*
-     * Returns an instance of the PlatformPublishingService associated with
-     * this type of offer (i.e. "EbayPublishingService, EtsyPublishingService,"
-     * etc.)
+     * Posts this offer to the respective platform.
      */
-    public abstract PlatformPublishingService getPlatformPublishingService();
+    public abstract void post();
 
 
 
@@ -41,5 +43,14 @@ public abstract class Offer {
         else {
             throw new IllegalArgumentException("Quantity may not be less than 0");
         }
+    }
+
+
+
+    /*
+     * Returns the associated localItem.
+     */
+    public LocalItem getLocalItem() {
+        return localItem;
     }
 }

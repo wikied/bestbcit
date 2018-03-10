@@ -3,10 +3,10 @@ package com.scriptofan.ecommerce.ItemDistributor;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
-import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Map;
@@ -38,8 +38,7 @@ public class DistributionService {
         final Map<String, String> fields = item.getAllFields();
         platformRegistry.getQuantityDistributionScheme().calculateDistribution(item);
         for (Offer offer : item.getOffers()) {
-            PlatformPublishingService publisher = offer.getPlatformPublishingService();
-            publisher.publish(fields, offer);
+            offer.post();
         }
 
         return item;

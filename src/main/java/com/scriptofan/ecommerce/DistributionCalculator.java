@@ -14,17 +14,22 @@ public class DistributionCalculator
     {
         int quantity;
         int quantityPerOffer;
+        int numberOfOffers = item.getOffers().size();
 
-        quantity         = item.getTotalQuantity();
-        quantityPerOffer = quantity / item.getOffers().size();
+        // Handle zero offers
+        if (numberOfOffers > 0) {
 
-        for (Offer offer : item.getOffers()) {
+            quantity = item.getTotalQuantity();
+            quantityPerOffer = quantity / numberOfOffers;
 
-            if (quantity > quantityPerOffer * 2) {
-                quantity -= quantityPerOffer;
-                offer.setQuantity(quantityPerOffer);
-            } else {
-                offer.setQuantity(quantity);
+            for (Offer offer : item.getOffers()) {
+
+                if (quantity > quantityPerOffer * 2) {
+                    quantity -= quantityPerOffer;
+                    offer.setQuantity(quantityPerOffer);
+                } else {
+                    offer.setQuantity(quantity);
+                }
             }
         }
         return item;
