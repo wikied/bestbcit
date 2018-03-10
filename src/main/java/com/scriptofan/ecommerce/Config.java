@@ -5,13 +5,13 @@ import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Platforms.Core.CoreRepository;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  * Configuration module. Try to centralize all build configurations here,
  * particularly for handling the integration of new retail platform modules.
  */
-@Repository
+@Service
 public class Config {
 
     private static boolean initialized = false;
@@ -24,12 +24,14 @@ public class Config {
      */
     public Config() {
         try {
-            init();
-        } catch (AlreadyInitializedException | AlreadyRegisteredException e) {
-            System.err.println("Configuration already initialized");
-        } catch (NullPointerException e) {
-            System.err.println("Null Pointer");
+            if (this.platformRegistry == null) {
+                this.platformRegistry = new PlatformRegistry();
+            }
+            this.init();
+        }
+        catch (NullPointerException e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -42,17 +44,21 @@ public class Config {
      * @throws AlreadyInitializedException if init() was already called.
      */
     public void init()
-            throws  AlreadyInitializedException,
-                    AlreadyRegisteredException
     {
-        /* Ensures init() is only run once per application. */
-        if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
-        Config.initialized = true;
+        if (Config.isInitialized()) { return; }
 
+        Config.initialized = true;
         System.err.println("Initializing config");
 
         // Import PlatformRepositories here
-        platformRegistry.registerPlatformRepository(new CoreRepository());
+        try {
+            platformRegistry.registerPlatformRepository(new CoreRepository());
+        }
+        catch (AlreadyRegisteredException e) {
+            System.err.println("Trying to register the same repository more than once");
+            e.printStackTrace();
+        }
+
     }
 
 

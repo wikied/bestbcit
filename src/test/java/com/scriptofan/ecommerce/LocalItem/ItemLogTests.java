@@ -1,7 +1,6 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 import java.util.List;
 
@@ -28,10 +26,8 @@ public class ItemLogTests {
      */
     @Before
     public void initializeItemLog() throws AlreadyRegisteredException {
-        try {
-            config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
-        itemLog         = new ItemLog();
+        config.init();
+        itemLog = new ItemLog();
     }
 
 

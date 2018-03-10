@@ -1,7 +1,6 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.User.User;
@@ -25,9 +24,7 @@ public class LocalItemTest {
 
     @Before
     public void init() throws AlreadyRegisteredException {
-        try {
-            config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+        config.init();
     }
 
     //Should throw NullPointerException due to passed null parameter.

@@ -27,9 +27,7 @@ public class LocalItemFactoryTests {
 
     @Before
     public void initTestSubjects() throws AlreadyRegisteredException {
-        try {
-            config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+        config.init();
     }
 
 
