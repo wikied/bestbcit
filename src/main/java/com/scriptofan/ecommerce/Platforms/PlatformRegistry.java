@@ -1,11 +1,13 @@
 package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
+import com.scriptofan.ecommerce.ItemDistributor.QuantityDistributionScheme;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRulesetFactory;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformRepository;
 import org.springframework.stereotype.Repository;
 
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,6 +19,7 @@ import java.util.Collection;
 @Repository
 public class PlatformRegistry {
 
+    private static QuantityDistributionScheme     quantityDistributionScheme;
     private static Collection<PlatformRepository> platformRepositories;
     static {
         platformRepositories = new ArrayList<>();
@@ -91,4 +94,23 @@ public class PlatformRegistry {
         return rulesetFactories;
     }
 
+
+
+
+    public static QuantityDistributionScheme getQuantityDistributionScheme() {
+        return quantityDistributionScheme;
+    }
+
+
+
+    public static void setQuantityDistributionScheme(QuantityDistributionScheme quantityDistributionScheme)
+            throws AlreadyBoundException
+    {
+        if (PlatformRegistry.quantityDistributionScheme == null) {
+            PlatformRegistry.quantityDistributionScheme = quantityDistributionScheme;
+        }
+        else {
+            throw new AlreadyBoundException("Distribution scheme is already set");
+        }
+    }
 }
