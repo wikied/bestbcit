@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class CoreItemBuilderRuleset implements ItemBuilderRuleset {
 
+    public static final String LOG_APPLIED    = "Core ruleset applied";
     public static final String TOTAL_QUANTITY = "totalQuantity";
 
     @Override
@@ -31,6 +32,7 @@ public class CoreItemBuilderRuleset implements ItemBuilderRuleset {
         }
 
         localItem.setTotalQuantity(quantityInt);
+        localItem.log(LOG_APPLIED);
         return localItem;
     }
 }
