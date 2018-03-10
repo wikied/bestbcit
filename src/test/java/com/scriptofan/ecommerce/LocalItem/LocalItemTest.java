@@ -22,7 +22,9 @@ public class LocalItemTest {
     public void init() {
         try {
             Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+        } catch (AlreadyInitializedException e) { /* catch error */ } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        }
     }
 
     //Should throw NullPointerException due to passed null parameter.

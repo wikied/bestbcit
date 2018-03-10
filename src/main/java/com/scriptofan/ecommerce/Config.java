@@ -1,7 +1,10 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.stereotype.Repository;
+
+import java.rmi.AlreadyBoundException;
 
 /**
  * Configuration module. Try to centralize all build configurations here,
@@ -20,6 +23,8 @@ public final class Config {
             Config.init();
         } catch (AlreadyInitializedException e) {
             System.err.println("Configuration already initialized");
+        } catch (AlreadyBoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -31,12 +36,14 @@ public final class Config {
      *
      * @throws AlreadyInitializedException if init() was already called.
      */
-    public static void init() throws AlreadyInitializedException {
+    public static void init() throws AlreadyInitializedException, AlreadyBoundException {
         /* Ensures init() is only run once per application. */
         if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
         Config.initialized = true;
 
         System.err.println("Initializing config");
+
+        (new PlatformRegistry()).setQuantityDistributionScheme(new DistributionCalculator());
 
         // Import PlatformRepositories here
     }

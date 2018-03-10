@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
+import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -25,7 +26,9 @@ public class ItemLogTests {
     public void initializeItemLog() {
         try {
             Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+        } catch (AlreadyInitializedException e) { /* catch error */ } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        }
         itemLog         = new ItemLog();
     }
 

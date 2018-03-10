@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.jvm.hotspot.utilities.Assert;
 
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,9 @@ public class LocalItemFactoryTests {
     public void initTestSubjects() {
         try {
             Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+        } catch (AlreadyInitializedException e) { /* catch error */ } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
