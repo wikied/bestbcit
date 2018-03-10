@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce;
 
-import com.scriptofan.ecommerce.upload.StorageService;
+import com.scriptofan.ecommerce.CSVParser.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

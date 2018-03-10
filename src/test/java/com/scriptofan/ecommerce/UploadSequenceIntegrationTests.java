@@ -8,7 +8,7 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
 import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.User.User;
-import com.scriptofan.ecommerce.parsercsv.ParserCsvService;
+import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

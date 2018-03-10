@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.upload;
+package com.scriptofan.ecommerce.CSVParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
