@@ -1,19 +1,18 @@
 package com.scriptofan.ecommerce.LocalItem;
 
-import com.scriptofan.ecommerce.Exception.NotImplementedException;
-import org.apache.tomcat.jni.Local;
-
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class ItemSyncService {
 
     /*
      * Synchronize each item in the list with the database.
      * TODO: Implement
      */
-    public List<LocalItem> sync(List<LocalItem> localItemList) throws NotImplementedException{
-        throw new NotImplementedException();
+    public List<LocalItem> sync(List<LocalItem> localItemList) {
+        return localItemList;
     }
 
 }

@@ -16,6 +16,8 @@ import java.util.Map;
 @Service
 public class LocalItemFactory {
 
+    public static final String LOG_APPLYING_RULESET = "Applying ruleset ";
+
     @Autowired
     private PlatformRegistry platformRegistry;
 
@@ -75,6 +77,7 @@ public class LocalItemFactory {
 
         // Run this item through each loaded Ruleset
         rulesets = platformRegistry.getItemBuilderRulesets();
+        localItem.log("Applying " + rulesets.size() + " rulesets");
         if (rulesets != null) {
             for (ItemBuilderRuleset ruleset : rulesets) {
                 localItem = ruleset.apply(localItem, fields);

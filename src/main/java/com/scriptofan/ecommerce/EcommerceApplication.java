@@ -16,9 +16,7 @@ public class EcommerceApplication implements CommandLineRunner{
     private Config config;
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(EcommerceApplication.class, args);
-
 	}
 
 	@Override
