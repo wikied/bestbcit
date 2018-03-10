@@ -2,7 +2,9 @@ package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
@@ -46,7 +48,7 @@ public class DistributionServiceTests {
      * contained.
      */
     @Test(expected = NullPointerException.class)
-    public void shouldCallGetPlatformPublishingServiceForEachOffer() {
+    public void shouldCallGetPlatformPublishingServiceForEachOffer() throws NotImplementedException {
         final boolean[] methodWasCalled = {false, false, false};
 
         LocalItem localItem = new LocalItem();
@@ -83,7 +85,7 @@ public class DistributionServiceTests {
      * Distribute should call publish() for each returned platformPublishingService.
      */
     @Test
-    public void distributeShouldCallPublishOncePerOffer() {
+    public void distributeShouldCallPublishOncePerOffer() throws NotImplementedException {
         final boolean[] methodWasCalled = {false, false, false};
 
         LocalItem localItem = new LocalItem();
@@ -135,7 +137,7 @@ public class DistributionServiceTests {
      * Distribute should return the same LocalItem back.
      */
     @Test
-    public void distributeShouldReturnSameLocalItem() {
+    public void distributeShouldReturnSameLocalItem() throws NotImplementedException {
         LocalItem initialLocalItem = new LocalItem();
         LocalItem returnedLocalItem;
         returnedLocalItem = this.distributionService.distribute(initialLocalItem);
@@ -147,7 +149,7 @@ public class DistributionServiceTests {
      * Distribute should feed all of the current LocalItem's fields into publish()
      */
     @Test
-    public void distributeShouldFeedAllFieldsToPublish() throws RulesetCollisionException {
+    public void distributeShouldFeedAllFieldsToPublish() throws RulesetCollisionException, NotImplementedException {
         LocalItem localItem = new LocalItem();
 
         // Add test fields to the map
@@ -179,7 +181,7 @@ public class DistributionServiceTests {
      * Distribute should apply only the current offer into any one publish() call
      */
     @Test
-    public void distributeShouldFeedOnlyCurrentOfferIntoPublish() {
+    public void distributeShouldFeedOnlyCurrentOfferIntoPublish() throws NotImplementedException {
         LocalItem localItem = new LocalItem();
         final Offer[] offersList = new Offer[2];
 
@@ -222,9 +224,9 @@ public class DistributionServiceTests {
      * PlatformDistributionService.
      */
     @Test
-    public void distributeShouldLetOffersBeModified() {
+    public void distributeShouldLetOffersBeModified() throws NotImplementedException {
         // Stub offer
-        class DummyOffer implements Offer {
+        class DummyOffer extends Offer {
             public boolean wasModified = false;
 
             @Override
@@ -252,7 +254,7 @@ public class DistributionServiceTests {
      * Distribute(List) should call Distribute(LocalItem) on all items in list
      */
     @Test
-    public void distributeListShouldDistributeAllItems() {
+    public void distributeListShouldDistributeAllItems() throws NotImplementedException {
         final int       numItems    = 10;
         final int[]     callCount   = {0};
         List<LocalItem> localItems  = new ArrayList<LocalItem>();

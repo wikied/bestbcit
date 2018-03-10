@@ -1,6 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Interface;
 
-import org.apache.commons.lang3.NotImplementedException;
+
+
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;

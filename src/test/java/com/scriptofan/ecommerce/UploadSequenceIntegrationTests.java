@@ -1,10 +1,12 @@
 package com.scriptofan.ecommerce;
 
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
-import com.scriptofan.ecommerce.Platforms.DistributionService;
+import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.User.User;
 import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import org.junit.Before;
@@ -37,7 +39,7 @@ public class UploadSequenceIntegrationTests {
 
     @Test
     public void completeUploadIntegrationTest()
-            throws AlreadyBoundException, RulesetCollisionException {
+            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException, NotImplementedException {
 
         File    csvFile = null;
         User    user    = new User();

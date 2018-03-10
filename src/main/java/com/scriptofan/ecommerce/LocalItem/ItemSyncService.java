@@ -1,10 +1,11 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import org.apache.tomcat.jni.Local;
 
-//import org.apache.tomcat.jni.Local;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+
 import java.util.List;
 
 public class ItemSyncService {
@@ -14,7 +15,7 @@ public class ItemSyncService {
      * TODO: Implement
      */
     public List<LocalItem> sync(List<LocalItem> localItemList) throws NotImplementedException{
-        throw new sun.reflect.generics.reflectiveObjects.NotImplementedException();
+        throw new NotImplementedException();
     }
 
 }

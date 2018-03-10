@@ -1,14 +1,29 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import org.springframework.stereotype.Repository;
 
 /**
  * Configuration module. Try to centralize all build configurations here,
  * particularly for handling the integration of new retail platform modules.
  */
+@Repository
 public class Config {
 
     private static boolean initialized = false;
+
+    /*
+     * Constructor.
+     */
+    public Config() {
+        try {
+            Config.init();
+        } catch (AlreadyInitializedException e) {
+            System.err.println("Configuration already initialized");
+        }
+    }
+
+
 
     /**
      * The platform initialization script.
@@ -21,7 +36,7 @@ public class Config {
         if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
         Config.initialized = true;
 
-
+        System.err.println("Initializing config");
 
         // Import PlatformRepositories here
     }

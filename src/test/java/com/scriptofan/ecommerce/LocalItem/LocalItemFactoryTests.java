@@ -2,10 +2,13 @@ package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 //import sun.jvm.hotspot.utilities.Assert;
@@ -19,7 +22,7 @@ import java.util.Map;
 @SpringBootTest
 public class LocalItemFactoryTests {
 
-
+    @Autowired
     private LocalItemFactory localItemFactory;
 
     @Before
@@ -27,7 +30,6 @@ public class LocalItemFactoryTests {
         try {
             Config.init();
         } catch (AlreadyInitializedException e) { /* catch error */ }
-        this.localItemFactory = new LocalItemFactory();
     }
 
 
@@ -36,7 +38,7 @@ public class LocalItemFactoryTests {
      * Passing null collection of maps should throw NullPointerException
      */
     @Test(expected = NullPointerException.class)
-    public void nullFieldCollectionShouldThrowException() throws RulesetCollisionException {
+    public void nullFieldCollectionShouldThrowException() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         localItemFactory.createLocalItems(null);
     }
 
@@ -46,7 +48,7 @@ public class LocalItemFactoryTests {
      * Passing a list containing one or more null values should throw a NullPointerException
      */
     @Test(expected = NullPointerException.class)
-    public void nullMapShouldThrowException() throws RulesetCollisionException {
+    public void nullMapShouldThrowException() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         List<Map<String, String>>   fieldCollection = new ArrayList<>();
         fieldCollection.add(null);
         localItemFactory.createLocalItems(fieldCollection);
@@ -58,7 +60,7 @@ public class LocalItemFactoryTests {
      * Passing a valid List<Map<String, String>> should return one LocalItem for each item in the map.
      */
     @Test
-    public void validMapShouldReturnSameNumberOfLocalItems() throws RulesetCollisionException {
+    public void validMapShouldReturnSameNumberOfLocalItems() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         Map<String, String>         fieldMap;
         List<Map<String, String>>   fieldCollection;
         List<LocalItem>             returnedItems;
