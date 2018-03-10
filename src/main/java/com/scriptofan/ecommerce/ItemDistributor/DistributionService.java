@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.ItemDistributor;
 
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
@@ -22,7 +23,7 @@ public class DistributionService {
      * list of items, with a log of all successes, failures, and issues for each
      * item.
      */
-    public List<LocalItem> distribute(List<LocalItem> items) {
+    public List<LocalItem> distribute(List<LocalItem> items) throws NotImplementedException {
         for (LocalItem item : items) {
             distribute(item);
         }
@@ -33,7 +34,7 @@ public class DistributionService {
      * Distributes LocalItem based on its offers. Returns the LocalItem, with an
      * updated log of successes, failures and issues.
      */
-    public LocalItem distribute(LocalItem item) {
+    public LocalItem distribute(LocalItem item) throws NotImplementedException {
         final Map<String, String> fields = item.getAllFields();
         platformRegistry.getQuantityDistributionScheme().calculateDistribution(item);
         for (Offer offer : item.getOffers()) {
