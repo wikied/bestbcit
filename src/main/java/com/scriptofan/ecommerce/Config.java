@@ -1,8 +1,11 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
+import com.scriptofan.ecommerce.Platforms.Core.CoreRepository;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.rmi.AlreadyBoundException;
 
@@ -10,20 +13,29 @@ import java.rmi.AlreadyBoundException;
  * Configuration module. Try to centralize all build configurations here,
  * particularly for handling the integration of new retail platform modules.
  */
-@Repository
-public final class Config {
+@Service
+public class Config {
 
     private static boolean initialized = false;
+
+    @Autowired
+    private PlatformRegistry platformRegistry;
 
     /*
      * Constructor.
      */
     public Config() {
         try {
-            Config.init();
-        } catch (AlreadyInitializedException e) {
-            System.err.println("Configuration already initialized");
-        } catch (AlreadyBoundException e) {
+            if (this.platformRegistry == null) {
+                this.platformRegistry = new PlatformRegistry();
+            }
+            this.init();
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
     }
@@ -36,16 +48,23 @@ public final class Config {
      *
      * @throws AlreadyInitializedException if init() was already called.
      */
-    public static void init() throws AlreadyInitializedException, AlreadyBoundException {
-        /* Ensures init() is only run once per application. */
-        if (Config.isInitialized()) { throw new AlreadyInitializedException(); }
-        Config.initialized = true;
+    public void init() throws AlreadyBoundException {
+        if (Config.isInitialized()) { return; }
 
+        Config.initialized = true;
         System.err.println("Initializing config");
 
-        (new PlatformRegistry()).setQuantityDistributionScheme(new DistributionCalculator());
+        platformRegistry.setQuantityDistributionScheme(new DistributionCalculator());
 
         // Import PlatformRepositories here
+        try {
+            platformRegistry.registerPlatformRepository(new CoreRepository());
+        }
+        catch (AlreadyRegisteredException e) {
+            System.err.println("Trying to register the same repository more than once");
+            e.printStackTrace();
+        }
+
     }
 
 

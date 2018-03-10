@@ -2,7 +2,7 @@ package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.DistributionCalculator;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
@@ -32,12 +32,13 @@ public class DistributionServiceTests {
     @Autowired
     private PlatformRegistry platformRegistry;
 
+    @Autowired
+    private Config config;
+
 
     @Before
-    public void init() throws AlreadyBoundException {
-        try {
-            Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+    public void init() throws AlreadyBoundException, AlreadyRegisteredException {
+        config.init();
 
         this.testFields = new HashMap<>();
         testFields.put("key1", "value1");

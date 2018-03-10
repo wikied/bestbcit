@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Integration.CsvPostToEbay;
 
 import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
@@ -53,8 +52,6 @@ public class UploadSequenceIntegrationTests {
     public void init() {
         try {
             config.init();
-        } catch (AlreadyInitializedException e) {
-            System.err.println("Warning! Config already initialized");
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
