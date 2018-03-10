@@ -7,6 +7,7 @@ import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.jvm.hotspot.utilities.Assert;
@@ -20,7 +21,7 @@ import java.util.Map;
 @SpringBootTest
 public class LocalItemFactoryTests {
 
-
+    @Autowired
     private LocalItemFactory localItemFactory;
 
     @Before
@@ -28,7 +29,6 @@ public class LocalItemFactoryTests {
         try {
             Config.init();
         } catch (AlreadyInitializedException e) { /* catch error */ }
-        this.localItemFactory = new LocalItemFactory();
     }
 
 
