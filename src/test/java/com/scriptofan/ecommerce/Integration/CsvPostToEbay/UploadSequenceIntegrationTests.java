@@ -10,6 +10,7 @@ import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
+import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import com.scriptofan.ecommerce.User.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +42,9 @@ public class UploadSequenceIntegrationTests {
 
     @Autowired
     private DistributionService distributionService;
+
+    @Autowired
+    private PlatformRegistry platformRegistry;
 
     @Autowired
     private Config config;
@@ -84,11 +88,19 @@ public class UploadSequenceIntegrationTests {
         user = new User();
         for (LocalItem item : localItems) {
             item.associateUser(user);
+            assert(item.getUser() != null);
         }
 
         localItems = itemSyncService.sync(localItems);
         localItems = distributionService.distribute(localItems);
         localItems = itemSyncService.sync(localItems);
+
+        for (LocalItem item : localItems) {
+            for (String log : item.getFullLog()) {
+                System.err.println(log);
+            }
+            System.err.println();
+        }
     }
 
 }
