@@ -21,7 +21,7 @@ public class LocationPostController {
         Location    location;
         String      response;
 
-        location = locationBuilder.dummyLocationData();
+        location = locationBuilder.buildLocation();
         response = locationService.createInventoryLocation(location, DummyEbayUserService.TOKEN);
 
         return response;
