@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.Config;
+import com.scriptofan.ecommerce.DistributionCalculator;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
@@ -12,9 +13,11 @@ import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +28,12 @@ import java.util.Map;
 public class DistributionServiceTests {
 
     private Map<String, String> testFields;
+
+    @Autowired
     private DistributionService distributionService;
 
     @Before
-    public void init() {
+    public void init() throws AlreadyBoundException {
         try {
             Config.init();
         } catch (AlreadyInitializedException e) { /* catch error */ }
@@ -40,6 +45,8 @@ public class DistributionServiceTests {
         testFields.put("aaaa", "bbbbbb");
         testFields.put("123", "yo47");
         testFields.put("x", "3.14");
+
+        (new PlatformRegistry()).setQuantityDistributionScheme(new DistributionCalculator());
     }
 
 
@@ -280,5 +287,30 @@ public class DistributionServiceTests {
         // Call distribute on list and check callCount
         this.distributionService.distribute(localItems);
         assert(callCount[0] == numItems);
+    }
+
+
+
+    @Test
+    public void sumOfOfferQtyShouldEqualTotalQty() throws NotImplementedException {
+        int         quantity;
+        LocalItem   item;
+
+        item = new LocalItem();
+        item.setTotalQuantity(23);
+        item.addOffer(new Offer() {
+            public PlatformPublishingService getPlatformPublishingService() { return null; }
+        });
+        item.addOffer(new Offer() {
+            public PlatformPublishingService getPlatformPublishingService() { return null; }
+        });
+
+        distributionService.distribute(item);
+
+        quantity = 0;
+        for (Offer offer : item.getOffers()) {
+            quantity += offer.getQuantity();
+        }
+        assert(quantity == item.getTotalQuantity());
     }
 }
