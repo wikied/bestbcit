@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
@@ -9,7 +10,6 @@ import com.scriptofan.ecommerce.User.User;
 import com.scriptofan.ecommerce.parsercsv.ParserCsvService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,7 +38,7 @@ public class UploadSequenceIntegrationTests {
 
     @Test
     public void completeUploadIntegrationTest()
-            throws AlreadyBoundException, RulesetCollisionException {
+            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException {
 
         File    csvFile = null;
         User    user    = new User();
