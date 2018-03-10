@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
@@ -29,7 +30,8 @@ public class LocalItemFactory {
      */
     public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection)
             throws  RulesetCollisionException,
-                    RulesetViolationException
+                    RulesetViolationException,
+                    NotImplementedException
     {
         ArrayList<LocalItem> localItems;
 
@@ -57,8 +59,9 @@ public class LocalItemFactory {
      * @return New LocalItem created from fields.
      */
     private LocalItem createLocalItem(final Map<String, String> fields)
-            throws  RulesetCollisionException,
-                    RulesetViolationException
+            throws RulesetCollisionException,
+                    RulesetViolationException,
+                    NotImplementedException
     {
         LocalItem                       localItem;
         Collection<ItemBuilderRuleset>  rulesets;

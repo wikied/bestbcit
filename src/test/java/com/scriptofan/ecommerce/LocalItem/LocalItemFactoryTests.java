@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import org.junit.Before;
@@ -37,7 +38,7 @@ public class LocalItemFactoryTests {
      * Passing null collection of maps should throw NullPointerException
      */
     @Test(expected = NullPointerException.class)
-    public void nullFieldCollectionShouldThrowException() throws RulesetCollisionException, RulesetViolationException {
+    public void nullFieldCollectionShouldThrowException() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         localItemFactory.createLocalItems(null);
     }
 
@@ -47,7 +48,7 @@ public class LocalItemFactoryTests {
      * Passing a list containing one or more null values should throw a NullPointerException
      */
     @Test(expected = NullPointerException.class)
-    public void nullMapShouldThrowException() throws RulesetCollisionException, RulesetViolationException {
+    public void nullMapShouldThrowException() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         List<Map<String, String>>   fieldCollection = new ArrayList<>();
         fieldCollection.add(null);
         localItemFactory.createLocalItems(fieldCollection);
@@ -59,7 +60,7 @@ public class LocalItemFactoryTests {
      * Passing a valid List<Map<String, String>> should return one LocalItem for each item in the map.
      */
     @Test
-    public void validMapShouldReturnSameNumberOfLocalItems() throws RulesetCollisionException, RulesetViolationException {
+    public void validMapShouldReturnSameNumberOfLocalItems() throws RulesetCollisionException, RulesetViolationException, NotImplementedException {
         Map<String, String>         fieldMap;
         List<Map<String, String>>   fieldCollection;
         List<LocalItem>             returnedItems;

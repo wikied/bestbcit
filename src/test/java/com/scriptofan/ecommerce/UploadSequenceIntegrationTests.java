@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce;
 
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
@@ -38,7 +39,7 @@ public class UploadSequenceIntegrationTests {
 
     @Test
     public void completeUploadIntegrationTest()
-            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException {
+            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException, NotImplementedException {
 
         File    csvFile = null;
         User    user    = new User();
