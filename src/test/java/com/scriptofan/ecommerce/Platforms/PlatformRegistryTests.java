@@ -72,6 +72,7 @@ public class PlatformRegistryTests {
 
 
 
+
     @Test(expected = AlreadyRegisteredException.class)
     public void shouldCatchDuplicateRepoClasses() throws AlreadyRegisteredException {
         /* Dummy repository for use in testing */
