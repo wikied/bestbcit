@@ -19,6 +19,8 @@ public abstract class Offer {
 
 
 
+
+
     /**
      * Returns this offer's quantity.
      * @return this offer's quantity.
