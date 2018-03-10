@@ -2,7 +2,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 
 import java.util.Map;
 
