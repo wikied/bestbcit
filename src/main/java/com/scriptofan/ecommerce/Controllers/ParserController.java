@@ -25,7 +25,7 @@ public class ParserController {
     //FOR TESTING
     List<Map<String, String>> list_of_items = new ArrayList<>();
 
-    public void parseCSV(MultipartFile file){
+    public void parseMultipartFile(MultipartFile file){
         File newFile;
 
         try{
@@ -36,6 +36,15 @@ public class ParserController {
 
         } catch (IOException e){
             System.err.println("Unable to create the new file");
+        }
+    }
+
+
+    public void parseFile(File file){
+        try{
+            list_of_items = parserCsvService.parseCsv(file);
+        } catch (IOException e){
+            System.err.println("Unable to parse the CSV file in parseCSV2");
         }
     }
 

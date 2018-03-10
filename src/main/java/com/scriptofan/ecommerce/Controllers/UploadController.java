@@ -20,7 +20,7 @@ public class UploadController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             storageService.store(file);
-            parserController.parseCSV(file);
+            parserController.parseMultipartFile(file);
 
         } catch (Exception e) {
             System.err.println("Failed to upload " + file.getOriginalFilename());

@@ -18,13 +18,12 @@ public class FileConvertService {
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
-        return convFile;
 
+        return convFile;
     }
 
     public void deleteFile(){
         this.convFile.delete();
     }
-
 
 }
