@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Core.PlatformPublishingService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
 
 
 import java.util.List;
