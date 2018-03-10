@@ -49,19 +49,19 @@ public class DistributionServiceTests {
         final boolean[] methodWasCalled = {false, false, false};
 
         LocalItem localItem = new LocalItem();
-        localItem.addOffer(new Offer() {
+        localItem.addOffer(new Offer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[0] = true;
             }
         });
-        localItem.addOffer(new Offer() {
+        localItem.addOffer(new Offer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[1] = true;
             }
         });
-        localItem.addOffer(new Offer() {
+        localItem.addOffer(new Offer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[2] = true;
@@ -98,6 +98,10 @@ public class DistributionServiceTests {
         class DummyOffer extends Offer {
             public boolean wasModified = false;
 
+            public DummyOffer(LocalItem localItem) {
+                super(localItem);
+            }
+
             @Override
             public void post() {
                 wasModified = true;
@@ -105,7 +109,7 @@ public class DistributionServiceTests {
         }
 
         LocalItem localItem = new LocalItem();
-        localItem.addOffer(new DummyOffer());
+        localItem.addOffer(new DummyOffer(localItem));
 
         this.distributionService.distribute(localItem);
         assert(((DummyOffer) localItem.getOffers().toArray()[0]).wasModified == true);
@@ -126,7 +130,7 @@ public class DistributionServiceTests {
         // they have publish() called on their offer
         for (int i = 0; i < numItems; ++i) {
             LocalItem localItem = new LocalItem();
-            localItem.addOffer(new Offer() {
+            localItem.addOffer(new Offer(localItem) {
                 @Override
                 public void post() {
                     callCount[0]++;

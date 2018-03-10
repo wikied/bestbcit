@@ -1,11 +1,16 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
+import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 public class EbayOffer extends Offer{
+
+    public EbayOffer(LocalItem localItem) {
+        super(localItem);
+    }
 
     public void post() {
 
