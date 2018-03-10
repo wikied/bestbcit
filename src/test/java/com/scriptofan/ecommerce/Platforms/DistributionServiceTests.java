@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.Platforms;
 import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;

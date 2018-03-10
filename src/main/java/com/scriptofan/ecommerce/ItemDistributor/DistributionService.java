@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms;
+package com.scriptofan.ecommerce.ItemDistributor;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
