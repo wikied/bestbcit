@@ -11,15 +11,6 @@ public abstract class Offer {
 
 
     /*
-     * Returns an instance of the PlatformPublishingService associated with
-     * this type of offer (i.e. "EbayPublishingService, EtsyPublishingService,"
-     * etc.)
-     */
-    public abstract PlatformPublishingService getPlatformPublishingService();
-
-
-
-    /*
      * Posts this offer to the respective platform.
      */
     public abstract void post();

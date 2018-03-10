@@ -3,7 +3,6 @@ package com.scriptofan.ecommerce.ItemDistributor;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
-import com.scriptofan.ecommerce.Platforms.Interface.PlatformPublishingService;
 
 import java.util.List;
 import java.util.Map;
@@ -30,8 +29,7 @@ public class DistributionService {
         final Map<String, String> fields = item.getAllFields();
 
         for (Offer offer : item.getOffers()) {
-            PlatformPublishingService publisher = offer.getPlatformPublishingService();
-            publisher.publish(fields, offer);
+            offer.post();
         }
 
         return item;
