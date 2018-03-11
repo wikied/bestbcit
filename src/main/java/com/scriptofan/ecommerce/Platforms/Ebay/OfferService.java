@@ -14,10 +14,22 @@ public class OfferService {
 
     private static final String POST_OFFERS_URL     = "https://api.sandbox.ebay.com/sell/inventory/v1/offer";
     private static final String GET_OFFERS_URL      = POST_OFFERS_URL + "?";
+    private static final String CONTENT_LANGUAGE = "en-US";
     private static final String TOKEN_PREFIX        = "Bearer ";
 
     public OfferService (){
 
+    }
+
+    public Offer offerBuilder(EbayLocalOffer ebayoffer){
+        Offer           offer = new Offer();
+        offer.setSku(ebayoffer.getLocalItem().getField("sku"));
+        offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
+        offer.setCategoryId(ebayoffer.getLocalItem().getField("categoryId"));
+        offer.setFormat(ebayoffer.getLocalItem().getField("format"));
+        offer.setMarketplaceId(ebayoffer.getLocalItem().getField("markerplaceId"));
+        //offer.setListingPolicies();
+        return offer;
     }
 
     public Offer[] getOffers(String token){
@@ -43,39 +55,25 @@ public class OfferService {
 
     }
 
-    public Offer offerBuilder(EbayLocalOffer ebayoffer){
-        Offer           offer = new Offer();
-        offer.setSku(ebayoffer.getLocalItem().getField("sku"));
-        offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
-        offer.setCategoryId(ebayoffer.getLocalItem().getField("categoryId"));
-        offer.setFormat(ebayoffer.getLocalItem().getField("format"));
-        offer.setMarketplaceId(ebayoffer.getLocalItem().getField("markerplaceId"));
-        //offer.setListingPolicies();
-        return offer;
-    }
-
     public String createOffer(Offer offer, String token){
 
-        String              completeUrl;
         OfferResponse     offerResponse;
         String                 response;
         RestTemplate       restTemplate;
         HttpHeaders         httpHeaders;
         HttpEntity<Offer>    httpEntity;
 
-
-        completeUrl         = POST_OFFERS_URL;
-
         httpHeaders         = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpHeaders.set("Content-Type", "application/json");
+        httpHeaders.set("Content Language", CONTENT_LANGUAGE);
         httpEntity = new HttpEntity<>(offer, httpHeaders);
 
         restTemplate        = new RestTemplate();
         restTemplate.setErrorHandler(new LocationService.MyErrorHandler());
 
         try {
-            offerResponse = restTemplate.exchange(completeUrl, HttpMethod.POST, httpEntity, OfferResponse.class).getBody();
+            offerResponse = restTemplate.exchange(POST_OFFERS_URL, HttpMethod.POST, httpEntity, OfferResponse.class).getBody();
             response = offerResponse.getOfferId();
             return response;
         } catch (HttpServerErrorException ex) {
