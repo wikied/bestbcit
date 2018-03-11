@@ -26,7 +26,7 @@ public class CoreItemBuilderRuleset implements ItemBuilderRuleset {
         quantityStr = fields.get(TOTAL_QUANTITY);
         quantityInt = Integer.parseInt(quantityStr);
 
-        if (quantityInt == null || quantityInt >= 0) {
+        if (quantityInt == null || quantityInt < 0) {
             throw new RulesetViolationException(
                     "Field \"" + TOTAL_QUANTITY + "\" must be a non-negative integer.");
         }
