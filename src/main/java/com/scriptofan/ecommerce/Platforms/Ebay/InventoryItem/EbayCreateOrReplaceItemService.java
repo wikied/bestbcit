@@ -10,13 +10,9 @@ import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Product;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.ShipToLocationAvailability;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +35,6 @@ public class EbayCreateOrReplaceItemService {
      */
     public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
         InventoryItem inventoryItem;
-        EbayInventoryItemWrapper inventoryItemWrapper;
         HttpHeaders headers;
         HttpEntity<InventoryItem> httpEntity;
         RestTemplate template;
@@ -56,10 +51,8 @@ public class EbayCreateOrReplaceItemService {
             jacksonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             System.err.println(jacksonMapper.writeValueAsString(httpEntity));
             System.err.println("Making request");
-            template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
-                    HttpMethod.PUT,
-                    httpEntity,
-                    EbayInventoryItemWrapper.class);
+
+            template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
             response = "success";
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
@@ -95,28 +88,20 @@ public class EbayCreateOrReplaceItemService {
             StringBuilder       stringBuilder;
             InputStreamReader   responseBodyReader;
 
-            statusGood      = false;
             output          = "";
 
             try {
                 /* Handle response code */
                 statusCode = clientHttpResponse.getStatusCode();
+                statusText = clientHttpResponse.getStatusText();
 
                 if (statusCode.is2xxSuccessful()) {
-                    statusGood = true;
+                    // All clear
+                } else {
+                    throw new RestClientException("Error " + statusCode + " " + statusText);
                 }
-                else if (statusCode.is4xxClientError()) {
-                    statusGood = false;
-                }
-                else if (statusCode.is5xxServerError()) {
-                    statusGood = false;
-                }
-
-
-
 
                 /* Generate debug output */
-                statusText          = clientHttpResponse.getStatusText();
                 stringBuilder       = new StringBuilder();
                 responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
                 bufferReader        = new BufferedReader(responseBodyReader);
@@ -134,13 +119,12 @@ public class EbayCreateOrReplaceItemService {
                 throw new ResourceAccessException(output);
             }
 
-            System.err.println(output);
-            return statusGood;
+            return true;
         }
 
         @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            System.err.println("HERE");
+            /* ToDo: Implement */
         }
     }
 
