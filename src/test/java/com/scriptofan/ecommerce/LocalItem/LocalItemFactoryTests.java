@@ -1,10 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
-import com.scriptofan.ecommerce.Exception.NotImplementedException;
-import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-import com.scriptofan.ecommerce.Exception.RulesetViolationException;
+import com.scriptofan.ecommerce.Exception.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.jvm.hotspot.utilities.Assert;
 
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +23,12 @@ public class LocalItemFactoryTests {
     @Autowired
     private LocalItemFactory localItemFactory;
 
+    @Autowired
+    private Config config;
+
     @Before
-    public void initTestSubjects() {
-        try {
-            Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+    public void initTestSubjects() throws AlreadyRegisteredException, AlreadyBoundException {
+        config.init();
     }
 
 

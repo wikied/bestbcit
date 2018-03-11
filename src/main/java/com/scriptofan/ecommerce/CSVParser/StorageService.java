@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.upload;
+package com.scriptofan.ecommerce.CSVParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class StorageService {
 
-    private final Path rootLocation = Paths.get("src/main/java/com/scriptofan/ecommerce/upload/upload-dir");
+    private final Path rootLocation = Paths.get("src/main/java/com/scriptofan/ecommerce/CSVParser/upload-dir");
 
     public void store(MultipartFile file){
         try {

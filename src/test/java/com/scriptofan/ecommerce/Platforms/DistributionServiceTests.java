@@ -1,7 +1,8 @@
 package com.scriptofan.ecommerce.Platforms;
 
 import com.scriptofan.ecommerce.Config;
-import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
+import com.scriptofan.ecommerce.DistributionCalculator;
+import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
@@ -9,9 +10,11 @@ import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,21 +25,30 @@ import java.util.Map;
 public class DistributionServiceTests {
 
     private Map<String, String> testFields;
+
+    @Autowired
     private DistributionService distributionService;
 
-    @Before
-    public void init() {
-        try {
-            Config.init();
-        } catch (AlreadyInitializedException e) { /* catch error */ }
+    @Autowired
+    private PlatformRegistry platformRegistry;
 
-        this.distributionService = new DistributionService();
+    @Autowired
+    private Config config;
+
+
+    @Before
+    public void init() throws AlreadyBoundException, AlreadyRegisteredException {
+        config.init();
 
         this.testFields = new HashMap<>();
         testFields.put("key1", "value1");
         testFields.put("aaaa", "bbbbbb");
         testFields.put("123", "yo47");
         testFields.put("x", "3.14");
+
+        if (platformRegistry.getQuantityDistributionScheme() == null) {
+            platformRegistry.setQuantityDistributionScheme(new DistributionCalculator());
+        }
     }
 
 
@@ -143,5 +155,30 @@ public class DistributionServiceTests {
         // Call distribute on list and check callCount
         this.distributionService.distribute(localItems);
         assert(callCount[0] == numItems);
+    }
+
+
+
+    @Test
+    public void sumOfOfferQtyShouldEqualTotalQty() throws NotImplementedException {
+        int         quantity;
+        LocalItem   item;
+
+        item = new LocalItem();
+        item.setTotalQuantity(23);
+        item.addOffer(new Offer(item) {
+            public void post() { }
+        });
+        item.addOffer(new Offer(item) {
+            public void post() { }
+        });
+
+        distributionService.distribute(item);
+
+        quantity = 0;
+        for (Offer offer : item.getOffers()) {
+            quantity += offer.getQuantity();
+        }
+        assert(quantity == item.getTotalQuantity());
     }
 }
