@@ -1,8 +1,8 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
 public class PickUpAtLocationAvailibility {
 
-    private AvailabilityTypeEnum    availabilityTypeEnum;
+    private AvailabilityTypeEnum availabilityTypeEnum;
     private String                  merchantLocationKey;
     private int                     quantity;
     private TimeDuration            fulfillmentTime;

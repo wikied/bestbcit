@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.web.bind.annotation.PathVariable;

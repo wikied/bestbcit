@@ -1,11 +1,11 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
 
 public class Dimension{
     private double              height;
     private double              width;
     private double              length;
-    LengthUnitOfMeasureEnum     unit;
+    LengthUnitOfMeasureEnum unit;
 
     public double getHeight() {
         return height;
