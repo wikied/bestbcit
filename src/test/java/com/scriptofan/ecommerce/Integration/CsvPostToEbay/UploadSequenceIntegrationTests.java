@@ -86,6 +86,7 @@ public class UploadSequenceIntegrationTests {
 
         for (LocalItem item : localItems) {
             System.err.println(item);
+            System.err.println(item.fieldsToString());
         }
 
         user = new User();
