@@ -1,6 +1,6 @@
-package com.scriptofan.ecommerce.Platforms.Ebay;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
 
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.InventoryItem;
+import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.InventoryItem;
 
 public class EbayInventoryItemWrapper {
 

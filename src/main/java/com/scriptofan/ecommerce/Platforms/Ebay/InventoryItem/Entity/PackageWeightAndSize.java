@@ -1,8 +1,8 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
 public class PackageWeightAndSize {
 
-    private Dimension           dimensions;
+    private Dimension dimensions;
     private PackageTypeEnum     packageTypeEnum;
     private Weight              weight;
 
