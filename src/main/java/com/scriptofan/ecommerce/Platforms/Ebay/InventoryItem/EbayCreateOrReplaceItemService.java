@@ -72,11 +72,10 @@ public class EbayCreateOrReplaceItemService {
             System.err.println(jacksonMapper.writeValueAsString(httpEntity));
 
             System.err.println("Making request");
-            inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
+            template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
                     HttpMethod.PUT,
                     httpEntity,
-                    EbayInventoryItemWrapper.class).getBody()
-                    .getInventoryItem();
+                    EbayInventoryItemWrapper.class);
             response = "success";
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
@@ -103,7 +102,7 @@ public class EbayCreateOrReplaceItemService {
     {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            boolean             responseHandled;
+            boolean             statusGood;
             String              line;
             String              output;
             HttpStatus          statusCode;
@@ -112,13 +111,28 @@ public class EbayCreateOrReplaceItemService {
             StringBuilder       stringBuilder;
             InputStreamReader   responseBodyReader;
 
-            responseHandled = false;
+            statusGood      = false;
             output          = "";
 
             try {
-                statusCode          = clientHttpResponse.getStatusCode();
-                statusText          = clientHttpResponse.getStatusText();
+                /* Handle response code */
+                statusCode = clientHttpResponse.getStatusCode();
 
+                if (statusCode.is2xxSuccessful()) {
+                    statusGood = true;
+                }
+                else if (statusCode.is4xxClientError()) {
+                    statusGood = false;
+                }
+                else if (statusCode.is5xxServerError()) {
+                    statusGood = false;
+                }
+
+
+
+
+                /* Generate debug output */
+                statusText          = clientHttpResponse.getStatusText();
                 stringBuilder       = new StringBuilder();
                 responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
                 bufferReader        = new BufferedReader(responseBodyReader);
@@ -129,12 +143,7 @@ public class EbayCreateOrReplaceItemService {
 
                 output += "clientHttpResponse error:\n";
                 output += statusCode + " " + statusText + "\n";
-                output += stringBuilder.toString();
-
-                /* Success */
-                if (statusCode.is2xxSuccessful()) {
-                    responseHandled = true;
-                }
+                output += stringBuilder.toString() + "\n";
             }
             catch (IOException e) {
                 output += "IO Exception reading clientHttpResponse";
@@ -142,7 +151,7 @@ public class EbayCreateOrReplaceItemService {
             }
 
             System.err.println(output);
-            return responseHandled;
+            return statusGood;
         }
 
         @Override
