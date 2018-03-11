@@ -11,6 +11,7 @@ import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.ShipToLocati
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -94,39 +95,54 @@ public class EbayCreateOrReplaceItemService {
         return response;
     }
 
-    public static class CreateInventoryItemErrorHandler implements ResponseErrorHandler {
+    /**
+     * Response handler.
+     */
+    public static class CreateInventoryItemErrorHandler
+            implements  ResponseErrorHandler
+    {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            // Extract error body
-            String          line;
-            String          output;
-            BufferedReader bufferReader;
-            StringBuilder   stringBuilder;
+            boolean             responseHandled;
+            String              line;
+            String              output;
+            HttpStatus          statusCode;
+            String              statusText;
+            BufferedReader      bufferReader;
+            StringBuilder       stringBuilder;
+            InputStreamReader   responseBodyReader;
 
-            System.err.println("HANDLING ERROR");
-            stringBuilder = new StringBuilder();
+            responseHandled = false;
+            output          = "";
 
-            output = "";
             try {
+                statusCode          = clientHttpResponse.getStatusCode();
+                statusText          = clientHttpResponse.getStatusText();
 
-                output += "clientHttpResponse error:\n";
-                output += clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText() + "\n";
+                stringBuilder       = new StringBuilder();
+                responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
+                bufferReader        = new BufferedReader(responseBodyReader);
 
-                bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
                 while ((line = bufferReader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
 
+                output += "clientHttpResponse error:\n";
+                output += statusCode + " " + statusText + "\n";
                 output += stringBuilder.toString();
+
+                /* Success */
+                if (statusCode.is2xxSuccessful()) {
+                    responseHandled = true;
+                }
             }
             catch (IOException e) {
-                System.err.println("IO Exception reading clientHttpResponse");
-                e.printStackTrace();
+                output += "IO Exception reading clientHttpResponse";
+                throw new ResourceAccessException(output);
             }
 
             System.err.println(output);
-
-            return false;
+            return responseHandled;
         }
 
         @Override
