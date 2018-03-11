@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.InventoryItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Product;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ShipToLocationAvailibility;
+import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ShipToLocationAvailability;
 
 import java.util.ArrayList;
 
@@ -22,9 +22,9 @@ public class EbayCreateOrReplaceItemService {
     // Creates a Availability object for the inventory item
     private static Availability createAvailability(EbayLocalOffer offer) {
         Availability availability = new Availability();
-        ShipToLocationAvailibility shipToLocationAvailibility = new ShipToLocationAvailibility();
-        shipToLocationAvailibility.setQuantity(offer.getQuantity());
-        availability.setShipToLocationAvailibility(shipToLocationAvailibility);
+        ShipToLocationAvailability shipToLocationAvailability= new ShipToLocationAvailability();
+        shipToLocationAvailability.setQuantity(offer.getQuantity());
+        availability.setShipToLocationAvailibility(shipToLocationAvailability);
         return availability;
     }
 

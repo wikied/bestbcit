@@ -1,17 +1,12 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.InventoryItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Product;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ShipToLocationAvailibility;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
 
 public class EbayLocalOffer extends Offer{
 
@@ -29,9 +24,15 @@ public class EbayLocalOffer extends Offer{
 
     }
 
-
+    /**
+     * Creates or replaces a inventory item with a given sku
+     * @param token - the ebay user token associated with the user
+     * @param sku - the user defined sku
+     * @return - string
+     */
     private String createOrReplaceInventoryItem(String token, String sku) {
         InventoryItem                 inventoryItem;
+        EbayInventoryItemWrapper      inventoryItemWrapper;
         HttpHeaders                   headers;
         HttpEntity<InventoryItem>     httpEntity;
         RestTemplate                  template;
@@ -46,12 +47,13 @@ public class EbayLocalOffer extends Offer{
 
         httpEntity = new HttpEntity<>(inventoryItem, headers);
 
-        //inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,)
+        inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
+                                            HttpMethod.POST,
+                                            httpEntity,
+                                            EbayInventoryItemWrapper.class).getBody()
+                                                                           .getInventoryItem();
 
-
-
-
-        return null;
+        return inventoryItem.toString();
     }
 
 }
