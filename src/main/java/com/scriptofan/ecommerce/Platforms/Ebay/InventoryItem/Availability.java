@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 public class Availability {
 
-    private ArrayList<PickUpAtLocationAvailibility>     pickUpAtLocationAvailibilities;
-    private ShipToLocationAvailability shipToLocationAvailibility;
+    private ArrayList<PickUpAtLocationAvailibility> pickUpAtLocationAvailabilities;
+    private ShipToLocationAvailability shipToLocationAvailability;
 
-    public ArrayList<PickUpAtLocationAvailibility> getPickUpAtLocationAvailibilities() {
-        return pickUpAtLocationAvailibilities;
+    public ArrayList<PickUpAtLocationAvailibility> getPickUpAtLocationAvailabilities() {
+        return pickUpAtLocationAvailabilities;
     }
 
-    public void setPickUpAtLocationAvailibilities(ArrayList<PickUpAtLocationAvailibility> pickUpAtLocationAvailibilities) {
-        this.pickUpAtLocationAvailibilities = pickUpAtLocationAvailibilities;
+    public void setPickUpAtLocationAvailabilities(ArrayList<PickUpAtLocationAvailibility> pickUpAtLocationAvailabilities) {
+        this.pickUpAtLocationAvailabilities = pickUpAtLocationAvailabilities;
     }
 
-    public ShipToLocationAvailability getShipToLocationAvailibility() {
-        return shipToLocationAvailibility;
+    public ShipToLocationAvailability getShipToLocationAvailability() {
+        return shipToLocationAvailability;
     }
 
-    public void setShipToLocationAvailibility(ShipToLocationAvailability shipToLocationAvailibility) {
-        this.shipToLocationAvailibility = shipToLocationAvailibility;
+    public void setShipToLocationAvailability(ShipToLocationAvailability shipToLocationAvailability) {
+        this.shipToLocationAvailability = shipToLocationAvailability;
     }
 }

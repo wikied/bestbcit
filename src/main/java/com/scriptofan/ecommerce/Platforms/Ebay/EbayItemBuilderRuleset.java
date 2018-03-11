@@ -79,6 +79,8 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         throws RulesetCollisionException,
                RulesetViolationException {
 
+        EbayLocalOffer ebayLocalOffer;
+
         // sku
         if (fields.get("sku") == null) {
             throw new RulesetViolationException("sku is empty");
@@ -148,6 +150,9 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         } else {
             localItem.addField("value", fields.get("value"));
         }
+
+        ebayLocalOffer = new EbayLocalOffer(localItem);
+        localItem.addOffer(ebayLocalOffer);
     }
 
 }

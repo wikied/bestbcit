@@ -24,7 +24,7 @@ public class EbayCreateOrReplaceItemService {
         Availability availability = new Availability();
         ShipToLocationAvailability shipToLocationAvailability= new ShipToLocationAvailability();
         shipToLocationAvailability.setQuantity(offer.getQuantity());
-        availability.setShipToLocationAvailibility(shipToLocationAvailability);
+        availability.setShipToLocationAvailability(shipToLocationAvailability);
         return availability;
     }
 
@@ -32,11 +32,11 @@ public class EbayCreateOrReplaceItemService {
     private static Product createProduct(EbayLocalOffer offer) {
         Product product = new Product();
 
-        product.setTitle(offer.getLocalItem().getField("title"));
+        product.setTitle(offer.getLocalItem().getField("productTitle"));
         product.setDescription(offer.getLocalItem().getField("productDescription"));
 
         // Sets the imageUrls
-        String listOfImageUrls = offer.getLocalItem().getField("imageUrls");
+        String listOfImageUrls = offer.getLocalItem().getField("productImageUrls");
         String[] imageUrls = listOfImageUrls.split("\\s+");
         ArrayList<String> productImageUrls = new ArrayList<>();
 

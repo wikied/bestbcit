@@ -1,10 +1,11 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class InventoryItem {
 
     private Availability availability;
@@ -16,7 +17,7 @@ public class InventoryItem {
     private ArrayList<String> groupids[];
 
     //Constructor that accepts the end point SKU
-    @RequestMapping(value = "{sku}")
+    // @RequestMapping(value = "{sku}")
     public InventoryItem inventoryItem(@PathVariable final int sku){
         InventoryItem item = new InventoryItem();
 
