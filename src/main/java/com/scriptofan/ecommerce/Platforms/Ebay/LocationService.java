@@ -77,7 +77,7 @@ public class LocationService {
         return response;
     }
 
-    public class MyErrorHandler implements ResponseErrorHandler {
+    public static class MyErrorHandler implements ResponseErrorHandler {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
             // Extract error body
