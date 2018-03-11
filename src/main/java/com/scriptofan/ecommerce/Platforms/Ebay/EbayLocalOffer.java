@@ -13,7 +13,7 @@ public class EbayLocalOffer extends Offer{
     public void post() {
         EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(getLocalItem().getUser().getUserToken(),
                                                            getLocalItem().getField("sku"),
-                                                            this);
+                                                          this);
 
     }
 
