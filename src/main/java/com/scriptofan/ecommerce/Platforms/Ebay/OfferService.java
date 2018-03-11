@@ -1,7 +1,9 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Amount;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferResponse;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.PricingSummary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,11 +25,17 @@ public class OfferService {
 
     public Offer offerBuilder(EbayLocalOffer ebayoffer){
         Offer           offer = new Offer();
+        Amount  amount = new Amount();
+        PricingSummary pricingSummary = new PricingSummary();
+        amount.setValue(ebayoffer.getLocalItem().getField("value"));
+        amount.setCurrency(ebayoffer.getLocalItem().getField("currencyCode"));
+        pricingSummary.setPrice(amount);
+        offer.setPricingSummary(pricingSummary);
         offer.setSku(ebayoffer.getLocalItem().getField("sku"));
         offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
         offer.setCategoryId(ebayoffer.getLocalItem().getField("categoryId"));
         offer.setFormat(ebayoffer.getLocalItem().getField("format"));
-        offer.setMarketplaceId(ebayoffer.getLocalItem().getField("markerplaceId"));
+        offer.setMarketplaceId(ebayoffer.getLocalItem().getField("marketplaceId"));
         //offer.setListingPolicies();
         return offer;
     }
