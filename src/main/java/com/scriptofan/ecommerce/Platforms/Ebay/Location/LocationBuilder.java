@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationBuilder {
 
-    public Location dummyLocationData(){
+    public Location buildLocation(){
 
         Address address = addressObjectCreator();
         LocationDetails locationDetails = new LocationDetails(address);
