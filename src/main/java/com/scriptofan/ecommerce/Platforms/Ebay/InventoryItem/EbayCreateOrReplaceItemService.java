@@ -12,8 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -35,6 +33,7 @@ public class EbayCreateOrReplaceItemService {
      * Creates or replaces a inventory item with a given sku
      * @param token - the ebay user token associated with the user
      * @param sku - the user defined sku
+     * @param ebayLocalOffer - the ebay offer
      * @return - string
      */
     public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
@@ -45,23 +44,9 @@ public class EbayCreateOrReplaceItemService {
         RestTemplate template;
         String response = null;
 
-        headers = new HttpHeaders();
-        headers.set("authorization", TOKEN_PREFIX + ebayLocalOffer.getLocalItem().getUser().getUserToken());
-        headers.set("Content-Language", CONTENT_LANGUAGE);
-        headers.set("Accept","application/json");
-        headers.set("Content-Type", "application/json");
-
+        headers = createHttpHeaders(ebayLocalOffer);
         template = new RestTemplate();
         template.setErrorHandler(new CreateInventoryItemErrorHandler());
-
-
-        for (HttpMessageConverter<?> converter: template.getMessageConverters()) {
-            System.err.println(converter);
-            if (converter instanceof MappingJackson2HttpMessageConverter) {
-                ((MappingJackson2HttpMessageConverter) converter).getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            }
-        }
-
         inventoryItem   = EbayCreateOrReplaceItemService.createInventoryItem(ebayLocalOffer);
         httpEntity      = new HttpEntity<>(inventoryItem, headers);
 
@@ -69,7 +54,6 @@ public class EbayCreateOrReplaceItemService {
             ObjectMapper jacksonMapper = new ObjectMapper();
             jacksonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             System.err.println(jacksonMapper.writeValueAsString(httpEntity));
-
             System.err.println("Making request");
             inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
                     HttpMethod.PUT,
@@ -135,7 +119,8 @@ public class EbayCreateOrReplaceItemService {
         }
     }
 
-    private HttpHeaders createHttpHeaders(EbayLocalOffer ebayLocalOffer) {
+    // Creates and sets the Http headers
+    private static HttpHeaders createHttpHeaders(EbayLocalOffer ebayLocalOffer) {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("authorization", TOKEN_PREFIX + ebayLocalOffer.getLocalItem().getUser().getUserToken());
