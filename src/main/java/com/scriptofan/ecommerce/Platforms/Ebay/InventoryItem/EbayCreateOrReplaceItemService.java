@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalLocalOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.InventoryItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Product;
@@ -33,7 +33,7 @@ public class EbayCreateOrReplaceItemService {
      * @param ebayLocalOffer - the ebay offer
      * @return - string
      */
-    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
+    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalLocalOffer ebayLocalOffer) {
         InventoryItem inventoryItem;
         HttpHeaders headers;
         HttpEntity<InventoryItem> httpEntity;
@@ -129,7 +129,7 @@ public class EbayCreateOrReplaceItemService {
     }
 
     // Creates and sets the Http headers
-    private static HttpHeaders createHttpHeaders(EbayLocalOffer ebayLocalOffer) {
+    private static HttpHeaders createHttpHeaders(EbayLocalLocalOffer ebayLocalOffer) {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("authorization", TOKEN_PREFIX + ebayLocalOffer.getLocalItem().getUser().getUserToken());
@@ -139,7 +139,7 @@ public class EbayCreateOrReplaceItemService {
         return headers;
     }
 
-    private static InventoryItem createInventoryItem(EbayLocalOffer offer) {
+    private static InventoryItem createInventoryItem(EbayLocalLocalOffer offer) {
         InventoryItem inventoryItem = new InventoryItem();
 
         inventoryItem.setAvailability(createAvailability(offer));
@@ -150,7 +150,7 @@ public class EbayCreateOrReplaceItemService {
     }
 
     // Creates a Availability object for the inventory item
-    private static Availability createAvailability(EbayLocalOffer offer) {
+    private static Availability createAvailability(EbayLocalLocalOffer offer) {
         Availability availability = new Availability();
         ShipToLocationAvailability shipToLocationAvailability= new ShipToLocationAvailability();
         shipToLocationAvailability.setQuantity(offer.getQuantity());
@@ -159,7 +159,7 @@ public class EbayCreateOrReplaceItemService {
     }
 
     // Creates a Product object for the inventory item
-    private static Product createProduct(EbayLocalOffer offer) {
+    private static Product createProduct(EbayLocalLocalOffer offer) {
         Product product = new Product();
 
         product.setTitle(offer.getLocalItem().getField("productTitle"));

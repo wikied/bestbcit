@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.ItemDistributor;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,9 +60,9 @@ public class DistributionService {
         }
 
         distributionScheme.calculateDistribution(item);
-        for (Offer offer : item.getOffers()) {
-            item.log("Posting to " + offer);
-            offer.post();
+        for (LocalOffer localOffer : item.getLocalOffers()) {
+            item.log("Posting to " + localOffer);
+            localOffer.post();
         }
 
         return item;
