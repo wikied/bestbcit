@@ -6,6 +6,7 @@ import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 public class EbayLocalOffer extends Offer{
@@ -36,24 +37,33 @@ public class EbayLocalOffer extends Offer{
         HttpHeaders                   headers;
         HttpEntity<InventoryItem>     httpEntity;
         RestTemplate                  template;
+        String response;
 
         headers = new HttpHeaders();
         headers.set("authorization", TOKEN_PREFIX + getLocalItem().getUser().getUserToken());
         headers.set("content-language", CONTENT_LANGUAGE);
 
         template = new RestTemplate();
+        template.setErrorHandler(new LocationService.MyErrorHandler());
 
         inventoryItem = EbayCreateOrReplaceItemService.createInventoryItem(this);
 
         httpEntity = new HttpEntity<>(inventoryItem, headers);
 
-        inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
-                                            HttpMethod.POST,
-                                            httpEntity,
-                                            EbayInventoryItemWrapper.class).getBody()
-                                                                           .getInventoryItem();
-
-        return inventoryItem.toString();
+        try {
+            inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
+                    HttpMethod.POST,
+                    httpEntity,
+                    EbayInventoryItemWrapper.class).getBody()
+                    .getInventoryItem();
+            response = "success";
+        } catch (HttpServerErrorException ex) {
+            ex.printStackTrace();
+            response = ex.getMessage();
+        }
+        return response;
     }
+
+
 
 }

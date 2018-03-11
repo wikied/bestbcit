@@ -44,7 +44,7 @@ public class OfferService {
 
     }
 
-    public Offer offerBuilder(EbayOffer ebayoffer){
+    public Offer offerBuilder(EbayLocalOffer ebayoffer){
         Offer           offer = new Offer();
         offer.setSku(ebayoffer.getLocalItem().getField("sku"));
         offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
