@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce;
 import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Platforms.Core.CoreRepository;
+import com.scriptofan.ecommerce.Platforms.Ebay.EbayPlatformRepository;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ public class Config {
         // Import PlatformRepositories here
         try {
             platformRegistry.registerPlatformRepository(new CoreRepository());
+            platformRegistry.registerPlatformRepository(new EbayPlatformRepository());
         }
         catch (AlreadyRegisteredException e) {
             System.err.println("Trying to register the same repository more than once");

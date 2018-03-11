@@ -1,13 +1,12 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
+
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.ConditionEnum;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
-
-
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 
 import java.util.Map;
 
@@ -31,11 +30,18 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
     private void applyItemRuleset(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
-                   RulesetViolationException {
+                   RulesetViolationException
+    {
+        if (fields == null) {
+            throw new NullPointerException("Fields is null");
+        }
 
-        // Condition //
+        String condition = fields.get("condition");
+        if (condition == null) {
+            throw new RulesetViolationException("condition cannot be null");
+        }
         for (ConditionEnum conditionEnum : ConditionEnum.values()) {
-            if(fields.get("condition").equals(conditionEnum.toString())) {
+            if(condition.equals(conditionEnum.toString())) {
                  validCondition = true;
                  break;
             }
@@ -49,21 +55,21 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
         // Product Title //
         if (fields.get("productTitle") == null) {
-            throw new RulesetViolationException("Product title is empty");
+            throw new RulesetViolationException("productTitle is empty");
         } else {
             localItem.addField("productTitle", fields.get("productTitle"));
         }
 
         // Product Description //
         if (fields.get("productDescription") == null) {
-            throw new RulesetViolationException("Product description is empty");
+            throw new RulesetViolationException("productDescription is empty");
         } else {
             localItem.addField("productDescription", fields.get("productDescription"));
         }
 
         // Image Urls //
         if (fields.get("productImageUrls") == null) {
-            throw new RulesetViolationException("TmageUrls is empty");
+            throw new RulesetViolationException("productImageUrls is empty");
         } else {
             localItem.addField("productImageUrls", fields.get("productImageUrls"));
         }
@@ -110,21 +116,21 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
         // Fulfillment Policy
         if(fields.get("fulfillmentPolicy") == null) {
-            throw new RulesetViolationException("fulfillment policy is empty");
+            throw new RulesetViolationException("fulfillmentPolicy is empty");
         } else {
             localItem.addField("fulfillmentPolicy", fields.get("fulfillmentPolicy"));
         }
 
         // Payment Policy
         if (fields.get("paymentPolicy") == null) {
-            throw new RulesetViolationException("payment policy is empty");
+            throw new RulesetViolationException("paymentPolicy is empty");
         } else {
             localItem.addField("paymentPolicy", fields.get("paymentPolicy"));
         }
 
         // Return Policy
         if (fields.get("returnPolicy") == null) {
-            throw new RulesetViolationException("return policy is empty");
+            throw new RulesetViolationException("returnPolicy is empty");
         } else {
             localItem.addField("returnPolicy", fields.get("returnPolicy"));
         }
@@ -138,7 +144,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
         // Value
         if (fields.get("value") == null) {
-            throw new RulesetViolationException("value is empty");
+            throw new RulesetViolationException("value (price) is empty");
         } else {
             localItem.addField("value", fields.get("value"));
         }

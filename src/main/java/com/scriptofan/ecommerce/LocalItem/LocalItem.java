@@ -118,4 +118,29 @@ public class LocalItem {
         return this.log.getFullLog();
     }
 
+    @Override
+    public String toString() {
+        return    "LocalItem ("
+                + fields.size() + " fields, "
+                + offers.size() + " offers, "
+                + "quantity = " + totalQuantity + ", "
+                + "user = " + user + ", "
+                + log.getFullLog().size() + " logs"
+                + ")";
+    }
+
+    public String fieldsToString() {
+        String  output  = "";
+        int     max     = fields.size();
+        int     i       = 0;
+        for (Map.Entry<String, String> field : fields.entrySet()) {
+            output += field.getKey() + "=" + field.getValue();
+            ++i;
+            if (i < max) {
+                output += ", ";
+            }
+        }
+        return output;
+    }
+
 }
