@@ -1,13 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
-import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.AccountPolicies.Entity.FulfillmentPolicy;
-import com.scriptofan.ecommerce.Platforms.Ebay.AccountPolicies.FulfillmentPolicyService;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.InventoryItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.Location.Location;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.ListingPolicies;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
 
-import com.sun.tools.classfile.ConstantPool;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
