@@ -1,9 +1,8 @@
 package com.scriptofan.ecommerce.User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.scriptofan.ecommerce.Database.Item;
+
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -13,6 +12,9 @@ public class User {
     private Integer userID;
 
     private String name;
+
+    @ManyToOne
+    private Item item;
 
     public User(){}
 
@@ -35,5 +37,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }

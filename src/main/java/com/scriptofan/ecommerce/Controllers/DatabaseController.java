@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.Controllers;
 
 
-import com.scriptofan.ecommerce.Database.Repository;
+import com.scriptofan.ecommerce.Database.UserRepository;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DatabaseController {
 
     @Autowired
-    private Repository repository;
+    private UserRepository repository;
 
     @GetMapping("/add-user")
     public String addNewUser(){
