@@ -67,20 +67,27 @@ public class UploadSequenceIntegrationTests {
     {
         String                      filename;
         File                        csvFile;
+        final int                   rowsInFile;
         User                        user;
         List<Map<String, String>>   rawParsedItems;
         List<LocalItem>             localItems;
 
         filename        = TEST_CSV_DIRECTORY + "test_01.csv";
+        rowsInFile      = 1;
         csvFile         = new File(filename);
         assert(csvFile != null);
 
         rawParsedItems  = parserCsvService.parseCsv(csvFile);
         assert(rawParsedItems != null);
-        assert(rawParsedItems.size() > 0);
+        assert(rawParsedItems.size() == rowsInFile);
 
         localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
-        assert(localItems.size() > 0);
+        assert(localItems.size() == rowsInFile);
+
+        for (LocalItem item : localItems) {
+            System.err.println(item);
+            System.err.println(item.fieldsToString());
+        }
 
         user = new User();
         for (LocalItem item : localItems) {

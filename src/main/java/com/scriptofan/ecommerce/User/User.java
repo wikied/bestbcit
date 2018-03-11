@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.User;
 
+import com.scriptofan.ecommerce.DummyRequestData;
+
 public class User {
     private String userID;
     private String token;
@@ -9,6 +11,6 @@ public class User {
     }
 
     public String getUserToken() {
-        return token;
+        return DummyRequestData.TOKEN;
     }
 }

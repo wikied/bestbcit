@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferResponse;
-import com.sun.tools.classfile.ConstantPool;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -44,7 +43,7 @@ public class OfferService {
 
     }
 
-    public Offer offerBuilder(EbayOffer ebayoffer){
+    public Offer offerBuilder(EbayLocalOffer ebayoffer){
         Offer           offer = new Offer();
         offer.setSku(ebayoffer.getLocalItem().getField("sku"));
         offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));

@@ -12,6 +12,8 @@ import java.util.Map;
 @Service
 public class DistributionService {
 
+    public static final String LOG_DISTRIBUTED = "Item sent to DistributionService";
+
     @Autowired
     private PlatformRegistry platformRegistry;
 
@@ -34,6 +36,7 @@ public class DistributionService {
      */
     public LocalItem distribute(LocalItem item) {
         final Map<String, String> fields = item.getAllFields();
+        item.log(LOG_DISTRIBUTED);
 
         if (platformRegistry == null) {
             throw new NullPointerException("Platform Registry is null");
@@ -46,6 +49,7 @@ public class DistributionService {
 
         distributionScheme.calculateDistribution(item);
         for (Offer offer : item.getOffers()) {
+            item.log("Posting to " + offer);
             offer.post();
         }
 
