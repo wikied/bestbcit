@@ -31,11 +31,10 @@ public class EbayOffer extends Offer{
 
 
     private String createOrReplaceInventoryItem(String token, String sku) {
-        InventoryItem          inventoryItem;
-        HttpHeaders            headers;
-        HttpEntity<String>     request;
-        ResponseEntity<String> response;
-        RestTemplate           template;
+        InventoryItem                 inventoryItem;
+        HttpHeaders                   headers;
+        HttpEntity<InventoryItem>     httpEntity;
+        RestTemplate                  template;
 
         headers = new HttpHeaders();
         headers.set("authorization", TOKEN_PREFIX + getLocalItem().getUser().getUserToken());
@@ -66,8 +65,12 @@ public class EbayOffer extends Offer{
         for(String imageUrl : imageUrls) {
             productImageUrls.add(imageUrl);
         }
-
         product.setImageUrls(productImageUrls);
+
+        httpEntity = new HttpEntity<>(inventoryItem, headers);
+
+
+
 
         return null;
     }
