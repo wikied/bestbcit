@@ -13,14 +13,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
-public class EbayOffer extends Offer{
+public class EbayLocalOffer extends Offer{
 
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final String CONTENT_LANGUAGE = "en-US";
     private static final String CREATE_OR_REPLACE_INVENTORY_ITEM_URI
                                 = "https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item/";
 
-    public EbayOffer(LocalItem localItem) {
+    public EbayLocalOffer(LocalItem localItem) {
         super(localItem);
     }
 
@@ -40,34 +40,13 @@ public class EbayOffer extends Offer{
         headers.set("authorization", TOKEN_PREFIX + getLocalItem().getUser().getUserToken());
         headers.set("content-language", CONTENT_LANGUAGE);
 
-        inventoryItem = new InventoryItem();
+        template = new RestTemplate();
 
-        // Sets the Availability for the Inventory Item
-        Availability availability = new Availability();
-        ShipToLocationAvailibility shipToLocationAvailibility = new ShipToLocationAvailibility();
-        shipToLocationAvailibility.setQuantity(getQuantity());
-        availability.setShipToLocationAvailibility(shipToLocationAvailibility);
-        inventoryItem.setAvailability(availability);
-
-        // Sets the condition
-        inventoryItem.setCondition(getLocalItem().getField("condition"));
-
-        // Sets the product title and description
-        Product product = new Product();
-        product.setTitle(getLocalItem().getField("title"));
-        product.setDescription(getLocalItem().getField("productDescription"));
-
-        // Sets the imageUrls
-        String listOfImageUrls = getLocalItem().getField("imageUrls");
-        String[] imageUrls = listOfImageUrls.split("\\s+");
-        ArrayList<String> productImageUrls = new ArrayList<>();
-
-        for(String imageUrl : imageUrls) {
-            productImageUrls.add(imageUrl);
-        }
-        product.setImageUrls(productImageUrls);
+        inventoryItem = EbayCreateOrReplaceItemService.createInventoryItem(this);
 
         httpEntity = new HttpEntity<>(inventoryItem, headers);
+
+        //inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,)
 
 
 
