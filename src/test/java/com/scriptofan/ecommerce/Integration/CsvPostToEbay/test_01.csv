@@ -1,4 +1,2 @@
-sku, totalQuantity, someOtherField, etc.
-item-01, 10, brains, 2
-item-02, 4, zombies, 34
-item-03, 73, rabbits, 1
+totalQuantity,sku,marketplaceId,format,availableQuantity,categoryId,listingDescription,priceCurrency,priceValue,quantityLimitPerBuyer,postOnEtsy,postOnEbay
+34,3455632452345,EBAY_US,FIXED_PRICE,75,30120,Lumia phone with a stunning 5.7 inch Quad HD display and a powerful octa-core processor,USD,272.17,2,yes,no
