@@ -2,14 +2,12 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Amount;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferId;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferResponse;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.PricingSummary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.*;
 
@@ -68,46 +66,34 @@ public class OfferService {
     }
 
     public String createOffer(Offer offer, String token){
-
-        OfferId offerId;
-        String                 response;
-        RestTemplate       restTemplate;
+        OfferResponse       offerResponse;
+        String              response;
+        RestTemplate        restTemplate;
         HttpHeaders         httpHeaders;
-        HttpEntity<Offer>    httpEntity;
+        HttpEntity<Offer>   httpEntity;
 
-        httpHeaders         = new HttpHeaders();
+        httpHeaders = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpHeaders.set("Content-Type", "application/json");
         httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
-        httpEntity = new HttpEntity<>(offer, httpHeaders);
 
-        restTemplate        = new RestTemplate();
+        httpEntity   = new HttpEntity<>(offer, httpHeaders);
+        restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new CreateOfferHandler());
-
-        for (HttpMessageConverter m : restTemplate.getMessageConverters()) {
-            System.err.println(m);
-        }
-
         try {
-            System.err.println("MAKING CREATE OFFER CALL");
-
-            offerId = restTemplate.exchange(POST_OFFERS_URL, HttpMethod.POST, httpEntity, OfferId.class).getBody();
-
-            System.err.println("OFFER RESPONSE: ");
-            assert(offerId != null);
-            System.err.println("Offer Response: " + offerId.getOfferId());
-
-            // response = offerId.getOfferId();
-            return "hi";
-        } catch (HttpServerErrorException ex) {
+            offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
+            assert(offerResponse != null);
+            response = offerResponse.getOfferId();
+        }
+        catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = "Could not create offer\n" + ex.getMessage();
-        } catch (RestClientException e) {
+        }
+        catch (RestClientException e) {
             System.err.println(e.getMessage());
             throw e;
         }
         return response;
-
     }
 
 
@@ -119,26 +105,14 @@ public class OfferService {
     {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            HttpStatus          statusCode;
-
-            System.err.println("HAS ERROR()");
-
+            boolean     hasError;
             try {
-                /* Handle response code */
-                statusCode = clientHttpResponse.getStatusCode();
-
-                if (statusCode.is2xxSuccessful()) {
-                    System.err.println("All good");
-                    // All clear
-                } else {
-                    System.err.println("Some other error");
-                }
+                hasError = !clientHttpResponse.getStatusCode().is2xxSuccessful();
             }
             catch (IOException e) {
                 throw new ResourceAccessException("IO Exception reading clientHttpResponse");
             }
-
-            return false;
+            return hasError;
         }
 
         @Override

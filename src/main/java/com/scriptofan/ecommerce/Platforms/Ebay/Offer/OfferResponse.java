@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OfferId {
+public class OfferResponse {
 
     // Unique id when a offer is successfully created
     @JsonProperty("offerId")
