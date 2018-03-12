@@ -1,14 +1,9 @@
 package com.scriptofan.ecommerce.Database;
 
-import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import com.scriptofan.ecommerce.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -23,13 +18,15 @@ public class Item {
     private User user;
 
 
-    @ElementCollection
-    @Column(name="value")
-    Map<String, String> attributes;
+    @ElementCollection()
+    //@CollectionTable(name = "item_fields", joinColumns = @JoinColumn(name = "item_id"))
+    @MapKeyClass(ItemAttributes.class)
+    @Column(name = "Value")
+    Map<String, String> fields;
 
 
     public Item(){
-        attributes = new HashMap<>();
+        fields = new HashMap<>();
     }
 
 
@@ -49,12 +46,13 @@ public class Item {
         this.user = user;
     }
 
-    public Map<String, String> getAttributes() {
-        return attributes;
+    public Map<String, String> getFields() {
+        return fields;
     }
 
-    public void setAttributes(Map<String, String> attributes) {
-        this.attributes = attributes;
+    public void setFields(Map<String, String> fields) {
+        this.fields = fields;
     }
 }
+
 
