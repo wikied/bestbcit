@@ -3,19 +3,16 @@ package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalLocalOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.InventoryItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Product;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.ShipToLocationAvailability;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +33,7 @@ public class EbayCreateOrReplaceItemService {
      * @param ebayLocalOffer - the ebay offer
      * @return - string
      */
-    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
+    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalLocalOffer ebayLocalOffer) {
         InventoryItem inventoryItem;
         HttpHeaders headers;
         HttpEntity<InventoryItem> httpEntity;
@@ -54,11 +51,8 @@ public class EbayCreateOrReplaceItemService {
             jacksonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             System.err.println(jacksonMapper.writeValueAsString(httpEntity));
             System.err.println("Making request");
-            inventoryItem = template.exchange(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku,
-                    HttpMethod.PUT,
-                    httpEntity,
-                    EbayInventoryItemWrapper.class).getBody()
-                    .getInventoryItem();
+
+            template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
             response = "success";
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
@@ -77,49 +71,65 @@ public class EbayCreateOrReplaceItemService {
         return response;
     }
 
-    public static class CreateInventoryItemErrorHandler implements ResponseErrorHandler {
+    /**
+     * Response handler.
+     */
+    public static class CreateInventoryItemErrorHandler
+            implements  ResponseErrorHandler
+    {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            // Extract error body
-            String          line;
-            String          output;
-            BufferedReader bufferReader;
-            StringBuilder   stringBuilder;
+            boolean             statusGood;
+            String              line;
+            String              output;
+            HttpStatus          statusCode;
+            String              statusText;
+            BufferedReader      bufferReader;
+            StringBuilder       stringBuilder;
+            InputStreamReader   responseBodyReader;
 
-            System.err.println("HANDLING ERROR");
-            stringBuilder = new StringBuilder();
+            output          = "";
 
-            output = "";
             try {
+                /* Handle response code */
+                statusCode = clientHttpResponse.getStatusCode();
+                statusText = clientHttpResponse.getStatusText();
 
-                output += "clientHttpResponse error:\n";
-                output += clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText() + "\n";
+                if (statusCode.is2xxSuccessful()) {
+                    // All clear
+                } else {
+                    throw new RestClientException("Error " + statusCode + " " + statusText);
+                }
 
-                bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
+                /* Generate debug output */
+                stringBuilder       = new StringBuilder();
+                responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
+                bufferReader        = new BufferedReader(responseBodyReader);
+
                 while ((line = bufferReader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
 
-                output += stringBuilder.toString();
+                output += "clientHttpResponse error:\n";
+                output += statusCode + " " + statusText + "\n";
+                output += stringBuilder.toString() + "\n";
             }
             catch (IOException e) {
-                System.err.println("IO Exception reading clientHttpResponse");
-                e.printStackTrace();
+                output += "IO Exception reading clientHttpResponse";
+                throw new ResourceAccessException(output);
             }
 
-            System.err.println(output);
-
-            return false;
+            return true;
         }
 
         @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            System.err.println("HERE");
+            /* ToDo: Implement */
         }
     }
 
     // Creates and sets the Http headers
-    private static HttpHeaders createHttpHeaders(EbayLocalOffer ebayLocalOffer) {
+    private static HttpHeaders createHttpHeaders(EbayLocalLocalOffer ebayLocalOffer) {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("authorization", TOKEN_PREFIX + ebayLocalOffer.getLocalItem().getUser().getUserToken());
@@ -129,7 +139,7 @@ public class EbayCreateOrReplaceItemService {
         return headers;
     }
 
-    private static InventoryItem createInventoryItem(EbayLocalOffer offer) {
+    private static InventoryItem createInventoryItem(EbayLocalLocalOffer offer) {
         InventoryItem inventoryItem = new InventoryItem();
 
         inventoryItem.setAvailability(createAvailability(offer));
@@ -140,7 +150,7 @@ public class EbayCreateOrReplaceItemService {
     }
 
     // Creates a Availability object for the inventory item
-    private static Availability createAvailability(EbayLocalOffer offer) {
+    private static Availability createAvailability(EbayLocalLocalOffer offer) {
         Availability availability = new Availability();
         ShipToLocationAvailability shipToLocationAvailability= new ShipToLocationAvailability();
         shipToLocationAvailability.setQuantity(offer.getQuantity());
@@ -149,7 +159,7 @@ public class EbayCreateOrReplaceItemService {
     }
 
     // Creates a Product object for the inventory item
-    private static Product createProduct(EbayLocalOffer offer) {
+    private static Product createProduct(EbayLocalLocalOffer offer) {
         Product product = new Product();
 
         product.setTitle(offer.getLocalItem().getField("productTitle"));

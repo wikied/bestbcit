@@ -2,22 +2,32 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplaceItemService;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
-public class EbayLocalOffer extends Offer{
+public class EbayLocalLocalOffer extends LocalOffer {
 
-    public EbayLocalOffer(LocalItem localItem) {
+    private OfferService offerService;
+
+    public EbayLocalLocalOffer(LocalItem localItem) {
         super(localItem);
     }
 
     public void post() {
-        EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(getLocalItem().getUser().getUserToken(),
+        String  token;
+        Offer   offer;
+
+        offerService = new OfferService();
+
+        token = getLocalItem().getUser().getUserToken();
+
+        EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(token,
                                                            getLocalItem().getField("sku"),
                                                           this);
 
-
-        //EbayPublishOffer.publishEbayOffer();
+        offer = offerService.offerBuilder(this);
+        System.err.println(offer);
+        offerService.createOffer(offer,token);
     }
 
 

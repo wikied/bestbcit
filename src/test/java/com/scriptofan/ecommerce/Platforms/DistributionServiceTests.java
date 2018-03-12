@@ -6,7 +6,7 @@ import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,19 +61,19 @@ public class DistributionServiceTests {
         final boolean[] methodWasCalled = {false, false, false};
 
         LocalItem localItem = new LocalItem();
-        localItem.addOffer(new Offer(localItem) {
+        localItem.addOffer(new LocalOffer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[0] = true;
             }
         });
-        localItem.addOffer(new Offer(localItem) {
+        localItem.addOffer(new LocalOffer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[1] = true;
             }
         });
-        localItem.addOffer(new Offer(localItem) {
+        localItem.addOffer(new LocalOffer(localItem) {
             @Override
             public void post() {
                 methodWasCalled[2] = true;
@@ -107,10 +107,10 @@ public class DistributionServiceTests {
     @Test
     public void distributeShouldLetOffersBeModified() throws NotImplementedException {
         // Stub offer
-        class DummyOffer extends Offer {
+        class DummyLocalOffer extends LocalOffer {
             public boolean wasModified = false;
 
-            public DummyOffer(LocalItem localItem) {
+            public DummyLocalOffer(LocalItem localItem) {
                 super(localItem);
             }
 
@@ -121,10 +121,10 @@ public class DistributionServiceTests {
         }
 
         LocalItem localItem = new LocalItem();
-        localItem.addOffer(new DummyOffer(localItem));
+        localItem.addOffer(new DummyLocalOffer(localItem));
 
         this.distributionService.distribute(localItem);
-        assert(((DummyOffer) localItem.getOffers().toArray()[0]).wasModified == true);
+        assert(((DummyLocalOffer) localItem.getLocalOffers().toArray()[0]).wasModified == true);
     }
 
 
@@ -142,7 +142,7 @@ public class DistributionServiceTests {
         // they have publish() called on their offer
         for (int i = 0; i < numItems; ++i) {
             LocalItem localItem = new LocalItem();
-            localItem.addOffer(new Offer(localItem) {
+            localItem.addOffer(new LocalOffer(localItem) {
                 @Override
                 public void post() {
                     callCount[0]++;
@@ -166,18 +166,18 @@ public class DistributionServiceTests {
 
         item = new LocalItem();
         item.setTotalQuantity(23);
-        item.addOffer(new Offer(item) {
+        item.addOffer(new LocalOffer(item) {
             public void post() { }
         });
-        item.addOffer(new Offer(item) {
+        item.addOffer(new LocalOffer(item) {
             public void post() { }
         });
 
         distributionService.distribute(item);
 
         quantity = 0;
-        for (Offer offer : item.getOffers()) {
-            quantity += offer.getQuantity();
+        for (LocalOffer localOffer : item.getLocalOffers()) {
+            quantity += localOffer.getQuantity();
         }
         assert(quantity == item.getTotalQuantity());
     }

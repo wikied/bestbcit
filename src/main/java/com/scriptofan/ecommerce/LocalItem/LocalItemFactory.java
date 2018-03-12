@@ -27,7 +27,7 @@ public class LocalItemFactory {
      * 1) Create a new LocalItem
      * 2) Validate all the fields in the associated Map
      * 3) Use those fields to populate the fields in the LocalItem
-     * 4) Create the LocalItem's Offer placeholders
+     * 4) Create the LocalItem's LocalOffer placeholders
      * 5) Set the initial quantity
      */
     public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection)

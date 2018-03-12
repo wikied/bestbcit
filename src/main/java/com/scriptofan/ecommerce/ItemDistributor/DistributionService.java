@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.ItemDistributor;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,14 +9,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Handles distributing LocalItems among the available retail platforms.
+ * Specifically, each LocalItem will have 0 or more attached Offers,
+ * each associated with a retail platform (1). This service divides the
+ * quantity among the attached offers (2) and calls post() on each offer.
+ *
+ * (1) Retail Platforms are fetched from the PlatformRegistry. The best
+ * place to add them to the registry is in Config.
+ *
+ * (2) The particular scheme for distributing available quantity among
+ * offers is dictated by the QuantityDistributionScheme.
+ */
 @Service
 public class DistributionService {
 
+    /* This message is added to LocalItems when they are run through this service */
     public static final String LOG_DISTRIBUTED = "Item sent to DistributionService";
 
     @Autowired
     private PlatformRegistry platformRegistry;
-
 
     /*
      * Distributes a list of items based on their offers. Returns the complete
@@ -48,9 +60,9 @@ public class DistributionService {
         }
 
         distributionScheme.calculateDistribution(item);
-        for (Offer offer : item.getOffers()) {
-            item.log("Posting to " + offer);
-            offer.post();
+        for (LocalOffer localOffer : item.getLocalOffers()) {
+            item.log("Posting to " + localOffer);
+            localOffer.post();
         }
 
         return item;

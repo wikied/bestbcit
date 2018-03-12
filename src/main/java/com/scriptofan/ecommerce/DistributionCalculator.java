@@ -2,7 +2,7 @@ package com.scriptofan.ecommerce;
 
 import com.scriptofan.ecommerce.ItemDistributor.QuantityDistributionScheme;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
 public class DistributionCalculator
         implements QuantityDistributionScheme
@@ -14,7 +14,7 @@ public class DistributionCalculator
     {
         int quantity;
         int quantityPerOffer;
-        int numberOfOffers = item.getOffers().size();
+        int numberOfOffers = item.getLocalOffers().size();
 
         // Handle zero offers
         if (numberOfOffers > 0) {
@@ -22,13 +22,13 @@ public class DistributionCalculator
             quantity = item.getTotalQuantity();
             quantityPerOffer = quantity / numberOfOffers;
 
-            for (Offer offer : item.getOffers()) {
+            for (LocalOffer localOffer : item.getLocalOffers()) {
 
                 if (quantity > quantityPerOffer * 2) {
                     quantity -= quantityPerOffer;
-                    offer.setQuantity(quantityPerOffer);
+                    localOffer.setQuantity(quantityPerOffer);
                 } else {
-                    offer.setQuantity(quantity);
+                    localOffer.setQuantity(quantity);
                 }
             }
         }

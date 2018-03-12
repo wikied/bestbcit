@@ -79,7 +79,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         throws RulesetCollisionException,
                RulesetViolationException {
 
-        EbayLocalOffer ebayLocalOffer;
+        EbayLocalLocalOffer ebayLocalOffer;
 
         // sku
         if (fields.get("sku") == null) {
@@ -87,6 +87,14 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         } else {
             localItem.addField("sku", fields.get("sku"));
         }
+
+        // merchantLocationKey
+        if (fields.get("merchantLocationKey") == null) {
+            throw new RulesetViolationException("merchantLocationKey is empty");
+        } else {
+            localItem.addField("merchantLocationKey", fields.get("merchantLocationKey"));
+        }
+
 
         // category id
         if (fields.get("categoryId") == null) {
@@ -151,7 +159,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             localItem.addField("value", fields.get("value"));
         }
 
-        ebayLocalOffer = new EbayLocalOffer(localItem);
+        ebayLocalOffer = new EbayLocalLocalOffer(localItem);
         localItem.addOffer(ebayLocalOffer);
     }
 
