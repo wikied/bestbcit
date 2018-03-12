@@ -1,7 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayListing;
-import com.scriptofan.ecommerce.Platforms.Ebay.Location.Location;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +18,7 @@ public class EbayPublishOffer {
         HttpHeaders httpHeaders;
         HttpEntity<String> httpEntity;
         String response;
+        EbayListing ebayListing = null;
 
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
@@ -30,15 +30,16 @@ public class EbayPublishOffer {
         httpEntity = new HttpEntity<>(offerId, httpHeaders);
 
         try {
-            restTemplate.exchange(PUBLISH_OFFER_URI + offerId,
-                                   HttpMethod.POST, httpEntity, EbayListing.class);
-            response = "success";
+           ebayListing =  restTemplate.exchange(PUBLISH_OFFER_URI + offerId,
+                                   HttpMethod.POST, httpEntity, EbayListing.class).getBody();
+            System.err.println(ebayListing);
+
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = ex.getMessage();
         }
 
-        return response;
+        return ebayListing.toString();
 
     }
 }
