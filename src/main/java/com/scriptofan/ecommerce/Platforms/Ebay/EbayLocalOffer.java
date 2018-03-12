@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplaceItemService;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
 import com.scriptofan.ecommerce.Platforms.Interface.Offer;
 
 public class EbayLocalOffer extends Offer{
@@ -15,6 +16,8 @@ public class EbayLocalOffer extends Offer{
                                                            getLocalItem().getField("sku"),
                                                           this);
 
+
+        //EbayPublishOffer.publishEbayOffer();
     }
 
 

@@ -38,7 +38,6 @@ public class EbayCreateOrReplaceItemService {
      */
     public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
         InventoryItem inventoryItem;
-        EbayInventoryItemWrapper inventoryItemWrapper;
         HttpHeaders headers;
         HttpEntity<InventoryItem> httpEntity;
         RestTemplate template;
