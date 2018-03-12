@@ -100,7 +100,6 @@ public class OfferService {
         catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = "Could not create offer\n" + ex.getMessage();
-            System.err.println(response);
         }
         catch (RestClientException e) {
             System.err.println(e.getMessage());

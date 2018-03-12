@@ -31,7 +31,6 @@ public class EbayLocalOffer extends LocalOffer {
         System.err.println(offer);
         System.err.println("Creating offer");
         offerId = offerService.createOffer(offer,token);
-
         System.err.println("publishing offer");
         EbayPublishOffer.publishEbayOffer(offerId, token);
     }

@@ -17,7 +17,8 @@ import java.io.InputStreamReader;
 
 public class EbayPublishOffer {
 
-    private static final String PUBLISH_OFFER_URI = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/publish/";
+    private static final String PUBLISH_OFFER_URI = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/";
+    private static final String URI_POSTFIX = "/publish/";
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final String CONTENT_LANGUAGE = "en-US";
 
@@ -40,7 +41,7 @@ public class EbayPublishOffer {
         httpEntity = new HttpEntity<>(offerId, httpHeaders);
 
         try {
-           ebayListing =  restTemplate.exchange(PUBLISH_OFFER_URI + offerId,
+           ebayListing =  restTemplate.exchange(PUBLISH_OFFER_URI + offerId + URI_POSTFIX,
                                    HttpMethod.POST, httpEntity, EbayListing.class).getBody();
             System.err.println(ebayListing);
 
