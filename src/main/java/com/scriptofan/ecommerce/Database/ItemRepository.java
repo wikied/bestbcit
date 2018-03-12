@@ -8,7 +8,7 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
 
     public Item findItemById(Integer id);
     public Item getItemById(Integer id);
-    public List<Item> findAllByAvaliableQuantity(Integer id);
+    public List<Item> findAllByAvailableQuantity(Integer id);
 
 
 

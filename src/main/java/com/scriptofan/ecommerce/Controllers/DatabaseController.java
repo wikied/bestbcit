@@ -21,39 +21,25 @@ public class DatabaseController {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Autowired
-    private ItemRepository2 itemRepository2;
 
     @GetMapping("/add-item")
     public String addNewItem(){
 
-        User user = new User(1, "testing");
-        Item2 item2 = new Item2();
+        User user = new User();
 
+        Item item = new Item("3455632452345",
+                "EBAY_US",
+                "FIXED_PRICE",
+                75,
+                "30120",
+                "Lumia Phone",
+                "USD",
+                "272.17",
+                "2",
+                1,
+                "testing");
 
-
-        Map<String, String> tester = new HashMap<>();
-        tester.put("Quantity", "2");
-        tester.put("Price", "23");
-
-        item2.setFields(tester);
-        item2.setUser(user);
-
-
-//        Item item = new Item("3455632452345",
-//                "EBAY_US",
-//                "FIXED_PRICE",
-//                75,
-//                "30120",
-//                "Lumia Phone",
-//                "USD",
-//                "272.17",
-//                "2",
-//                1,
-//                "testing");
-
-        userRepository.save(user);
-        itemRepository2.save(item2);
+        itemRepository.save(item);
 
         return "Saved !";
     }
@@ -65,7 +51,7 @@ public class DatabaseController {
 
     @GetMapping("/get-items/{quantity}")
     public List<Item> getAllItem(@PathVariable Integer quantity){
-        return itemRepository.findAllByAvaliableQuantity(quantity);
+        return itemRepository.findAllByAvailableQuantity(quantity);
     }
 
 }
