@@ -13,20 +13,31 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String  sku;
+    private String  marketplaceId;
+    private String  format;
+    private String  description;
+    private Integer avaliableQuantity;
+    private String  categoryId;
+    private String  priceCurrency;
+    private String  priceValue;
+    private String  limitPerBuyer;
+
+
     @ManyToOne
     @JoinColumn(name = "fk_User")
     private User user;
 
 
-    @ElementCollection()
-    //@CollectionTable(name = "item_fields", joinColumns = @JoinColumn(name = "item_id"))
-    @MapKeyClass(ItemAttributes.class)
-    @Column(name = "Value")
-    Map<String, String> fields;
+//    @ElementCollection()
+//    //@CollectionTable(name = "item_fields", joinColumns = @JoinColumn(name = "item_id"))
+//    @MapKeyClass(ItemAttributes.class)
+//    @Column(name = "Value")
+//    Map<String, String> fields;
 
 
     public Item(){
-        fields = new HashMap<>();
+        //fields = new HashMap<>();
     }
 
 
@@ -46,13 +57,13 @@ public class Item {
         this.user = user;
     }
 
-    public Map<String, String> getFields() {
-        return fields;
-    }
-
-    public void setFields(Map<String, String> fields) {
-        this.fields = fields;
-    }
+//    public Map<String, String> getFields() {
+//        return fields;
+//    }
+//
+//    public void setFields(Map<String, String> fields) {
+//        this.fields = fields;
+//    }
 }
 
 
