@@ -28,18 +28,27 @@ public class Item {
     @JoinColumn(name = "fk_User")
     private User user;
 
-
-//    @ElementCollection()
-//    //@CollectionTable(name = "item_fields", joinColumns = @JoinColumn(name = "item_id"))
-//    @MapKeyClass(ItemAttributes.class)
-//    @Column(name = "Value")
-//    Map<String, String> fields;
-
-
-    public Item(){
-        //fields = new HashMap<>();
+    public Item(String sku,
+                String marketplaceId,
+                String format,
+                String description,
+                Integer avaliableQuantity,
+                String categoryId,
+                String priceCurrency,
+                String priceValue,
+                String limitPerBuyer,
+                User user) {
+        this.sku = sku;
+        this.marketplaceId = marketplaceId;
+        this.format = format;
+        this.description = description;
+        this.avaliableQuantity = avaliableQuantity;
+        this.categoryId = categoryId;
+        this.priceCurrency = priceCurrency;
+        this.priceValue = priceValue;
+        this.limitPerBuyer = limitPerBuyer;
+        this.user = user;
     }
-
 
     public Integer getId() {
         return id;
@@ -57,13 +66,78 @@ public class Item {
         this.user = user;
     }
 
-//    public Map<String, String> getFields() {
-//        return fields;
-//    }
-//
-//    public void setFields(Map<String, String> fields) {
-//        this.fields = fields;
-//    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public String getMarketplaceId() {
+        return marketplaceId;
+    }
+
+    public void setMarketplaceId(String marketplaceId) {
+        this.marketplaceId = marketplaceId;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getAvaliableQuantity() {
+        return avaliableQuantity;
+    }
+
+    public void setAvaliableQuantity(Integer avaliableQuantity) {
+        this.avaliableQuantity = avaliableQuantity;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getPriceCurrency() {
+        return priceCurrency;
+    }
+
+    public void setPriceCurrency(String priceCurrency) {
+        this.priceCurrency = priceCurrency;
+    }
+
+    public String getPriceValue() {
+        return priceValue;
+    }
+
+    public void setPriceValue(String priceValue) {
+        this.priceValue = priceValue;
+    }
+
+    public String getLimitPerBuyer() {
+        return limitPerBuyer;
+    }
+
+    public void setLimitPerBuyer(String limitPerBuyer) {
+        this.limitPerBuyer = limitPerBuyer;
+    }
 }
 
 

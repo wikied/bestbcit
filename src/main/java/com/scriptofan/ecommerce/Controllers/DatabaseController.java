@@ -23,23 +23,25 @@ public class DatabaseController {
 
     @GetMapping("/add-user")
     public String addNewUser(){
-//
-//        User user = new User();
-//
-//        user.setName("testing");
-//
-//
-//        Map<String, String> tester = new HashMap<>();
-//
-//        tester.put("Quantity", "2");
-//        tester.put("Price", "23");
-//
-//        Item item = new Item();
-//        item.setFields(tester);
-//        item.setUser(user);
-//
-//        userRepository.save(user);
-//        itemRepository.save(item);
+
+        User user = new User();
+        user.setName("testing");
+
+        Item item = new Item("testing",
+                            "testing",
+                            "testing,",
+                            "testing",
+                            12,
+                            "testing",
+                            "testing",
+                            "testing",
+                            "testing",
+                                    user);
+
+        userRepository.save(user);
+
+        itemRepository.save(item);
+
 
         return "Saved !";
     }
