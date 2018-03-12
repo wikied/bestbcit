@@ -19,8 +19,9 @@ public class User {
     public User(){}
 
 
-    public User(Integer userID){
-        this.userID = userID;
+    public User(Integer id, String name){
+        this.userID = id;
+        this.name =  name;
     }
 
     public Integer getUserID() {
