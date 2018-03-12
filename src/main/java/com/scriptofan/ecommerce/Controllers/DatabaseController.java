@@ -27,15 +27,15 @@ public class DatabaseController {
         User user = new User();
         user.setName("testing");
 
-        Item item = new Item("testing",
-                            "testing",
-                            "testing,",
-                            "testing",
-                            12,
-                            "testing",
-                            "testing",
-                            "testing",
-                            "testing",
+        Item item = new Item("3455632452345",
+                             "EBAY_US",
+                             "FIXED_PRICE,",
+                             "Lumia phone.....",
+                             75,
+                             "30120",
+                             "USD",
+                             "272.17",
+                             "2",
                                     user);
 
         userRepository.save(user);
