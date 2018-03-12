@@ -25,7 +25,7 @@ public class OfferService {
 
     }
 
-    public Offer offerBuilder(EbayLocalLocalOffer ebayoffer){
+    public Offer offerBuilder(EbayLocalOffer ebayoffer){
         Offer           offer = new Offer();
         Amount  amount = new Amount();
         PricingSummary pricingSummary = new PricingSummary();
