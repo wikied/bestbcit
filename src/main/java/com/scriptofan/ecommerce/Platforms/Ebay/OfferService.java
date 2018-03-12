@@ -1,22 +1,26 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
+
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Amount;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
-
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferResponse;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.OfferId;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.PricingSummary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
+
+import java.io.IOException;
 
 @Service
 public class OfferService {
 
     private static final String POST_OFFERS_URL     = "https://api.sandbox.ebay.com/sell/inventory/v1/offer";
     private static final String GET_OFFERS_URL      = POST_OFFERS_URL + "?";
-    private static final String CONTENT_LANGUAGE = "en-US";
+    private static final String CONTENT_LANGUAGE    = "en-US";
     private static final String TOKEN_PREFIX        = "Bearer ";
 
     public OfferService (){
@@ -65,7 +69,7 @@ public class OfferService {
 
     public String createOffer(Offer offer, String token){
 
-        OfferResponse     offerResponse;
+        OfferId offerId;
         String                 response;
         RestTemplate       restTemplate;
         HttpHeaders         httpHeaders;
@@ -74,23 +78,73 @@ public class OfferService {
         httpHeaders         = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpHeaders.set("Content-Type", "application/json");
-        httpHeaders.set("Content Language", CONTENT_LANGUAGE);
+        httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
         httpEntity = new HttpEntity<>(offer, httpHeaders);
 
         restTemplate        = new RestTemplate();
-        restTemplate.setErrorHandler(new LocationService.MyErrorHandler());
+        restTemplate.setErrorHandler(new CreateOfferHandler());
+
+        for (HttpMessageConverter m : restTemplate.getMessageConverters()) {
+            System.err.println(m);
+        }
 
         try {
-            offerResponse = restTemplate.exchange(POST_OFFERS_URL, HttpMethod.POST, httpEntity, OfferResponse.class).getBody();
-            response = offerResponse.getOfferId();
-            return response;
+            System.err.println("MAKING CREATE OFFER CALL");
+
+            offerId = restTemplate.exchange(POST_OFFERS_URL, HttpMethod.POST, httpEntity, OfferId.class).getBody();
+
+            System.err.println("OFFER RESPONSE: ");
+            assert(offerId != null);
+            System.err.println("Offer Response: " + offerId.getOfferId());
+
+            // response = offerId.getOfferId();
+            return "hi";
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = "Could not create offer\n" + ex.getMessage();
+        } catch (RestClientException e) {
+            System.err.println(e.getMessage());
+            throw e;
         }
         return response;
 
     }
 
 
+    /**
+     * Response handler.
+     */
+    public static class CreateOfferHandler
+            implements ResponseErrorHandler
+    {
+        @Override
+        public boolean hasError(ClientHttpResponse clientHttpResponse) {
+            HttpStatus          statusCode;
+
+            System.err.println("HAS ERROR()");
+
+            try {
+                /* Handle response code */
+                statusCode = clientHttpResponse.getStatusCode();
+
+                if (statusCode.is2xxSuccessful()) {
+                    System.err.println("All good");
+                    // All clear
+                } else {
+                    System.err.println("Some other error");
+                }
+            }
+            catch (IOException e) {
+                throw new ResourceAccessException("IO Exception reading clientHttpResponse");
+            }
+
+            return false;
+        }
+
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
+            /* ToDo: Implement */
+            System.err.println("HANDLE ERROR()");
+        }
+    }
 }

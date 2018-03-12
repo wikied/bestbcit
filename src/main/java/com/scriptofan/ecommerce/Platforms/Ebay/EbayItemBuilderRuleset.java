@@ -88,6 +88,14 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             localItem.addField("sku", fields.get("sku"));
         }
 
+        // merchantLocationKey
+        if (fields.get("merchantLocationKey") == null) {
+            throw new RulesetViolationException("merchantLocationKey is empty");
+        } else {
+            localItem.addField("merchantLocationKey", fields.get("merchantLocationKey"));
+        }
+
+
         // category id
         if (fields.get("categoryId") == null) {
             throw new RulesetViolationException("categoryId is empty");
