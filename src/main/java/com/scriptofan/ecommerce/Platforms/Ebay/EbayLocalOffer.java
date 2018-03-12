@@ -28,6 +28,7 @@ public class EbayLocalOffer extends LocalOffer {
         offer = offerService.offerBuilder(this);
         System.err.println(offer);
         offerService.createOffer(offer,token);
+
     }
 
 
