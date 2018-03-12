@@ -81,6 +81,7 @@ public class OfferService {
         HttpHeaders         httpHeaders;
         HttpEntity<Offer>   httpEntity;
 
+        System.err.println("Creating headers");
         httpHeaders = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpHeaders.set("Content-Type", "application/json");
@@ -88,15 +89,18 @@ public class OfferService {
 
         httpEntity   = new HttpEntity<>(offer, httpHeaders);
         restTemplate = new RestTemplate();
+        System.err.println("set error handler");
         restTemplate.setErrorHandler(new CreateOfferHandler());
         try {
             offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
             assert(offerResponse != null);
             response = offerResponse.getOfferId();
+            System.err.println(response);
         }
         catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = "Could not create offer\n" + ex.getMessage();
+            System.err.println(response);
         }
         catch (RestClientException e) {
             System.err.println(e.getMessage());
