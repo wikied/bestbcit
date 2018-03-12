@@ -18,7 +18,7 @@ public class ResponseLog {
         if(this.response == null){
             this.response = nullResponse;
         }
-        String responsePrompt = "This response was generated:\n";
+        String responsePrompt = "Response was generated:\n";
         this.reports.add(responsePrompt + response);
 
     }
