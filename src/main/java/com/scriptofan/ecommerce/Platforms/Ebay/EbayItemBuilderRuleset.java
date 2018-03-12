@@ -79,7 +79,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         throws RulesetCollisionException,
                RulesetViolationException {
 
-        EbayLocalLocalOffer ebayLocalOffer;
+        EbayLocalOffer ebayLocalOffer;
 
         // sku
         if (fields.get("sku") == null) {
@@ -159,7 +159,7 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
             localItem.addField("value", fields.get("value"));
         }
 
-        ebayLocalOffer = new EbayLocalLocalOffer(localItem);
+        ebayLocalOffer = new EbayLocalOffer(localItem);
         localItem.addOffer(ebayLocalOffer);
     }
 

@@ -5,11 +5,11 @@ import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplace
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
-public class EbayLocalLocalOffer extends LocalOffer {
+public class EbayLocalOffer extends LocalOffer {
 
     private OfferService offerService;
 
-    public EbayLocalLocalOffer(LocalItem localItem) {
+    public EbayLocalOffer(LocalItem localItem) {
         super(localItem);
     }
 
