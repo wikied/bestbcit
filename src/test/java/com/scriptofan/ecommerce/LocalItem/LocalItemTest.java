@@ -70,7 +70,7 @@ public class LocalItemTest {
     @Test
     public void shouldCatchNoOffers(){
         localItem = new LocalItem();
-        assert(localItem.getOffers().size() == 0);
+        assert(localItem.getLocalOffers().size() == 0);
     }
 
     //Should throw AlreadyBoundException for an already associated User.

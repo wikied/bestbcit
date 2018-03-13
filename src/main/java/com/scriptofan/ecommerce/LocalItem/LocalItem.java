@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-import com.scriptofan.ecommerce.Platforms.Interface.Offer;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.User.User;
 
 import java.nio.channels.NotYetBoundException;
@@ -11,7 +11,7 @@ import java.util.*;
 public class LocalItem {
 
     private Map<String, String> fields;
-    private Collection<Offer>   offers;
+    private Collection<LocalOffer> localOffers;
     private User                user;
     private int                 totalQuantity;
 
@@ -22,7 +22,7 @@ public class LocalItem {
      */
     public LocalItem() {
         this.fields = new HashMap<>();
-        this.offers = new ArrayList<Offer>();
+        this.localOffers = new ArrayList<LocalOffer>();
         this.log    = new ItemLog();
         this.user   = null;
     }
@@ -65,12 +65,12 @@ public class LocalItem {
 
 
 
-    public void addOffer(Offer offer) {
-        this.offers.add(offer);
+    public void addOffer(LocalOffer localOffer) {
+        this.localOffers.add(localOffer);
     }
 
-    public Collection<Offer> getOffers() {
-        return offers;
+    public Collection<LocalOffer> getLocalOffers() {
+        return localOffers;
     }
 
 
@@ -116,6 +116,31 @@ public class LocalItem {
 
     public List<String> getFullLog() {
         return this.log.getFullLog();
+    }
+
+    @Override
+    public String toString() {
+        return    "LocalItem ("
+                + fields.size() + " fields, "
+                + localOffers.size() + " localOffers, "
+                + "quantity = " + totalQuantity + ", "
+                + "user = " + user + ", "
+                + log.getFullLog().size() + " logs"
+                + ")";
+    }
+
+    public String fieldsToString() {
+        String  output  = "";
+        int     max     = fields.size();
+        int     i       = 0;
+        for (Map.Entry<String, String> field : fields.entrySet()) {
+            output += field.getKey() + "=" + field.getValue();
+            ++i;
+            if (i < max) {
+                output += ", ";
+            }
+        }
+        return output;
     }
 
 }

@@ -26,6 +26,7 @@ public class Offer {
     // The unique identifier of a merchants inventory location
     private String merchantLocationKey;
 
+    private PricingSummary pricingSummary;
     // Constructor
     public Offer() {
     }
@@ -33,7 +34,6 @@ public class Offer {
     public String getSku() {
         return sku;
     }
-
     public void setSku(String sku) {
         this.sku = sku;
     }
@@ -74,5 +74,15 @@ public class Offer {
 
     public void setMerchantLocationKey(String merchantLocationKey) {
         this.merchantLocationKey = merchantLocationKey;
+    }
+
+
+    public PricingSummary getPricingSummary() {
+        return pricingSummary;
+
+    }
+
+    public void setPricingSummary(PricingSummary pricingSummary) {
+        this.pricingSummary = pricingSummary;
     }
 }

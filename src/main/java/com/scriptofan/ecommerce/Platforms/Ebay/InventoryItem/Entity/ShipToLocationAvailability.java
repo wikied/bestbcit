@@ -1,6 +1,6 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
-public class ShipToLocationAvailibility {
+public class ShipToLocationAvailability {
 
     private int quantity;
 

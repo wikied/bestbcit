@@ -2,12 +2,12 @@ package com.scriptofan.ecommerce.Platforms.Interface;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 
-public abstract class Offer {
+public abstract class LocalOffer {
 
     private int         quantity;
     private LocalItem   localItem;
 
-    public Offer(LocalItem localItem) {
+    public LocalOffer(LocalItem localItem) {
         this.quantity   = 0;
         this.localItem  = localItem;
     }

@@ -23,9 +23,8 @@ public class Item {
     private String  priceValue;
     private String  limitPerBuyer;
 
-
     @ManyToOne
-    @JoinColumn(name = "fk_User")
+    @JoinColumn(name = "fk_user")
     private User user;
 
     public Item(){ }
@@ -67,7 +66,6 @@ public class Item {
     public void setUser(User user) {
         this.user = user;
     }
-
 
     public String getSku() {
         return sku;

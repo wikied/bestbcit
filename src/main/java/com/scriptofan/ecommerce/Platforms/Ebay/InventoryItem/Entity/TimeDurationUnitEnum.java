@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem;
+package com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity;
 
 public enum TimeDurationUnitEnum {
     YEAR,
