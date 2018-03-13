@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.Money;
+package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
 
 public class Money {
     private int amount;
@@ -8,7 +8,7 @@ public class Money {
     private String formatted_short;
     private String formatted_long;
     private String original_currency_code;
-    private String before_conversion;
+    private Money before_conversion;
 
     public int getAmount() {
         return amount;
@@ -66,11 +66,11 @@ public class Money {
         this.original_currency_code = original_currency_code;
     }
 
-    public String getBefore_conversion() {
+    public Money getBefore_conversion() {
         return before_conversion;
     }
 
-    public void setBefore_conversion(String before_conversion) {
+    public void setBefore_conversion(Money before_conversion) {
         this.before_conversion = before_conversion;
     }
 }

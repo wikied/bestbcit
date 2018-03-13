@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.ListingImage;
+package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
 
 public class ListingImage {
     private int listing_image_id;
