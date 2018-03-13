@@ -1,10 +1,10 @@
 package com.scriptofan.ecommerce.Database;
 
+
 import com.scriptofan.ecommerce.User.User;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Entity
 public class Item {

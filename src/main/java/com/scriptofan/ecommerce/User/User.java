@@ -9,14 +9,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String userID;
+    private Integer userID;
 
     private String name;
 
+    @Transient
     private String token;
-
-//    @ManyToOne
-//    private Item item;
 
     public User(){}
 
@@ -25,11 +23,11 @@ public class User {
         this.name = name;
     }
 
-    public String getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 
@@ -52,6 +50,7 @@ public class User {
     public String getUserToken() {
         return DummyRequestData.TOKEN;
     }
+
     public String getPayementPolicy() {return DummyRequestData.PAYMENT_POLICY;}
     public String getReturnPolicy() {return DummyRequestData.RETURN_POLICY;}
     public String getFulfillmentPolicy() {return  DummyRequestData.FULFILLMENT_POLICY;}

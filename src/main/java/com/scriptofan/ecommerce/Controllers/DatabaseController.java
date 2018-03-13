@@ -1,8 +1,8 @@
 package com.scriptofan.ecommerce.Controllers;
 
-
 import com.scriptofan.ecommerce.Database.Item;
 import com.scriptofan.ecommerce.Database.ItemRepository;
+
 import com.scriptofan.ecommerce.Database.UserRepository;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class DatabaseController {
                               "USD",
                               "1000.00",
                               "1",
-                                          user2);
+                                           user2);
 
 
         userRepository.save(user1);
@@ -65,9 +65,9 @@ public class DatabaseController {
         return itemRepository.findItemById(id);
     }
 
-    @GetMapping("/get-by-user/{user}")
-    public Iterable<Item> getItemByUser(@PathVariable String user){
-        return itemRepository.findItemsByUser_Name(user);
+    @GetMapping("/get-by-user/{name}")
+    public Iterable<Item> getItemByUser(@PathVariable String name){
+        return itemRepository.findItemsByUser_Name(name);
     }
 
 
