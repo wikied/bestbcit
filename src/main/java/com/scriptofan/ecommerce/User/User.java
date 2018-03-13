@@ -13,14 +13,14 @@ public class User {
 
     private String name;
 
-    @ManyToOne
-    private Item item;
+//    @ManyToOne
+//    private Item item;
 
     public User(){}
 
 
-    public User(Integer userID){
-        this.userID = userID;
+    public User(String name){
+        this.name = name;
     }
 
     public Integer getUserID() {
@@ -39,11 +39,4 @@ public class User {
         this.name = name;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
 }

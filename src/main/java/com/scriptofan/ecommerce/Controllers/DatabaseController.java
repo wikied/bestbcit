@@ -7,6 +7,8 @@ import com.scriptofan.ecommerce.Database.UserRepository;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -21,34 +23,56 @@ public class DatabaseController {
     @Autowired
     private ItemRepository itemRepository;
 
-    @GetMapping("/add-user")
+    @GetMapping("/add-item")
     public String addNewUser(){
 
-        User user = new User();
-        user.setName("testing");
+        User user1 = new User("Robert");
+        User user2 = new User("William");
 
-        Item item = new Item("3455632452345",
+        Item item1 = new Item("3455632452345",
                              "EBAY_US",
                              "FIXED_PRICE,",
-                             "Lumia phone.....",
                              75,
                              "30120",
+                             "Lumia phone.....",
                              "USD",
                              "272.17",
                              "2",
-                                    user);
+                                         user1);
 
-        userRepository.save(user);
+        Item item2 = new Item("287439387429847",
+                              "EBAY_US",
+                              "FIXED_PRICE,",
+                              122,
+                              "238820",
+                              "Iphone X.....",
+                              "USD",
+                              "1000.00",
+                              "1",
+                                          user2);
 
-        itemRepository.save(item);
 
-
+        userRepository.save(user1);
+        userRepository.save(user2);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
         return "Saved !";
     }
 
-    @GetMapping("/get-user")
+    @GetMapping("/get-items")
     public Iterable<Item> getALLItems(){
         return itemRepository.findAll();
     }
+
+    @GetMapping("/get-by-id/{id}")
+    public Iterable<Item> getItemById(@PathVariable Integer id){
+        return itemRepository.findItemById(id);
+    }
+
+    @GetMapping("/get-by-user/{user}")
+    public Iterable<Item> getItemByUser(@PathVariable String user){
+        return itemRepository.findItemsByUser_Name(user);
+    }
+
 
 }

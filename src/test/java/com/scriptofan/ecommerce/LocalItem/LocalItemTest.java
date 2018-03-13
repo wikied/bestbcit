@@ -77,8 +77,8 @@ public class LocalItemTest {
     @Test(expected = AlreadyBoundException.class)
     public void shouldCatchAlreadyBound() throws AlreadyBoundException{
         localItem = new LocalItem();
-        User testuser = new User(1);
-        User testuser2 = new User(2);
+        User testuser = new User("Robert");
+        User testuser2 = new User("William");
         localItem.associateUser(testuser);
         localItem.associateUser(testuser2);
     }

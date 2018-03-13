@@ -28,12 +28,14 @@ public class Item {
     @JoinColumn(name = "fk_User")
     private User user;
 
+    public Item(){ }
+
     public Item(String sku,
                 String marketplaceId,
                 String format,
-                String description,
                 Integer avaliableQuantity,
                 String categoryId,
+                String description,
                 String priceCurrency,
                 String priceValue,
                 String limitPerBuyer,
@@ -41,9 +43,9 @@ public class Item {
         this.sku = sku;
         this.marketplaceId = marketplaceId;
         this.format = format;
-        this.description = description;
         this.avaliableQuantity = avaliableQuantity;
         this.categoryId = categoryId;
+        this.description = description;
         this.priceCurrency = priceCurrency;
         this.priceValue = priceValue;
         this.limitPerBuyer = limitPerBuyer;
