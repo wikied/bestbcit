@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.LocalItem;
 
+import org.apache.tomcat.jni.Local;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,18 @@ public class ResponseLog {
         if(this.response == null){
             this.response = nullResponse;
         }
-        String responsePrompt = "Response generated:\n";
+        String responsePrompt = "Response generated: ";
         this.reports.add(responsePrompt + response);
 
     }
 
+    public void appendToItemLog(LocalItem localItem){
+        localItem.getFullLog().addAll(this.reports);
+    }
+
+    public List<String> getReports() {
+        return this.reports;
+    }
 
 
 
