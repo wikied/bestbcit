@@ -1,5 +1,7 @@
 package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
 
+import com.scriptofan.ecommerce.Platforms.Etsy.Money.Money;
+
 public class ListingOffering {
     private int offering_id;
     private Money price;

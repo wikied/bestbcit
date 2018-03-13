@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
+package com.scriptofan.ecommerce.Platforms.Etsy.Money;
 
 public class Money {
     private int amount;
