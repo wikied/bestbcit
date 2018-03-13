@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scriptofan.ecommerce.Database.Item;
 import com.scriptofan.ecommerce.DummyRequestData;
 import javax.persistence.*;
@@ -39,20 +40,26 @@ public class User {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getToken() {
         return token;
     }
 
+    @JsonIgnore
     public void setToken(String token) {
         this.token = token;
     }
 
+    @JsonIgnore
     public String getUserToken() {
         return DummyRequestData.TOKEN;
     }
 
+    @JsonIgnore
     public String getPayementPolicy() {return DummyRequestData.PAYMENT_POLICY;}
+    @JsonIgnore
     public String getReturnPolicy() {return DummyRequestData.RETURN_POLICY;}
+    @JsonIgnore
     public String getFulfillmentPolicy() {return  DummyRequestData.FULFILLMENT_POLICY;}
 
 }
