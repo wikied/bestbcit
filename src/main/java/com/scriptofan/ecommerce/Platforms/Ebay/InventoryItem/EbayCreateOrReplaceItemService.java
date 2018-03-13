@@ -72,40 +72,43 @@ public class EbayCreateOrReplaceItemService {
     }
 
     /**
-     * Response handler.
+     * Error handler.
      */
     public static class CreateInventoryItemErrorHandler
             implements  ResponseErrorHandler
     {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            boolean             statusGood;
+            try {
+                return clientHttpResponse.getStatusCode().is2xxSuccessful();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
             String              line;
             String              output;
             HttpStatus          statusCode;
             String              statusText;
+
             BufferedReader      bufferReader;
             StringBuilder       stringBuilder;
             InputStreamReader   responseBodyReader;
 
             output          = "";
-
             try {
-                /* Handle response code */
+                /* Get response essentials */
                 statusCode = clientHttpResponse.getStatusCode();
                 statusText = clientHttpResponse.getStatusText();
 
-                if (statusCode.is2xxSuccessful()) {
-                    // All clear
-                } else {
-                    throw new RestClientException("Error " + statusCode + " " + statusText);
-                }
-
-                /* Generate debug output */
+                /* Generate debugging output */
                 stringBuilder       = new StringBuilder();
                 responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
                 bufferReader        = new BufferedReader(responseBodyReader);
-
                 while ((line = bufferReader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
@@ -113,18 +116,15 @@ public class EbayCreateOrReplaceItemService {
                 output += "clientHttpResponse error:\n";
                 output += statusCode + " " + statusText + "\n";
                 output += stringBuilder.toString() + "\n";
+
+                /* Handle error */
+
             }
             catch (IOException e) {
+                /* IO Exception occured in clientHttpResponse.getBody() */
                 output += "IO Exception reading clientHttpResponse";
                 throw new ResourceAccessException(output);
             }
-
-            return true;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            /* ToDo: Implement */
         }
     }
 
