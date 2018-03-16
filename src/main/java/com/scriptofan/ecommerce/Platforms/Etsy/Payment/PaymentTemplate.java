@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.ListingTemplate;
+package com.scriptofan.ecommerce.Platforms.Etsy.Payment;
 
 public class PaymentTemplate {
     private int payment_template_id;

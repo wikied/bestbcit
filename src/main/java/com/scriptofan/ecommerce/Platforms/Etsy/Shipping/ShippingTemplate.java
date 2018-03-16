@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.ListingTemplate;
+package com.scriptofan.ecommerce.Platforms.Etsy.Shipping;
 
 public class ShippingTemplate {
     private int shipping_template_id;
