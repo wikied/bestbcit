@@ -54,7 +54,7 @@ public class EbayPublishOffer {
         }
         catch (NullPointerException e) {
             if (null == ebayListing) {
-                response += "Publishing Offer returned null";
+                response += "Publishing EbayRemoteOffer returned null";
             }
         }
 

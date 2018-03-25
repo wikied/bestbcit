@@ -23,8 +23,8 @@ public class OfferService {
 
     }
 
-    public Offer offerBuilder(EbayLocalOffer ebayoffer){
-        Offer           offer = new Offer();
+    public EbayRemoteOffer offerBuilder(EbayLocalOffer ebayoffer){
+        EbayRemoteOffer ebayRemoteOffer = new EbayRemoteOffer();
         Amount  amount = new Amount();
         PricingSummary pricingSummary = new PricingSummary();
         ListingPolicies listingPolicies = new ListingPolicies();
@@ -35,24 +35,24 @@ public class OfferService {
         amount.setCurrency(ebayoffer.getLocalItem().getField("currencyCode"));
         pricingSummary.setPrice(amount);
 
-        offer.setPricingSummary(pricingSummary);
-        offer.setSku(ebayoffer.getLocalItem().getField("sku"));
-        offer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
-        offer.setCategoryId(ebayoffer.getLocalItem().getField("categoryId"));
-        offer.setFormat(ebayoffer.getLocalItem().getField("format"));
-        offer.setMarketplaceId(ebayoffer.getLocalItem().getField("marketplaceId"));
+        ebayRemoteOffer.setPricingSummary(pricingSummary);
+        ebayRemoteOffer.setSku(ebayoffer.getLocalItem().getField("sku"));
+        ebayRemoteOffer.setMerchantLocationKey(ebayoffer.getLocalItem().getField("merchantLocationKey"));
+        ebayRemoteOffer.setCategoryId(ebayoffer.getLocalItem().getField("categoryId"));
+        ebayRemoteOffer.setFormat(ebayoffer.getLocalItem().getField("format"));
+        ebayRemoteOffer.setMarketplaceId(ebayoffer.getLocalItem().getField("marketplaceId"));
 
         listingPolicies.setFulfillmentPolicyId(user.getFulfillmentPolicy());
         listingPolicies.setPaymentPolicyId(user.getPayementPolicy());
         listingPolicies.setReturnPolicyId(user.getReturnPolicy());
 
-        offer.setListingPolicies(listingPolicies);
+        ebayRemoteOffer.setListingPolicies(listingPolicies);
 
-        return offer;
+        return ebayRemoteOffer;
     }
 
-    public Offer[] getOffers(String token){
-        Offer[]             itemOffers;
+    public EbayRemoteOffer[] getOffers(String token){
+        EbayRemoteOffer[] itemEbayRemoteOffers;
         RestTemplate        restTemplate;
         HttpHeaders         httpHeaders;
         HttpEntity<String>  httpEntity;
@@ -62,24 +62,24 @@ public class OfferService {
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpEntity      = new HttpEntity<>("parameters", httpHeaders);
 
-        itemOffers = restTemplate
+        itemEbayRemoteOffers = restTemplate
                 .exchange(
                         GET_OFFERS_URL,
                         HttpMethod.GET,
                         httpEntity,
-                        Offer[].class)
+                        EbayRemoteOffer[].class)
                 .getBody();
 
-        return itemOffers;
+        return itemEbayRemoteOffers;
 
     }
 
-    public String createOffer(Offer offer, String token){
+    public String createOffer(EbayRemoteOffer ebayRemoteOffer, String token){
         OfferResponse       offerResponse;
         String              response;
         RestTemplate        restTemplate;
         HttpHeaders         httpHeaders;
-        HttpEntity<Offer>   httpEntity;
+        HttpEntity<EbayRemoteOffer>   httpEntity;
 
         System.err.println("Creating headers");
         httpHeaders = new HttpHeaders();
@@ -87,7 +87,7 @@ public class OfferService {
         httpHeaders.set("Content-Type", "application/json");
         httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
 
-        httpEntity   = new HttpEntity<>(offer, httpHeaders);
+        httpEntity   = new HttpEntity<>(ebayRemoteOffer, httpHeaders);
         restTemplate = new RestTemplate();
         System.err.println("set error handler");
         restTemplate.setErrorHandler(new CreateOfferHandler());
@@ -99,7 +99,7 @@ public class OfferService {
         }
         catch (HttpServerErrorException ex) {
             ex.printStackTrace();
-            response = "Could not create offer\n" + ex.getMessage();
+            response = "Could not create ebayRemoteOffer\n" + ex.getMessage();
         }
         catch (RestClientException e) {
             System.err.println(e.getMessage());
