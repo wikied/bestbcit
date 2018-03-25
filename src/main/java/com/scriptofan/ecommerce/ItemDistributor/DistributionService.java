@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -39,16 +38,17 @@ public class DistributionService {
      * item.
      */
     public List<LocalItem> distribute(List<LocalItem> items) {
-        List<CompletableFuture<LocalItem>> itemPostFutures;
-        itemPostFutures = new ArrayList<>();
 
-        for (LocalItem item : items) {
+        int nItems = items.size();
+        CompletableFuture<LocalItem>[] itemFutures = new CompletableFuture[nItems];
+
+        for (int i=0; i < nItems; ++i) {
             CompletableFuture<LocalItem> itemPostFuture;
-            itemPostFuture = this.distribute(item);
-            itemPostFutures.add(itemPostFuture);
+            itemPostFuture = this.distribute(items.get(i));
+            itemFutures[i] = itemPostFuture;
         }
-        CompletableFuture.allOf((CompletableFuture<LocalItem>[]) itemPostFutures.toArray()).join();
 
+        CompletableFuture.allOf(itemFutures).join();
         return items;
     }
 
@@ -61,19 +61,28 @@ public class DistributionService {
         final Map<String, String> fields = item.getAllFields();
         item.log(LOG_DISTRIBUTED);
 
-        if (platformRegistry == null) {
-            throw new NullPointerException("Platform Registry is null");
-        }
+        try {
+            if (platformRegistry == null) {
+                throw new NullPointerException("Platform Registry is null");
+            }
 
-        QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
-        if (distributionScheme == null) {
-            throw new NullPointerException("Distribution Scheme is null");
-        }
+            QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
+            if (distributionScheme == null) {
+                throw new NullPointerException("Distribution Scheme is null");
+            }
 
-        distributionScheme.calculateDistribution(item);
-        for (LocalOffer localOffer : item.getLocalOffers()) {
-            item.log("Posting to " + localOffer);
-            localOffer.post();
+            distributionScheme.calculateDistribution(item);
+            for (LocalOffer localOffer : item.getLocalOffers()) {
+                item.log("Posting to " + localOffer);
+                localOffer.post();
+            }
+        }
+        catch (NullPointerException e) {
+            String output = "NullPointerException: " + e.getMessage() + "\n";
+            for (StackTraceElement element : e.getStackTrace()) {
+                output += element.toString() + "\n";
+            }
+            item.log(output);
         }
 
         return CompletableFuture.completedFuture(item);
