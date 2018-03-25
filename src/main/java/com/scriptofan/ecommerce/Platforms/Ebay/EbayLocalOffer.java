@@ -5,6 +5,9 @@ import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplace
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
+import org.springframework.scheduling.annotation.Async;
+
+import java.util.concurrent.CompletableFuture;
 
 public class EbayLocalOffer extends LocalOffer {
 
@@ -14,7 +17,9 @@ public class EbayLocalOffer extends LocalOffer {
         super(localItem);
     }
 
-    public void post() {
+    @Override
+    @Async
+    public CompletableFuture<LocalOffer> post() {
         String  token;
         Offer   offer;
         String offerId;
@@ -33,8 +38,7 @@ public class EbayLocalOffer extends LocalOffer {
         offerId = offerService.createOffer(offer,token);
         System.err.println("publishing offer");
         EbayPublishOffer.publishEbayOffer(offerId, token);
+
+        return CompletableFuture.completedFuture(this);
     }
-
-
-
 }

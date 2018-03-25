@@ -4,10 +4,13 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Handles distributing LocalItems among the available retail platforms.
@@ -36,9 +39,16 @@ public class DistributionService {
      * item.
      */
     public List<LocalItem> distribute(List<LocalItem> items) {
+        List<CompletableFuture<LocalItem>> itemPostFutures;
+        itemPostFutures = new ArrayList<>();
+
         for (LocalItem item : items) {
-            distribute(item);
+            CompletableFuture<LocalItem> itemPostFuture;
+            itemPostFuture = this.distribute(item);
+            itemPostFutures.add(itemPostFuture);
         }
+        CompletableFuture.allOf((CompletableFuture<LocalItem>[]) itemPostFutures.toArray()).join();
+
         return items;
     }
 
@@ -46,7 +56,8 @@ public class DistributionService {
      * Distributes LocalItem based on its offers. Returns the LocalItem, with an
      * updated log of successes, failures and issues.
      */
-    public LocalItem distribute(LocalItem item) {
+    @Async
+    public CompletableFuture<LocalItem> distribute(LocalItem item) {
         final Map<String, String> fields = item.getAllFields();
         item.log(LOG_DISTRIBUTED);
 
@@ -65,7 +76,7 @@ public class DistributionService {
             localOffer.post();
         }
 
-        return item;
+        return CompletableFuture.completedFuture(item);
     }
 
 }
