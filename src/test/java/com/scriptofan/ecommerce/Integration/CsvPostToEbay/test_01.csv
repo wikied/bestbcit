@@ -1,2 +1,3 @@
 totalQuantity,sku,marketplaceId,format,availableQuantity,categoryId,productDescription,priceCurrency,priceValue,quantityLimitPerBuyer,postOnEtsy,postOnEbay,condition,productTitle,productImageUrls,fulfillmentPolicy,paymentPolicy,returnPolicy,currencyCode,value,merchantLocationKey
-9,my-item-299,EBAY_US,FIXED_PRICE,75,30120,Lumiaasdfasdfasdfasdf phone XXXXXXXXXXX with a stunning 5.7 inch Quad HD display and a powerful octa-core processor,USD,272.17,2,yes,no,NEW,Adjustable Bed Lamp,http://www.somesite.com/someimage.jpg,23456,12323,12222,USD,320.95,Warehouse-1
+9,my-item-303,EBAY_US,FIXED_PRICE,75,30120,blah blah blah blah blah,USD,272.17,2,no,yes,NEW,Orange Egg Flipper,http://www.somesite.com/someimage.jpg,23456,12323,12222,USD,320.95,Warehouse-1
+9,my-item-304,EBAY_US,FIXED_PRICE,75,30120,blah blah blah blah blah,USD,272.17,2,no,yes,NEW,Noodle Waffler,http://www.somesite.com/someimage.jpg,23456,12323,12222,USD,320.95,Warehouse-1

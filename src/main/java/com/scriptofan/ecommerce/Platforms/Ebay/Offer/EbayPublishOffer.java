@@ -17,40 +17,48 @@ import java.io.InputStreamReader;
 
 public class EbayPublishOffer {
 
-    private static final String PUBLISH_OFFER_URI = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/";
-    private static final String URI_POSTFIX = "/publish/";
-    private static final String TOKEN_PREFIX = "Bearer ";
-    private static final String CONTENT_LANGUAGE = "en-US";
+    private static final String PUBLISH_OFFER_URI   = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/";
+    private static final String URI_POSTFIX         = "/publish/";
+    private static final String TOKEN_PREFIX        = "Bearer ";
+    private static final String CONTENT_LANGUAGE    = "en-US";
 
     public static String publishEbayOffer(String offerId, String token) {
-        RestTemplate restTemplate;
-        HttpHeaders httpHeaders;
-        HttpEntity<String> httpEntity;
-        String response;
-        EbayListing ebayListing = null;
+        String              response;
+        EbayListing         ebayListing = null;
+
+        RestTemplate        restTemplate;
+        HttpHeaders         httpHeaders;
+        HttpEntity<String>  httpEntity;
 
         restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new PublishOfferHandler());
 
         httpHeaders = new HttpHeaders();
-        httpHeaders.set("authorization", TOKEN_PREFIX + token);
+        httpHeaders.set("authorization",    TOKEN_PREFIX + token);
         httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
-        httpHeaders.set("Accept","application/json");
-        httpHeaders.set("Content-Type", "application/json");
+        httpHeaders.set("Accept",           "application/json");
+        httpHeaders.set("Content-Type",     "application/json");
 
         httpEntity = new HttpEntity<>(offerId, httpHeaders);
 
+        response = "";
         try {
-           ebayListing =  restTemplate.exchange(PUBLISH_OFFER_URI + offerId + URI_POSTFIX,
+            ebayListing = restTemplate.exchange(PUBLISH_OFFER_URI + offerId + URI_POSTFIX,
                                    HttpMethod.POST, httpEntity, EbayListing.class).getBody();
             System.err.println(ebayListing);
-
-        } catch (HttpServerErrorException ex) {
+            response += ebayListing.toString();
+        }
+        catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = ex.getMessage();
         }
+        catch (NullPointerException e) {
+            if (null == ebayListing) {
+                response += "Publishing Offer returned null";
+            }
+        }
 
-        return ebayListing.toString();
+        return response;
     }
 
     /**
