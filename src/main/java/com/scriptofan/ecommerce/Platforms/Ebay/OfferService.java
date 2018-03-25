@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.*;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.http.HttpEntity;
@@ -74,7 +75,7 @@ public class OfferService {
 
     }
 
-    public String createOffer(EbayRemoteOffer ebayRemoteOffer, String token){
+    public String createOffer(EbayRemoteOffer ebayRemoteOffer, String token) throws EbayCreateOfferException {
         OfferResponse       offerResponse;
         String              response;
         RestTemplate        restTemplate;
@@ -100,10 +101,11 @@ public class OfferService {
         catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = "Could not create ebayRemoteOffer\n" + ex.getMessage();
+            throw new EbayCreateOfferException(ex);
         }
         catch (RestClientException e) {
             System.err.println(e.getMessage());
-            throw e;
+            throw new EbayCreateOfferException(e);
         }
         return response;
     }

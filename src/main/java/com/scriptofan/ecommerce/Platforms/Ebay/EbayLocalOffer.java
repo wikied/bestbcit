@@ -1,6 +1,9 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplaceItemService;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayRemoteOffer;
@@ -45,9 +48,12 @@ public class EbayLocalOffer extends LocalOffer {
 
             System.err.println("\n" + TAG + " ~ Publishing EbayRemoteOffer");
             EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
-        }
-        catch (NullPointerException e) {
-            // Do stuff
+        } catch (EbayPublishOfferException e) {
+            e.printStackTrace();
+        } catch (EbayCreateOfferException e) {
+            e.printStackTrace();
+        } catch (EbayCreateInventoryItemException e) {
+            e.printStackTrace();
         }
 
         return CompletableFuture.completedFuture(this);

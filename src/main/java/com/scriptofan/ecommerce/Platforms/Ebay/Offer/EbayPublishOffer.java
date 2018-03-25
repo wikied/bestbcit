@@ -1,6 +1,7 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayListing;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,7 +23,7 @@ public class EbayPublishOffer {
     private static final String TOKEN_PREFIX        = "Bearer ";
     private static final String CONTENT_LANGUAGE    = "en-US";
 
-    public static String publishEbayOffer(String offerId, String token) {
+    public static String publishEbayOffer(String offerId, String token) throws EbayPublishOfferException {
         String              response;
         EbayListing         ebayListing = null;
 
@@ -50,11 +51,14 @@ public class EbayPublishOffer {
         }
         catch (HttpServerErrorException ex) {
             ex.printStackTrace();
-            response = ex.getMessage();
+            throw new EbayPublishOfferException(ex);
         }
         catch (NullPointerException e) {
             if (null == ebayListing) {
-                response += "Publishing EbayRemoteOffer returned null";
+                throw new EbayPublishOfferException("Publishing EbayRemoteOffer returned null");
+            }
+            else {
+                throw new EbayPublishOfferException(e);
             }
         }
 
