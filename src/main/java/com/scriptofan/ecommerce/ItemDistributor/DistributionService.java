@@ -32,6 +32,8 @@ public class DistributionService {
     @Autowired
     private PlatformRegistry platformRegistry;
 
+
+
     /*
      * Distributes a list of items based on their offers. Returns the complete
      * list of items, with a log of all successes, failures, and issues for each
@@ -52,6 +54,8 @@ public class DistributionService {
         return items;
     }
 
+
+
     /*
      * Distributes LocalItem based on its offers. Returns the LocalItem, with an
      * updated log of successes, failures and issues.
@@ -62,14 +66,7 @@ public class DistributionService {
         item.log(LOG_DISTRIBUTED);
 
         try {
-            if (platformRegistry == null) {
-                throw new NullPointerException("Platform Registry is null");
-            }
-
             QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
-            if (distributionScheme == null) {
-                throw new NullPointerException("Distribution Scheme is null");
-            }
 
             distributionScheme.calculateDistribution(item);
             for (LocalOffer localOffer : item.getLocalOffers()) {
