@@ -4,10 +4,12 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Handles distributing LocalItems among the available retail platforms.
@@ -36,9 +38,17 @@ public class DistributionService {
      * item.
      */
     public List<LocalItem> distribute(List<LocalItem> items) {
-        for (LocalItem item : items) {
-            distribute(item);
+
+        int nItems = items.size();
+        CompletableFuture<LocalItem>[] itemFutures = new CompletableFuture[nItems];
+
+        for (int i=0; i < nItems; ++i) {
+            CompletableFuture<LocalItem> itemPostFuture;
+            itemPostFuture = this.distribute(items.get(i));
+            itemFutures[i] = itemPostFuture;
         }
+
+        CompletableFuture.allOf(itemFutures).join();
         return items;
     }
 
@@ -46,26 +56,36 @@ public class DistributionService {
      * Distributes LocalItem based on its offers. Returns the LocalItem, with an
      * updated log of successes, failures and issues.
      */
-    public LocalItem distribute(LocalItem item) {
+    @Async
+    public CompletableFuture<LocalItem> distribute(LocalItem item) {
         final Map<String, String> fields = item.getAllFields();
         item.log(LOG_DISTRIBUTED);
 
-        if (platformRegistry == null) {
-            throw new NullPointerException("Platform Registry is null");
+        try {
+            if (platformRegistry == null) {
+                throw new NullPointerException("Platform Registry is null");
+            }
+
+            QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
+            if (distributionScheme == null) {
+                throw new NullPointerException("Distribution Scheme is null");
+            }
+
+            distributionScheme.calculateDistribution(item);
+            for (LocalOffer localOffer : item.getLocalOffers()) {
+                item.log("Posting to " + localOffer);
+                localOffer.post();
+            }
+        }
+        catch (NullPointerException e) {
+            String output = "NullPointerException: " + e.getMessage() + "\n";
+            for (StackTraceElement element : e.getStackTrace()) {
+                output += element.toString() + "\n";
+            }
+            item.log(output);
         }
 
-        QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
-        if (distributionScheme == null) {
-            throw new NullPointerException("Distribution Scheme is null");
-        }
-
-        distributionScheme.calculateDistribution(item);
-        for (LocalOffer localOffer : item.getLocalOffers()) {
-            item.log("Posting to " + localOffer);
-            localOffer.post();
-        }
-
-        return item;
+        return CompletableFuture.completedFuture(item);
     }
 
 }

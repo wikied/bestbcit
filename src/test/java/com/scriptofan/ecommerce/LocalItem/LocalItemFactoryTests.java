@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.jvm.hotspot.utilities.Assert;
 
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class LocalItemFactoryTests {
 
             returnedItems = localItemFactory.createLocalItems(fieldCollection);
 
-            Assert.that(returnedItems.size() == i + 1, "number of items = " + returnedItems.size());
+            assert(returnedItems.size() == i + 1);
 
             for (LocalItem item : returnedItems) {
                 assert (item != null);
