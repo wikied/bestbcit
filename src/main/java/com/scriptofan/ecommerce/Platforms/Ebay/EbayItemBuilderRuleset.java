@@ -54,17 +54,17 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         }
 
         // Product Title //
-        if (fields.get("productTitle") == null) {
+        if (fields.get("title") == null) {
             throw new RulesetViolationException("productTitle is empty");
         } else {
-            localItem.addField("productTitle", fields.get("productTitle"));
+            localItem.addField("title", fields.get("title"));
         }
 
         // Product Description //
-        if (fields.get("productDescription") == null) {
+        if (fields.get("description") == null) {
             throw new RulesetViolationException("productDescription is empty");
         } else {
-            localItem.addField("productDescription", fields.get("productDescription"));
+            localItem.addField("productDescription", fields.get("description"));
         }
 
         // Image Urls //
