@@ -17,7 +17,8 @@ public class UploadController {
     private StorageService storageService;
 
     /*
-        The inventory CSV file is uploaded through this end point
+        The inventory CSV multipart file is uploaded through this end point.
+        The multipart is saved to the upload-dir folder in the CSVParser directory
         @param  file     multipart csv file
      */
     @PostMapping("/upload-inventory")

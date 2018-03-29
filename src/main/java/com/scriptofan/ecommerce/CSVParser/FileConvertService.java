@@ -12,6 +12,10 @@ public class FileConvertService {
 
     private File convFile;
 
+    /*
+        Converts a multipart file to a regular file.
+
+     */
     public File convertFile(MultipartFile file) throws IOException{
         this.convFile = new File(file.getOriginalFilename());
         this.convFile.createNewFile();

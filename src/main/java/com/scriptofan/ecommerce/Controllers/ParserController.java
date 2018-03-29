@@ -23,10 +23,16 @@ public class ParserController {
     private FileConvertService fileConvertService;
 
     //FOR TESTING PURPOSES
+    //SHOULD BE MADE A LOCAL VARIABLE
     List<Map<String, String>> list_of_items = new ArrayList<>();
 
     /*
-        Converts the multi-part file to a a regular file
+        Converts the multi-part file to a a regular file.
+        The new file is then mapped to a List of Maps.
+        The temporary file is deleted that was created when converting
+        multipart file to a regular file
+
+        @param file     a multipart csv file
 
      */
     public void parseMultipartFile(MultipartFile file){
@@ -43,12 +49,14 @@ public class ParserController {
         }
     }
 
-
+    /*
+        Parses a regular file instead of a multi part file.
+     */
     public void parseFile(File file){
         try{
             list_of_items = parserCsvService.parseCsv(file);
         } catch (IOException e){
-            System.err.println("Unable to parse the CSV file in parseCSV2");
+            System.err.println("Unable to parse the CSV file in parseFile");
         }
     }
 
