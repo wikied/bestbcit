@@ -4,6 +4,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Placeholder. Synchronizes LocalItems with persistent storage.
+ */
 @Repository
 public class ItemSyncService {
 

@@ -8,14 +8,16 @@ import java.nio.channels.NotYetBoundException;
 import java.rmi.AlreadyBoundException;
 import java.util.*;
 
+/**
+ * Represents a user's item in their inventory, as modelled on our server.
+ */
 public class LocalItem {
 
-    private Map<String, String> fields;
-    private Collection<LocalOffer> localOffers;
-    private User                user;
-    private int                 totalQuantity;
-
-    private ItemLog             log;
+    private Map<String, String>     fields;             // Item details
+    private Collection<LocalOffer>  localOffers;        // Listings on remote platforms (Ebay, Etsy, etc.)
+    private User                    user;               // User that owns this item
+    private int                     totalQuantity;      // Total quantity to be distributed among all offers
+    private ItemLog                 log;                // Log of events that happen to the item.
 
     /*
      * Constructor
@@ -27,10 +29,19 @@ public class LocalItem {
         this.user   = null;
     }
 
-    /*
-     * Must throw an exception if the incoming value conflicts with an
-     * already-existing entry (i.e., the keys are the same but the values
-     * are different).
+
+
+    /**
+     * Adds a field to the item's data.
+     * Note: any collisions will through a RulesetCollisionException. This
+     * is intentional, as we want to catch any issues between different
+     * ItemBuilderRulesets as early as possible.
+     *
+     * @param key name of the field to add
+     * @param value value of the field to add
+     * @throws RulesetCollisionException The field you are trying to add
+     * has the same name as an existing field, but is attempting to insert
+     * a different value.
      */
     public void addField(String key, String value) throws RulesetCollisionException {
 
@@ -47,12 +58,22 @@ public class LocalItem {
         this.fields.put(key, value);
     }
 
+
+
+    /**
+     * Returns the requested field from the item's data map.
+     * @param key field to request.
+     * @return value of the field.
+     */
     public String getField(String key) {
         if(this.fields.get(key) == null){
             throw new NullPointerException();
         }
         return this.fields.get(key);
     }
+
+
+
 
     public Map<String, String> getAllFields() {
         Map<String, String> returnMap;
