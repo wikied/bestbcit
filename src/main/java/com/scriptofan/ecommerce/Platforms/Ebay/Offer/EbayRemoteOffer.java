@@ -1,6 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
-//
+/**
+ * The class represents a ebay offer object
+ */
 public class EbayRemoteOffer {
 
     // The unique sku used for the item in the sellers inventory

@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * This class creates or replaces a item for ebay
+ **/
 public class EbayCreateOrReplaceItemService {
 
     private static final String TOKEN_PREFIX = "Bearer ";
@@ -139,9 +142,9 @@ public class EbayCreateOrReplaceItemService {
         return headers;
     }
 
+    // Creates the inventory item
     private static InventoryItem createInventoryItem(EbayLocalOffer offer) {
         InventoryItem inventoryItem = new InventoryItem();
-
         inventoryItem.setAvailability(createAvailability(offer));
         inventoryItem.setCondition(offer.getLocalItem().getField("condition"));
         inventoryItem.setProduct(createProduct(offer));
