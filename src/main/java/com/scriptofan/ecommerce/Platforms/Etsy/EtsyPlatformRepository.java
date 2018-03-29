@@ -12,8 +12,6 @@ public class EtsyPlatformRepository implements PlatformRepository {
     }
 
     @Override
-    public ItemBuilderRuleset getNewItemBuilderRuleset() {
-        return null;
-    }
+    public ItemBuilderRuleset getNewItemBuilderRuleset() { return new EtsyListingBuilderRuleset(); }
 
 }

@@ -4,6 +4,7 @@ import com.scriptofan.ecommerce.Exception.AlreadyInitializedException;
 import com.scriptofan.ecommerce.Exception.AlreadyRegisteredException;
 import com.scriptofan.ecommerce.Platforms.Core.CoreRepository;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayPlatformRepository;
+import com.scriptofan.ecommerce.Platforms.Etsy.EtsyPlatformRepository;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.rmi.AlreadyBoundException;
 public class Config {
 
     private static boolean initialized = false;
+
+    public static final boolean forceEtsyDraft = true;
 
     @Autowired
     private PlatformRegistry platformRegistry;
@@ -61,6 +64,7 @@ public class Config {
         try {
             platformRegistry.registerPlatformRepository(new CoreRepository());
             platformRegistry.registerPlatformRepository(new EbayPlatformRepository());
+            platformRegistry.registerPlatformRepository(new EtsyPlatformRepository());
         }
         catch (AlreadyRegisteredException e) {
             System.err.println("Trying to register the same repository more than once");
