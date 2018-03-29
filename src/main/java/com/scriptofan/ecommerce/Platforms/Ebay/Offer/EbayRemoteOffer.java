@@ -1,7 +1,7 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
 //
-public class Offer {
+public class EbayRemoteOffer {
 
     // The unique sku used for the item in the sellers inventory
     private String sku;
@@ -28,7 +28,7 @@ public class Offer {
 
     private PricingSummary pricingSummary;
     // Constructor
-    public Offer() {
+    public EbayRemoteOffer() {
     }
 
     public String getSku() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.InventoryItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.Product;
@@ -33,7 +34,7 @@ public class EbayCreateOrReplaceItemService {
      * @param ebayLocalOffer - the ebay offer
      * @return - string
      */
-    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) {
+    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) throws EbayCreateInventoryItemException {
         InventoryItem inventoryItem;
         HttpHeaders headers;
         HttpEntity<InventoryItem> httpEntity;
@@ -57,55 +58,57 @@ public class EbayCreateOrReplaceItemService {
         } catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = ex.getMessage();
+            throw new EbayCreateInventoryItemException(ex);
         }
         catch (ResourceAccessException e) {
             System.err.println("ResourceAccessException");
             System.err.println(e.getRootCause());
-            throw e;
+            throw new EbayCreateInventoryItemException(e);
         }
         catch (JsonProcessingException e) {
-            System.err.println("JSON PROCESSING EXCEPTION");
-            e.printStackTrace();
-            System.exit(1);
+            throw new EbayCreateInventoryItemException(e);
         }
         return response;
     }
 
     /**
-     * Response handler.
+     * Error handler.
      */
     public static class CreateInventoryItemErrorHandler
             implements  ResponseErrorHandler
     {
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            boolean             statusGood;
+            try {
+                return clientHttpResponse.getStatusCode().is2xxSuccessful();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
             String              line;
             String              output;
             HttpStatus          statusCode;
             String              statusText;
+
             BufferedReader      bufferReader;
             StringBuilder       stringBuilder;
             InputStreamReader   responseBodyReader;
 
             output          = "";
-
             try {
-                /* Handle response code */
+                /* Get response essentials */
                 statusCode = clientHttpResponse.getStatusCode();
                 statusText = clientHttpResponse.getStatusText();
 
-                if (statusCode.is2xxSuccessful()) {
-                    // All clear
-                } else {
-                    throw new RestClientException("Error " + statusCode + " " + statusText);
-                }
-
-                /* Generate debug output */
+                /* Generate debugging output */
                 stringBuilder       = new StringBuilder();
                 responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
                 bufferReader        = new BufferedReader(responseBodyReader);
-
                 while ((line = bufferReader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
@@ -113,18 +116,15 @@ public class EbayCreateOrReplaceItemService {
                 output += "clientHttpResponse error:\n";
                 output += statusCode + " " + statusText + "\n";
                 output += stringBuilder.toString() + "\n";
+
+                /* Handle error */
+
             }
             catch (IOException e) {
+                /* IO Exception occured in clientHttpResponse.getBody() */
                 output += "IO Exception reading clientHttpResponse";
                 throw new ResourceAccessException(output);
             }
-
-            return true;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            /* ToDo: Implement */
         }
     }
 

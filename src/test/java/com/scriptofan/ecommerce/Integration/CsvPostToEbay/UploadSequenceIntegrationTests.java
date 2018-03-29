@@ -73,7 +73,7 @@ public class UploadSequenceIntegrationTests {
         List<LocalItem>             localItems;
 
         filename        = TEST_CSV_DIRECTORY + "test_01.csv";
-        rowsInFile      = 1;
+        rowsInFile      = 2;
         csvFile         = new File(filename);
         assert(csvFile != null);
 

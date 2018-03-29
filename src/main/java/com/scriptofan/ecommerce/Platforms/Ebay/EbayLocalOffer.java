@@ -1,40 +1,61 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
 import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplaceItemService;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.Offer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayRemoteOffer;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
+import org.springframework.scheduling.annotation.Async;
+
+import java.util.concurrent.CompletableFuture;
 
 public class EbayLocalOffer extends LocalOffer {
 
+    public static final String TAG = EbayLocalOffer.class.getName();
     private OfferService offerService;
 
     public EbayLocalOffer(LocalItem localItem) {
         super(localItem);
     }
 
-    public void post() {
-        String  token;
-        Offer   offer;
-        String offerId;
+    @Override
+    @Async
+    public CompletableFuture<LocalOffer> post() {
+        EbayRemoteOffer ebayRemoteOffer;
 
-        offerService = new OfferService();
-        token = getLocalItem().getUser().getUserToken();
+        String  offerId;
+        String  ebayOAuthToken;
+        String  itemSku;
 
-        System.err.println("creating inventory item");
-        EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(token,
-                                                           getLocalItem().getField("sku"),
-                                                          this);
+        offerService    = new OfferService();
+        ebayOAuthToken  = getLocalItem().getUser().getUserToken();
+        itemSku         = getLocalItem().getField("sku");
 
-        offer = offerService.offerBuilder(this);
-        System.err.println(offer);
-        System.err.println("Creating offer");
-        offerId = offerService.createOffer(offer,token);
-        System.err.println("publishing offer");
-        EbayPublishOffer.publishEbayOffer(offerId, token);
+        try {
+            System.err.println("\n" + TAG + " ~ Creating Inventory Item");
+            EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(
+                    ebayOAuthToken,
+                    itemSku,
+                    this);
+
+            System.err.println("\n" + TAG + " ~ Creating EbayRemoteOffer");
+            ebayRemoteOffer = offerService.offerBuilder(this);
+            System.err.println(ebayRemoteOffer);
+            offerId = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
+
+            System.err.println("\n" + TAG + " ~ Publishing EbayRemoteOffer");
+            EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
+        } catch (EbayPublishOfferException e) {
+            e.printStackTrace();
+        } catch (EbayCreateOfferException e) {
+            e.printStackTrace();
+        } catch (EbayCreateInventoryItemException e) {
+            e.printStackTrace();
+        }
+
+        return CompletableFuture.completedFuture(this);
     }
-
-
-
 }
