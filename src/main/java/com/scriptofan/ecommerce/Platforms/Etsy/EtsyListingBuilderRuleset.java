@@ -8,13 +8,17 @@ import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
 import java.util.Map;
 
-    public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
+/**
+ * This class builds the local item for Etsy by going through the fields
+ * of the csv and adds the required fields to the local item
+ **/
+public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
 
-        private boolean validWhoMade = false;
+    private boolean validWhoMade = false;
 
-        private String isSupplyTrue = "true";
+    private String isSupplyTrue = "true";
 
-        private String isSupplyFalse = "false";
+    private String isSupplyFalse = "false";
 
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
@@ -47,10 +51,10 @@ import java.util.Map;
         }
 
         // Price
-        if (fields.get("price") == null) {
+        if (fields.get("value") == null) {
             throw new RulesetViolationException("Price is empty");
         } else {
-            localItem.addField("price", fields.get("price"));
+            localItem.addField("value", fields.get("value"));
         }
 
         // Shipping template id
@@ -104,5 +108,7 @@ import java.util.Map;
                 throw new RulesetViolationException("isSupply must be a boolean: true or false");
             }
         }
+        EtsyLocalOffer etsyLocalOffer = new EtsyLocalOffer(localItem);
+        localItem.addOffer(etsyLocalOffer);
     }
 }

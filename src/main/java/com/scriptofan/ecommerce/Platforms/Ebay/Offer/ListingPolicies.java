@@ -1,7 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
-// Contains the identifiers of the payment, return and fulfillment
-// polices that are to be associated with the offer
+/** Contains the identifiers of the payment, return and fulfillment
+*   polices that are to be associated with the offer
+ **/
 public class ListingPolicies {
 
     // Unique identifier for the sellers payment policy that will be

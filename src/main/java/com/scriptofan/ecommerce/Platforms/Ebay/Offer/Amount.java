@@ -1,6 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
-// Used to express amount and applicable currency
+/**
+ * Used to express amount and applicable currency
+ */
 public class Amount {
 
     // Represents the dollar value in the currency specified currency

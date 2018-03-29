@@ -16,6 +16,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * This class publishes the ebay offer
+ */
 public class EbayPublishOffer {
 
     private static final String PUBLISH_OFFER_URI   = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/";

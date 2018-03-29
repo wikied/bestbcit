@@ -1,5 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
+/**
+ * The enum of E-Bay marketplaces
+ */
 public enum MarketplaceEnum {
     EBAY_US,
     EBAY_MOTORS,

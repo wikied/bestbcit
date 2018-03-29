@@ -1,6 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 
-// Specifies the listing price for the product
+/**
+ * The class contains the
+ */
 public class PricingSummary {
 
     // Listing price of the offer

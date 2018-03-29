@@ -3,6 +3,9 @@ package com.scriptofan.ecommerce.Platforms.Ebay.Offer;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The currency codes
+ */
 public class CurrencyCode {
 
     public static final Set<String> currencies = new HashSet<>();
