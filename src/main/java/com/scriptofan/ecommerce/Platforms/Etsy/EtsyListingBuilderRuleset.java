@@ -52,7 +52,7 @@ import java.util.Map;
         } else {
             localItem.addField("price", fields.get("price"));
         }
-        
+
         // Shipping template id
         if (fields.get("shippingTemplateId") == null) {
             throw new RulesetViolationException("shipping_template id");
