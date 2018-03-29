@@ -22,9 +22,13 @@ public class ParserController {
     @Autowired
     private FileConvertService fileConvertService;
 
-    //FOR TESTING
+    //FOR TESTING PURPOSES
     List<Map<String, String>> list_of_items = new ArrayList<>();
 
+    /*
+        Converts the multi-part file to a a regular file
+
+     */
     public void parseMultipartFile(MultipartFile file){
         File newFile;
 

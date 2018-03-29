@@ -16,6 +16,10 @@ public class UploadController {
     @Autowired
     private StorageService storageService;
 
+    /*
+        The inventory CSV file is uploaded through this end point
+        @param  file     multipart csv file
+     */
     @PostMapping("/upload-inventory")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
