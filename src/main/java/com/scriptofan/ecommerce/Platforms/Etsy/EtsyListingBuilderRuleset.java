@@ -108,5 +108,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
                 throw new RulesetViolationException("isSupply must be a boolean: true or false");
             }
         }
+        EtsyLocalOffer etsyLocalOffer = new EtsyLocalOffer(localItem);
+        localItem.addOffer(etsyLocalOffer);
     }
 }
