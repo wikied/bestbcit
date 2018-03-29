@@ -19,6 +19,8 @@ public class Config {
 
     private static boolean initialized = false;
 
+    public static final boolean forceEtsyDraft = true;
+
     @Autowired
     private PlatformRegistry platformRegistry;
 
