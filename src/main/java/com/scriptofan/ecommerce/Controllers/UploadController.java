@@ -55,16 +55,12 @@ public class UploadController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                  RedirectAttributes redirectAttributes) {
         try {
-//            storageService.store(file);
-//            parserController.parseMultipartFile(file);
 //            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
 
             String                      filename;
             User                        user;
             List<Map<String, String>>   rawParsedItems;
             List<LocalItem>             localItems;
-
-
 
             rawParsedItems  = parserCsvService.parseCsv(file);
 
