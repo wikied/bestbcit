@@ -94,6 +94,7 @@ import java.util.Map;
             localItem.addField("state", "draft");
         }
 
+        // Is supply
         if (fields.get("isSupply") == null) {
             throw new RulesetViolationException("isSupply is empty");
         } else {
