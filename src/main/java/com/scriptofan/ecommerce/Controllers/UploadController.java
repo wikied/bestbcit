@@ -13,9 +13,10 @@ import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
@@ -53,7 +54,7 @@ public class UploadController {
      */
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                 RedirectAttributes redirectAttributes) {
+                                   Map<String, Object> model) {
         try {
 //            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
 
@@ -81,12 +82,9 @@ public class UploadController {
             localItems = distributionService.distribute(localItems);
             localItems = itemSyncService.sync(localItems);
 
-            for (LocalItem item : localItems) {
-                for (String log : item.getFullLog()) {
-                    System.err.println(log);
-                }
-                System.err.println();
-            }
+            model.put("items", localItems);
+
+            return "uploadResults";
 
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
