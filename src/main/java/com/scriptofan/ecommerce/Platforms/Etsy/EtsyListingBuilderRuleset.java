@@ -1,13 +1,16 @@
 package com.scriptofan.ecommerce.Platforms.Etsy;
 
-        import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
-        import com.scriptofan.ecommerce.Exception.RulesetViolationException;
-        import com.scriptofan.ecommerce.LocalItem.LocalItem;
-        import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
-
-        import java.util.Map;
+import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
+import com.scriptofan.ecommerce.LocalItem.LocalItem;
+import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
+import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
+import java.util.Map;
 
 public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
+
+    private boolean validWhoMade = false;
+
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
@@ -58,5 +61,28 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
         } else {
             localItem.addField("shippingTemplateId", fields.get("shippingTemplateId"));
         }
+
+        // Who made
+        for (WhoMadeEnum whoMadeEnum : WhoMadeEnum.values()) {
+            if(fields.get("whoMade").equals(whoMadeEnum.toString())) {
+                validWhoMade = true;
+                break;
+            }
+        }
+
+        if (!validWhoMade) {
+            throw new RulesetViolationException("invalid who_made");
+        } else {
+            localItem.addField("whoMade", fields.get("whoMade"));
+        }
+
+        // Currency Code
+        if (!CurrencyCode.currencies.contains(fields.get("currencyCode"))) {
+            throw new RulesetViolationException("Invalid currency code");
+        } else {
+            localItem.addField("currencyCode", fields.get("currencyCode"));
+        }
+
+
     }
 }
