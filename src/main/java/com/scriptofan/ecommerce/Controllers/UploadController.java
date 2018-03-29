@@ -16,6 +16,11 @@ public class UploadController {
     @Autowired
     private StorageService storageService;
 
+    /*
+        The inventory CSV multipart file is uploaded through this end point.
+        The multipart is saved to the upload-dir folder in the CSVParser directory
+        @param  file     multipart csv file
+     */
     @PostMapping("/upload-inventory")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
