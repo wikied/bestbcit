@@ -13,10 +13,12 @@ import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
@@ -42,10 +44,10 @@ public class UploadController {
     @Autowired
     private DistributionService distributionService;
 
-//    @GetMapping("/")
-//    public String displayIntialPage(){
-//        return "uploadForm";
-//    }
+    @GetMapping("/")
+    public String homePage(){
+        return "uploadForm";
+    }
 
     /*
         The inventory CSV multipart file is uploaded through this end point.
@@ -54,9 +56,10 @@ public class UploadController {
      */
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   Map<String, Object> model) {
+                                   Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
-//            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
+
+            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
 
             String                      filename;
             User                        user;
