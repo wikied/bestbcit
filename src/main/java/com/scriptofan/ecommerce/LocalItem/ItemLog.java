@@ -3,6 +3,11 @@ package com.scriptofan.ecommerce.LocalItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Encapsulates a Log of strings, which is attached to an object.
+ * The purpose of this is to log details of an item's journey for
+ * querying later.
+ */
 public class ItemLog {
 
     /** Used in place of any null values passed into the log. */
