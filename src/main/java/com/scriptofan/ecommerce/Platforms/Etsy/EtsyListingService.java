@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Platforms.Etsy;
 
 import com.scriptofan.ecommerce.DummyEtsyOAuthHeaderGen;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,13 +12,11 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.ws.rs.core.UriBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +24,15 @@ import java.util.Map;
 public class EtsyListingService {
     public static final String ETSY_POST_URL = "https://openapi.etsy.com/v2/listings";
 
-    public void creatingListing(EtsyLocalOffer etsyLocalOffer) throws MalformedURLException, UnsupportedEncodingException {
+
+    /**
+     * Makes a createListing call to the Etsy API, passing the specified LocalOffer.
+     *
+     * @param etsyLocalOffer LocalOffer to attempt to post to Etsy.
+     * @throws MalformedURLException URL is malformed
+     * @throws UnsupportedEncodingException
+     */
+    public void creatingListing(EtsyLocalOffer etsyLocalOffer) throws MalformedURLException {
 
         UriComponentsBuilder            uriComponentsBuilder;
         RestTemplate                    restTemplate;
@@ -36,11 +41,6 @@ public class EtsyListingService {
         HttpHeaders                     httpHeaders;
         HttpEntity<Void>                httpEntity;
         DummyEtsyOAuthHeaderGen         dummyEtsyOAuthHeaderGen;
-        UriBuilder                      uriBuilder;
-
-
-        restTemplate                = new RestTemplate();
-        restTemplate.setErrorHandler(new DebugResponseHandler());
 
         httpHeaders                 = new HttpHeaders();
         dummyEtsyOAuthHeaderGen     = new DummyEtsyOAuthHeaderGen();
@@ -52,17 +52,17 @@ public class EtsyListingService {
                     .queryParam(entry.getKey(), entry.getValue());
         }
 
+        // Set quantity parameter for API call
         uriComponentsBuilder        = uriComponentsBuilder.queryParam("quantity", etsyLocalOffer.getQuantity());
+
+        // Build URL and compute and append OAuth headers
         completeURL                 = uriComponentsBuilder.build().toUriString();
         httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, httpMethod);
         httpEntity                  = new HttpEntity(null, httpHeaders);
 
-
-        System.err.println("URL BEING SENT: " + completeURL);
-        System.err.println("HEADERS:        " + headersToString(httpHeaders));
-
-
-        try{
+        try {
+            restTemplate                = new RestTemplate();
+            restTemplate.setErrorHandler(new CreateListingResponseHandler());
             restTemplate.exchange(completeURL, httpMethod, httpEntity, String.class);
         }
         catch(ResourceAccessException e){
@@ -73,7 +73,11 @@ public class EtsyListingService {
 
     }
 
-    private class DebugResponseHandler implements ResponseErrorHandler{
+
+    /**
+     * Handles errors in the post-to-etsy API call.
+     */
+    private class CreateListingResponseHandler implements ResponseErrorHandler{
 
         @Override
         public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
@@ -83,15 +87,13 @@ public class EtsyListingService {
         @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
             // Extract error body
-            System.err.println("ANOTHER ERROR HERE");
             String          line;
-            BufferedReader bufferReader;
+            BufferedReader  bufferReader;
             StringBuilder   stringBuilder;
 
             try {
-                bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
-                stringBuilder = new StringBuilder();
-
+                bufferReader    = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
+                stringBuilder   = new StringBuilder();
 
                 while ((line = bufferReader.readLine()) != null) {
                     stringBuilder.append(line);
@@ -101,12 +103,17 @@ public class EtsyListingService {
                 System.err.println("clientHttpResponse error:");
                 System.err.println(clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText());
                 System.err.println(stringBuilder.toString());
-            }catch(IOException e){
+            }
+            catch(IOException e){
                 System.err.println("COULDN'T READ BODY");
             }
         }
     }
 
+
+    /*
+     * Converts an HttpHeaders object's contents to a string.
+     */
     private String headersToString(HttpHeaders headers) {
         String output = "";
 
