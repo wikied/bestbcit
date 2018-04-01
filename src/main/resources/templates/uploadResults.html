@@ -2,23 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Boot Thymeleaf Hello World Example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Patua+One" rel="stylesheet"/>
 
 </head>
 <body>
 
-<div class="container">
-    <div class="row">
+    <div class="container">
+        <div class="row">
 
-        <ul>
-            <li th:each="item : ${items}" th:text="${item.getAllFields().productTitle}"></li>
-        </ul>
+            <div class="col-md-auto mt-4">
+                <h1>Upload Results</h1>
+            </div>
 
+            <div class="col-lg-8"></div>
+
+            <!--<ul>DONT DELETE DONT DELETE-->
+
+                <!--<li th:each="item : ${items}" th:text="${item.getAllFields().productTitle}"></li>-->
+            <!--</ul>-->
+        </div>
+
+        <div class="row mt-4">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Item #</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Result</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Iphone</td>
+                    <td>Ebay</td>
+                    <td>Uploaded</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Macbook Pro</td>
+                    <td>Ebay</td>
+                    <td>Uploaded</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Ipad Pro</td>
+                    <td>Ebay</td>
+                    <td>Uploaded</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
     </div>
-</div>
 <!-- /.container -->
 
 <script type="text/javascript"

@@ -13,7 +13,6 @@ import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +45,7 @@ public class UploadController {
 
     @GetMapping("/")
     public String homePage(){
-        return "uploadForm";
+        return "index";
     }
 
     /*

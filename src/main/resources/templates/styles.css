@@ -2,3 +2,17 @@
     margin-top: 300px !important;
 }
 
+h1{
+    font-family: 'Patua One', cursive;
+    font-size: 5.0em;
+    text-decoration: underline;
+
+
+}
+
+body{
+    /*background-color: #C3E8FF;*/
+    background-image: url("../image/background2.jpg");
+    color: azure;
+}
+
