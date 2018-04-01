@@ -42,10 +42,10 @@ public class UploadController {
     @Autowired
     private DistributionService distributionService;
 
-    @GetMapping("/")
-    public String displayIntialPage(){
-        return "uploadForm";
-    }
+//    @GetMapping("/")
+//    public String displayIntialPage(){
+//        return "uploadForm";
+//    }
 
     /*
         The inventory CSV multipart file is uploaded through this end point.
