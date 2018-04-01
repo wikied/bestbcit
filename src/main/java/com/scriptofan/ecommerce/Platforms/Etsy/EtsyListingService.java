@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -31,17 +32,18 @@ public class EtsyListingService {
         UriComponentsBuilder            uriComponentsBuilder;
         RestTemplate                    restTemplate;
         String                          completeURL;
+        HttpMethod                      httpMethod  = HttpMethod.POST;
         HttpHeaders                     httpHeaders;
-        HttpEntity                      httpEntity;
+        HttpEntity<Void>                httpEntity;
         DummyEtsyOAuthHeaderGen         dummyEtsyOAuthHeaderGen;
         UriBuilder                      uriBuilder;
 
 
         restTemplate                = new RestTemplate();
+        restTemplate.setErrorHandler(new DebugResponseHandler());
+
         httpHeaders                 = new HttpHeaders();
-
         dummyEtsyOAuthHeaderGen     = new DummyEtsyOAuthHeaderGen();
-
         uriComponentsBuilder        = UriComponentsBuilder.fromUriString(ETSY_POST_URL);
 
         for(Map.Entry<String, String> entry : etsyLocalOffer.getLocalItem().getAllFields().entrySet()) {
@@ -50,15 +52,19 @@ public class EtsyListingService {
                     .queryParam(entry.getKey(), entry.getValue());
         }
 
-
+        uriComponentsBuilder        = uriComponentsBuilder.queryParam("quantity", etsyLocalOffer.getQuantity());
         completeURL                 = uriComponentsBuilder.build().toUriString();
-        System.err.println(completeURL);
-        httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, HttpMethod.POST);
-        httpEntity                  = new HttpEntity("", httpHeaders);
-        System.err.println("ERROR HERE");
-        restTemplate.setErrorHandler(new DebugResponseHandler());
+        httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, httpMethod);
+        httpEntity                  = new HttpEntity(null, httpHeaders);
 
-        try{restTemplate.exchange(completeURL, HttpMethod.PUT, httpEntity, String.class);}
+
+        System.err.println("URL BEING SENT: " + completeURL);
+        System.err.println("HEADERS:        " + headersToString(httpHeaders));
+
+
+        try{
+            restTemplate.exchange(completeURL, httpMethod, httpEntity, String.class);
+        }
         catch(ResourceAccessException e){
             System.err.println("Caught Resource access Exception");
             e.getCause().printStackTrace();
@@ -99,5 +105,18 @@ public class EtsyListingService {
                 System.err.println("COULDN'T READ BODY");
             }
         }
+    }
+
+    private String headersToString(HttpHeaders headers) {
+        String output = "";
+
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()){
+            output += entry.getKey() + "=";
+            for (String s : entry.getValue()) {
+                output += s + ", ";
+            }
+            output += "\n";
+        }
+        return output;
     }
 }

@@ -54,7 +54,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
         if (fields.get("value") == null) {
             throw new RulesetViolationException("Price is empty");
         } else {
-            localItem.addField("value", fields.get("value"));
+            localItem.addField("price", fields.get("value"));
         }
 
         // Shipping template id
