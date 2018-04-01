@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.EtsyOAuthTests;
+package com.scriptofan.ecommerce;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.Map;
 
 @Service
-public class TestOAuthService {
+public class DummyEtsyOAuthHeaderGen {
 
     /**
      * Adds our dummy AccessToken to the provided HttpHeaders object.
