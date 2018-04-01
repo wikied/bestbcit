@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class UploadSequenceIntegrationTests {
 
     @Test
     public void completeUploadIntegrationTest()
-            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException, NotImplementedException {
+            throws AlreadyBoundException, RulesetCollisionException, RulesetViolationException, NotImplementedException, MalformedURLException {
 
         File    csvFile = null;
         User    user    = new User();

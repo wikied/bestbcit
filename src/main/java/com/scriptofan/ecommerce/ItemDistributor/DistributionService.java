@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +40,7 @@ public class DistributionService {
      * list of items, with a log of all successes, failures, and issues for each
      * item.
      */
-    public List<LocalItem> distribute(List<LocalItem> items) {
+    public List<LocalItem> distribute(List<LocalItem> items) throws MalformedURLException {
 
         int nItems = items.size();
         CompletableFuture<LocalItem>[] itemFutures = new CompletableFuture[nItems];
@@ -61,7 +62,7 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     @Async
-    public CompletableFuture<LocalItem> distribute(LocalItem item) {
+    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException {
         final Map<String, String> fields = item.getAllFields();
         item.log(LOG_DISTRIBUTED);
 

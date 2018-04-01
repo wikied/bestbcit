@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +109,7 @@ public class DistributionServiceTests {
      * PlatformDistributionService.
      */
     @Test
-    public void distributeShouldLetOffersBeModified() throws NotImplementedException {
+    public void distributeShouldLetOffersBeModified() throws NotImplementedException, MalformedURLException {
         // Stub offer
         class DummyLocalOffer extends LocalOffer {
             public boolean wasModified = false;
@@ -137,7 +138,7 @@ public class DistributionServiceTests {
      * Distribute(List) should call Distribute(LocalItem) on all items in list
      */
     @Test
-    public void distributeListShouldDistributeAllItems() throws NotImplementedException {
+    public void distributeListShouldDistributeAllItems() throws NotImplementedException, MalformedURLException {
         final int       numItems    = 10;
         final int[]     callCount   = {0};
         List<LocalItem> localItems  = new ArrayList<>();
@@ -165,7 +166,7 @@ public class DistributionServiceTests {
 
 
     @Test
-    public void sumOfOfferQtyShouldEqualTotalQty() throws NotImplementedException {
+    public void sumOfOfferQtyShouldEqualTotalQty() throws NotImplementedException, MalformedURLException {
         int         quantity;
         LocalItem   item;
 
