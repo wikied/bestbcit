@@ -8,6 +8,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Handles retrieving a user's fulfillment policies from eBay.
+ */
 @Service
 public class FulfillmentPolicyService {
 
@@ -23,11 +26,10 @@ public class FulfillmentPolicyService {
      */
     public FulfillmentPolicy[] getFulfillmentPolicies(String token) {
 
-        FulfillmentPolicy[]     fulfillmentPolicies;
-        FulfillmentPoliciesWrapper fulfillmentPolicyWrapper;
-        RestTemplate            restTemplate;
-        HttpHeaders             httpHeaders;
-        HttpEntity<String>      httpEntity;
+        FulfillmentPolicy[]         fulfillmentPolicies;
+        RestTemplate                restTemplate;
+        HttpHeaders                 httpHeaders;
+        HttpEntity<String>          httpEntity;
 
         restTemplate    = new RestTemplate();
         httpHeaders     = new HttpHeaders();
