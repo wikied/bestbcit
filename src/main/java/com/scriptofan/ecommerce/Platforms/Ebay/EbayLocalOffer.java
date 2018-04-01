@@ -42,7 +42,7 @@ public class EbayLocalOffer extends LocalOffer {
                     this);
 
             System.err.println("\n" + TAG + " ~ Creating EbayRemoteOffer");
-            ebayRemoteOffer = offerService.offerBuilder(this);
+            ebayRemoteOffer = offerService.buildEbayOffer(this);
             System.err.println(ebayRemoteOffer);
             offerId = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
 
