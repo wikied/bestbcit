@@ -41,7 +41,7 @@ public abstract class LocalOffer {
      * @param quantity
      * @throws IllegalArgumentException Quantity must be non-negative.
      */
-    public final void setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         if (quantity >= 0) {
             this.quantity = quantity;
         }
