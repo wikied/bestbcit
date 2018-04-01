@@ -1,32 +1,107 @@
 package com.scriptofan.ecommerce.Controllers;
 
 
+import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import com.scriptofan.ecommerce.CSVParser.StorageService;
+import com.scriptofan.ecommerce.Exception.NotImplementedException;
+import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
+import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
+import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
+import com.scriptofan.ecommerce.LocalItem.LocalItem;
+import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
+import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.rmi.AlreadyBoundException;
+import java.util.List;
+import java.util.Map;
 
-@RestController
+
+@Controller
 public class UploadController {
 
     @Autowired
-    private ParserController parserController;
+    private ParserCsvService parserCsvService;
 
     @Autowired
     private StorageService storageService;
 
-    @PostMapping("/upload-inventory")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-        try {
-            storageService.store(file);
-            parserController.parseMultipartFile(file);
+    @Autowired
+    private LocalItemFactory localItemFactory;
 
-        } catch (Exception e) {
-            System.err.println("Failed to upload " + file.getOriginalFilename());
+    @Autowired
+    private ItemSyncService itemSyncService;
+
+    @Autowired
+    private DistributionService distributionService;
+
+//    @GetMapping("/")
+//    public String displayIntialPage(){
+//        return "uploadForm";
+//    }
+
+    /*
+        The inventory CSV multipart file is uploaded through this end point.
+        The multipart is saved to the upload-dir folder in the CSVParser directory
+        @param  file     multipart csv file
+     */
+    @PostMapping("/")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   Map<String, Object> model) {
+        try {
+//            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
+
+            String                      filename;
+            User                        user;
+            List<Map<String, String>>   rawParsedItems;
+            List<LocalItem>             localItems;
+
+            rawParsedItems  = parserCsvService.parseCsv(file);
+
+            localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
+
+
+            for (LocalItem item : localItems) {
+                System.err.println(item);
+                System.err.println(item.fieldsToString());
+            }
+
+            user = new User();
+            for (LocalItem item : localItems) {
+                item.associateUser(user);
+            }
+
+            localItems = itemSyncService.sync(localItems);
+            localItems = distributionService.distribute(localItems);
+            localItems = itemSyncService.sync(localItems);
+
+            model.put("items", localItems);
+
+            return "uploadResults";
+
+        } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        } catch (RulesetViolationException e) {
+            e.printStackTrace();
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        } catch (RulesetCollisionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return file.getOriginalFilename() + " uploaded successfully";
+        System.err.println(file.getOriginalFilename() + " uploaded successfully");
+
+        return "redirect:/";
+
     }
 
 }
