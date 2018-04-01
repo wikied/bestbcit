@@ -3,9 +3,9 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.ConditionEnum;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.ConditionEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.CurrencyCode;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.MarketplaceEnum;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 
 import java.util.Map;
