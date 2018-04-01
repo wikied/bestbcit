@@ -61,7 +61,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
         if (fields.get("shippingTemplateId") == null) {
             throw new RulesetViolationException("missing shipping_template id");
         } else {
-            localItem.addField("shippingTemplateId", fields.get("shippingTemplateId"));
+            localItem.addField("shipping_template_id", fields.get("shippingTemplateId"));
         }
 
         // Who made
@@ -75,21 +75,21 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
         if (!validWhoMade) {
             throw new RulesetViolationException("invalid who_made");
         } else {
-            localItem.addField("whoMade", fields.get("whoMade"));
+            localItem.addField("who_made", fields.get("whoMade"));
         }
 
         // Currency Code
         if (!CurrencyCode.currencies.contains(fields.get("currencyCode"))) {
             throw new RulesetViolationException("Invalid currency code");
         } else {
-            localItem.addField("currencyCode", fields.get("currencyCode"));
+            localItem.addField("currency_code", fields.get("currencyCode"));
         }
 
         // When Made
         if (!WhenMade.whenMade.contains(fields.get("whenMade"))) {
             throw new RulesetViolationException("Invalid whenMade");
         } else {
-            localItem.addField("whenMade", fields.get("whenMade"));
+            localItem.addField("when_made", fields.get("whenMade"));
         }
 
         // State
@@ -103,7 +103,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
             throw new RulesetViolationException("isSupply is empty");
         } else {
             if (fields.get("isSupply").equals(isSupplyTrue) || fields.get("isSupply").equals(isSupplyFalse)) {
-                localItem.addField("isSupply", fields.get("isSupply"));
+                localItem.addField("is_supply", fields.get("isSupply"));
             } else {
                 throw new RulesetViolationException("isSupply must be a boolean: true or false");
             }
