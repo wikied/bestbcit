@@ -59,7 +59,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
 
         // Shipping template id
         if (fields.get("shippingTemplateId") == null) {
-            throw new RulesetViolationException("shipping_template id");
+            throw new RulesetViolationException("missing shipping_template id");
         } else {
             localItem.addField("shipping_template_id", fields.get("shippingTemplateId"));
         }

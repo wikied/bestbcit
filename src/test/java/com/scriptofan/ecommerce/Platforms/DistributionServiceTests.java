@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
@@ -128,7 +129,11 @@ public class DistributionServiceTests {
         LocalItem localItem = new LocalItem();
         localItem.addOffer(new DummyLocalOffer(localItem));
 
-        this.distributionService.distribute(localItem);
+        try {
+            this.distributionService.distribute(localItem);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         assert(((DummyLocalOffer) localItem.getLocalOffers().toArray()[0]).wasModified == true);
     }
 
@@ -159,7 +164,11 @@ public class DistributionServiceTests {
         }
 
         // Call distribute on list and check callCount
-        this.distributionService.distribute(localItems);
+        try {
+            this.distributionService.distribute(localItems);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         assert(callCount[0] == numItems);
     }
 
@@ -183,7 +192,11 @@ public class DistributionServiceTests {
             }
         });
 
-        distributionService.distribute(item);
+        try {
+            distributionService.distribute(item);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         quantity = 0;
         for (LocalOffer localOffer : item.getLocalOffers()) {

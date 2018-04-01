@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Interface;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import org.springframework.scheduling.annotation.Async;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,7 +23,7 @@ public abstract class LocalOffer {
      * Posts this offer to the respective platform.
      */
     @Async
-    public abstract CompletableFuture<LocalOffer> post() throws MalformedURLException;
+    public abstract CompletableFuture<LocalOffer> post() throws MalformedURLException, UnsupportedEncodingException;
 
 
 

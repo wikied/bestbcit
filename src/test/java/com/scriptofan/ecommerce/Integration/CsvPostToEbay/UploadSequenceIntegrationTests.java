@@ -85,17 +85,17 @@ public class UploadSequenceIntegrationTests {
 
         localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
 
-        filename        = TEST_CSV_DIRECTORY + "test_01.csv";
-        rowsInFile      = 2;
-        csvFile         = new File(filename);
-        assert(csvFile != null);
-
-        rawParsedItems  = parserCsvService.parseCsv(csvFile);
-        assert(rawParsedItems != null);
-        assert(rawParsedItems.size() == rowsInFile);
-
-        localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
-        assert(localItems.size() == rowsInFile);
+//        filename        = TEST_CSV_DIRECTORY + "test_01.csv";
+//        rowsInFile      = 2;
+//        csvFile         = new File(filename);
+//        assert(csvFile != null);
+//
+//        rawParsedItems  = parserCsvService.parseCsv(csvFile);
+//        assert(rawParsedItems != null);
+//        assert(rawParsedItems.size() == rowsInFile);
+//
+//        localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
+//        assert(localItems.size() == rowsInFile);
 
 
         for (LocalItem item : localItems) {

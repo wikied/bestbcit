@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class DistributionService {
      * list of items, with a log of all successes, failures, and issues for each
      * item.
      */
-    public List<LocalItem> distribute(List<LocalItem> items) throws MalformedURLException {
+    public List<LocalItem> distribute(List<LocalItem> items) throws MalformedURLException, UnsupportedEncodingException {
 
         int nItems = items.size();
         CompletableFuture<LocalItem>[] itemFutures = new CompletableFuture[nItems];
@@ -62,7 +63,7 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     @Async
-    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException {
+    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException, UnsupportedEncodingException {
         final Map<String, String> fields = item.getAllFields();
         item.log(LOG_DISTRIBUTED);
 

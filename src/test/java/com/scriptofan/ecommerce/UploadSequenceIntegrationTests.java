@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.List;
@@ -60,7 +61,11 @@ public class UploadSequenceIntegrationTests {
         localItems = itemSyncService.sync(localItems);
 
         // Distribute local items
-        distributionService.distribute(localItems);
+        try {
+            distributionService.distribute(localItems);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         // Sync items with DB
         localItems = itemSyncService.sync(localItems);
