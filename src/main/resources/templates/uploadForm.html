@@ -10,6 +10,8 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
 </head>
 <body>
+
+
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
@@ -47,18 +49,10 @@
 
                         <tr>
                             <td>
-                                <input type="file" name="file" />
+                                <input type="file" onchange="this.form.submit()" name="file"/>
                             </td>
                         </tr>
 
-                        <tr>
-                            <td>
-
-                            </td>
-                            <td>
-                                <input type="submit" value="Upload" />
-                            </td>
-                        </tr>
 
                     </table>
                 </form>
@@ -73,6 +67,8 @@
     <div th:if="${message}">
         <h2 th:text="${message}"/>
     </div>
+
+
 
 </body>
 </html>
