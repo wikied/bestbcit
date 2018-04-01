@@ -1,158 +1,89 @@
 package com.scriptofan.ecommerce.EtsyOAuthTests;
 
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.security.oauth.common.signature.CoreOAuthSignatureMethodFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth.common.signature.SharedConsumerSecretImpl;
 import org.springframework.security.oauth.consumer.BaseProtectedResourceDetails;
 import org.springframework.security.oauth.consumer.OAuthConsumerToken;
-import org.springframework.security.oauth.consumer.OAuthRequestFailedException;
 import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
 import org.springframework.security.oauth.consumer.client.CoreOAuthConsumerSupport;
-import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.client.RestClientException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
 @Service
 public class TestOAuthService {
 
-    public void makeSecuredCall() {
+    /**
+     * Adds our dummy AccessToken to the provided HttpHeaders object.
+     *
+     * @param headers HttpHeaders object to add the Authorization header to.
+     * @param url URL that you're visiting.
+     * @param method HttpMethod we're using.
+     * @return the HttpHeaders object added in.
+     * @throws MalformedURLException Your URL is malformed.
+     */
+    public HttpHeaders addEtsyAuthorizationHeader(
+            HttpHeaders headers,
+            String      url,
+            HttpMethod  method)
+            throws MalformedURLException
+    {
+        headers.set("Authorization", getAuthHeader(url, method));
+        return headers;
+    }
 
-        OAuthConsumerToken              consumerToken;
-        CoreOAuthConsumerSupport        consumerSupport;
-        BaseProtectedResourceDetails    resourceDetails;
-        OAuthRestTemplate               template;
-        String                          response;
-        CoreOAuthSignatureMethodFactory sigFactory;
+    private String getAuthHeader(String urlStr, HttpMethod method) throws MalformedURLException {
+        CoreOAuthConsumerSupport    consumerSupport;
+        ProtectedResourceDetails    details;
+        String                      authHeader;
+        OAuthConsumerToken          token;
+        URL                         url;
+        String                      httpMethod;
+        Map<String, String>         additionalParams;
 
-        resourceDetails = new BaseProtectedResourceDetails();
-        resourceDetails.setUse10a(false);
-        resourceDetails.setConsumerKey("7brj55hkzgzmz5iqz9399q98");
-        resourceDetails.setSharedSecret(new SharedConsumerSecretImpl("txmv7mco03"));
-        resourceDetails.setAcceptsAuthorizationHeader(true);
+        details             = getDetails();
+        token               = getToken();
+        url                 = getUrl(urlStr);
+        httpMethod          = getMethodString(method);
+        additionalParams    = null;
 
-        template = new OAuthRestTemplate(resourceDetails);
-        template.setErrorHandler(new DebugResponseErrorHandler());
+        assert(token.getValue() != null);
+        assert(token.getSecret() != null);
+        assert(details.getConsumerKey() != null);
+        assert(details.getSharedSecret() != null);
 
-        consumerSupport = getOAuthConsumerSupport();
-        sigFactory      = (CoreOAuthSignatureMethodFactory) consumerSupport.getSignatureFactory();
+        consumerSupport = new CoreOAuthConsumerSupport();
+        authHeader      = consumerSupport.getAuthorizationHeader(details, token, url, httpMethod, additionalParams);
 
-        template.setSupport(consumerSupport);
-
-
-
-        try {
-            response = template.getForObject("https://openapi.etsy.com/v2/users/wtdhtpyy/shops", String.class);
-        }
-        catch (RestClientException e) {
-            System.err.println("EXCEPTION " + e.toString());
-        }
+        return authHeader;
     }
 
 
+    private ProtectedResourceDetails getDetails() {
+        BaseProtectedResourceDetails details = new BaseProtectedResourceDetails();
+        details.setConsumerKey("7brj55hkzgzmz5iqz9399q98");
+        details.setSharedSecret(new SharedConsumerSecretImpl("txmv7mco03"));
+        return details;
+    }
 
-    private OAuthConsumerToken getOAuthConsumerToken() {
+
+    private OAuthConsumerToken getToken() {
         OAuthConsumerToken token = new OAuthConsumerToken();
-
+        token.setValue("3c1d64df55ecc102368d33c809eb8b");
+        token.setSecret("d6df5517f2");
         return token;
     }
 
 
-
-    /*
-     * Hacky implementation of OAuthConsumerSupport
-     */
-    private CoreOAuthConsumerSupport getOAuthConsumerSupport() {
-        CoreOAuthConsumerSupport consumerSupport = new CoreOAuthConsumerSupport()
-        {
-            @Override
-            public OAuthConsumerToken getUnauthorizedRequestToken(ProtectedResourceDetails details, String callback)
-                    throws OAuthRequestFailedException
-            {
-                return getDummyUnauthToken();
-            }
-
-            @Override
-            public OAuthConsumerToken getUnauthorizedRequestToken(String resourceId, String callback)
-                    throws OAuthRequestFailedException
-            {
-                return getDummyUnauthToken();
-            }
-
-
-
-
-
-            @Override
-            public OAuthConsumerToken getAccessToken(ProtectedResourceDetails details,
-                                                     OAuthConsumerToken requestToken,
-                                                     String verifier)
-            {
-                return getDummyAccessToken();
-            }
-
-            @Override
-            public OAuthConsumerToken getAccessToken(OAuthConsumerToken requestToken, String verifier)
-                    throws OAuthRequestFailedException
-            {
-                return getDummyAccessToken();
-            }
-
-
-
-            private OAuthConsumerToken getDummyAccessToken() {
-                OAuthConsumerToken token;
-
-                token = new OAuthConsumerToken();
-                token.setValue("3c1d64df55ecc102368d33c809eb8b");
-                token.setSecret("d6df5517f2");
-                token.setAccessToken(true);
-
-                return token;
-            }
-
-
-
-            private OAuthConsumerToken getDummyUnauthToken() {
-                OAuthConsumerToken token;
-
-                token = new OAuthConsumerToken();
-                token.setValue("7brj55hkzgzmz5iqz9399q98");
-                token.setSecret("txmv7mco03");
-                token.setAccessToken(false);
-
-                return token;
-            }
-        };
-
-        return consumerSupport;
+    private URL getUrl(String urlString) throws MalformedURLException {
+        return new URL(urlString);
     }
 
 
-
-
-
-    private class DebugResponseErrorHandler implements ResponseErrorHandler {
-        @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-            return true;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-
-            String line;
-            BufferedReader bufferReader  = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
-            StringBuilder  stringBuilder = new StringBuilder();
-            while ((line = bufferReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-
-            System.err.println(stringBuilder.toString());
-        }
+    private String getMethodString(HttpMethod method) {
+        return method.name();
     }
 }
