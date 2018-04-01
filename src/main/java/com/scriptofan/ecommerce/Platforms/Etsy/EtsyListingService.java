@@ -82,17 +82,22 @@ public class EtsyListingService {
             BufferedReader bufferReader;
             StringBuilder   stringBuilder;
 
-            bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
-            stringBuilder = new StringBuilder();
+            try {
+                bufferReader = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
+                stringBuilder = new StringBuilder();
 
-            while ((line = bufferReader.readLine()) != null) {
-                stringBuilder.append(line);
+
+                while ((line = bufferReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+
+                // Print results to err log
+                System.err.println("clientHttpResponse error:");
+                System.err.println(clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText());
+                System.err.println(stringBuilder.toString());
+            }catch(IOException e){
+                System.err.println("COULDN'T READ BODY");
             }
-
-            // Print results to err log
-            System.err.println("clientHttpResponse error:");
-            System.err.println(clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText());
-            System.err.println(stringBuilder.toString());
         }
     }
 }
