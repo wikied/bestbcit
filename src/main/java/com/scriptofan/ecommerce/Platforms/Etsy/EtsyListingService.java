@@ -43,7 +43,6 @@ public class EtsyListingService {
         httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, HttpMethod.POST);
         httpEntity                  = new HttpEntity(etsyLocalOffer, httpHeaders);
 
-        restTemplate.exchange(completeURL, HttpMethod.PUT,
-                httpEntity, Listing.class);
+        restTemplate.exchange(completeURL, HttpMethod.PUT, httpEntity, Listing.class);
     }
 }
