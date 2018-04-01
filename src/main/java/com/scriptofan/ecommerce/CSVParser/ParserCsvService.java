@@ -3,12 +3,9 @@ package com.scriptofan.ecommerce.CSVParser;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -18,14 +15,15 @@ import java.util.HashMap;
 @Service
 public class ParserCsvService {
 
-    public List<Map<String, String>> parseCsv(File file) throws IOException {
+    public List<Map<String, String>> parseCsv(MultipartFile file) throws IOException {
+
 
         List<Map<String, String>> list_of_items = new ArrayList<>();
 
-        Reader in = new FileReader(file);
+        Reader in = new BufferedReader(new InputStreamReader(file.getInputStream()));
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
 
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String[] item_keys = bufferedReader.readLine().split(",");
 
         for(CSVRecord record : records){
