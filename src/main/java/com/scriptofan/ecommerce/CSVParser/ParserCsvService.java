@@ -16,29 +16,52 @@ import java.util.HashMap;
 public class ParserCsvService {
 
     public List<Map<String, String>> parseCsv(MultipartFile file) throws IOException {
+        List<Map<String, String>>   itemList;
+        BufferedReader              fileReader;
+        BufferedReader              headerReader;
 
+        fileReader      = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        headerReader    = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        itemList        = parseCsvBufferedReader(fileReader, headerReader);
 
-        List<Map<String, String>> list_of_items = new ArrayList<>();
-
-        Reader in = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        String[] item_keys = bufferedReader.readLine().split(",");
-
-        for(CSVRecord record : records){
-                int i = 0;
-                Map<String, String> tempMap = new HashMap<>();
-                for(String s : record){
-
-                    tempMap.put(item_keys[i], s);
-                    i++;
-                }
-                list_of_items.add(tempMap);
-        }
-
-        return list_of_items;
-
+        return itemList;
     }
 
+    public List<Map<String, String>> parseCsv(File file) throws IOException {
+        List<Map<String, String>>   itemList;
+        BufferedReader              fileReader;
+        BufferedReader              headerReader;
+
+        fileReader      = new BufferedReader(new FileReader(file));
+        headerReader    = new BufferedReader(new FileReader(file));
+        itemList        = parseCsvBufferedReader(fileReader, headerReader);
+
+        return itemList;
+    }
+
+    private List<Map<String, String>> parseCsvBufferedReader(
+            BufferedReader fileReader,
+            BufferedReader headerReader)
+            throws IOException
+    {
+        List<Map<String, String>>   itemList;
+        Iterable<CSVRecord>         records;
+        String[]                    itemKeys;
+
+        itemList    = new ArrayList<>();
+        records     = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(fileReader);
+        itemKeys    = headerReader.readLine().split(",");
+
+        for(CSVRecord record : records){
+            int i = 0;
+            Map<String, String> tempMap = new HashMap<>();
+            for(String s : record){
+
+                tempMap.put(itemKeys[i], s);
+                i++;
+            }
+            itemList.add(tempMap);
+        }
+        return itemList;
+    }
 }
