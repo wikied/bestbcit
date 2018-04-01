@@ -78,7 +78,8 @@ public class UploadSequenceIntegrationTests {
         csvFile         = new File(filename);
         assert(csvFile != null);
 
-        rawParsedItems  = parserCsvService.parseCsv((MultipartFile) csvFile);
+        //Included the multipartFile parse
+        rawParsedItems  = parserCsvService.parseCsv(csvFile);
         assert(rawParsedItems != null);
 
         localItems      = this.localItemFactory.createLocalItems(rawParsedItems);

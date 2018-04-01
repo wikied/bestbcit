@@ -18,10 +18,10 @@ public class EtsyListingService {
     public static final String ETSY_POST_URL = "https://openapi.etsy.com/v2/listings";
 
     public void creatingListing(EtsyLocalOffer etsyLocalOffer) throws MalformedURLException {
-        String                          response;
+
         UriComponentsBuilder            uriComponentsBuilder;
         RestTemplate                    restTemplate;
-        RequestEntity                   requestEntity;
+        String                          completeURL;
         HttpHeaders                     httpHeaders;
         HttpEntity<EtsyLocalOffer>      httpEntity;
         DummyEtsyOAuthHeaderGen         dummyEtsyOAuthHeaderGen;
@@ -31,9 +31,6 @@ public class EtsyListingService {
 
         dummyEtsyOAuthHeaderGen     = new DummyEtsyOAuthHeaderGen();
 
-        httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, ETSY_POST_URL, HttpMethod.POST);
-        httpEntity                  = new HttpEntity(etsyLocalOffer, httpHeaders);
-
         uriComponentsBuilder        = UriComponentsBuilder.fromUriString(ETSY_POST_URL);
 
         for(Map.Entry<String, String> entry : etsyLocalOffer.getLocalItem().getAllFields().entrySet()) {
@@ -42,8 +39,11 @@ public class EtsyListingService {
                     .queryParam(entry.getKey(), entry.getValue());
         }
 
-        restTemplate.exchange(uriComponentsBuilder.build().toUri() , HttpMethod.PUT,
-                httpEntity, Listing.class);
+        completeURL                 = uriComponentsBuilder.build().toUriString();
+        httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, HttpMethod.POST);
+        httpEntity                  = new HttpEntity(etsyLocalOffer, httpHeaders);
 
+        restTemplate.exchange(completeURL, HttpMethod.PUT,
+                httpEntity, Listing.class);
     }
 }
