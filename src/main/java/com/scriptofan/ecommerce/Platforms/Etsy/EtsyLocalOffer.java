@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Etsy;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.concurrent.CompletableFuture;
 
@@ -14,7 +15,7 @@ public class EtsyLocalOffer extends LocalOffer {
     }
 
     @Override
-    public CompletableFuture<LocalOffer> post() throws MalformedURLException {
+    public CompletableFuture<LocalOffer> post() throws MalformedURLException, UnsupportedEncodingException {
 
         etsyListingService = new EtsyListingService();
         etsyListingService.creatingListing(this);
