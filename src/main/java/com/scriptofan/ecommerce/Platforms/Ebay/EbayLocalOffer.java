@@ -7,6 +7,7 @@ import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayPublishOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayRemoteOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Services.OfferService;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
+import com.scriptofan.ecommerce.Platforms.Interface.OfferState;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.CompletableFuture;
@@ -46,18 +47,33 @@ public class EbayLocalOffer extends LocalOffer {
 
             System.err.println(TAG + " ~ PUBLISH REMOTE OFFER");
             EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
-        } catch (EbayPublishOfferException e) {
-            e.printStackTrace();
-        } catch (EbayCreateOfferException e) {
-            e.printStackTrace();
-        } catch (EbayCreateInventoryItemException e) {
-            e.printStackTrace();
-        } catch (OfferAlreadyExistsException e) {
-            e.printStackTrace();
-        } catch (BadEbayTokenException e) {
-            e.printStackTrace();
-        } catch (Ebay500ServerException e) {
-            e.printStackTrace();
+        }
+        catch (EbayCreateInventoryItemException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("createInventoryItem failed: " + e.getMessage());
+        }
+        catch (EbayCreateOfferException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("createOffer failed: " + e.getMessage());
+        }
+        catch (EbayPublishOfferException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("publishOffer failed: " + e.getMessage());
+        }
+        catch (OfferAlreadyExistsException e) {
+            System.err.println("OFFER ALREADY EXISTS");
+        }
+        catch (BadEbayTokenException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("Failed: eBay OAuth token is invalid");
+        }
+        catch (Ebay500ServerException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("Failed: eBay had a server error.");
+        }
+
+        for (String log : this.getFullLog()) {
+            System.err.println(log);
         }
 
         return CompletableFuture.completedFuture(this);
