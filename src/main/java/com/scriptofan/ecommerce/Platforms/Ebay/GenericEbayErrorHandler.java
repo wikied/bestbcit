@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.Services;
+package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
 import org.springframework.http.HttpStatus;
@@ -8,20 +8,30 @@ import org.springframework.web.client.ResponseErrorHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 /**
  * Error handler.
  */
 public class GenericEbayErrorHandler implements ResponseErrorHandler
 {
+    private static final String ERROR_ID_TEXT       = "errorId\":";
+    private static final String ERROR_MESSAGE_TEXT  = "message\":";
+
     private ClientHttpResponse  clientHttpResponse  = null;
-    private HttpStatus          statusCode          = null;
-    private String              statusText          = null;
-    private String              body                = null;
+    private HttpStatus          statusCode;
+    private String              statusText;
+    private String              body;
+    private int                 ebayErrorId;
+    private String              ebayMessage;
 
     @Override
     public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-        return clientHttpResponse.getStatusCode().is2xxSuccessful();
+        statusCode = clientHttpResponse.getStatusCode();
+        statusText = clientHttpResponse.getStatusText();
+
+        boolean wasSuccessful = clientHttpResponse.getStatusCode().is2xxSuccessful();
+        return !wasSuccessful;
     }
 
     @Override
@@ -29,13 +39,7 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
         loadErrorDetails(clientHttpResponse);
 
         // Handle error
-        if (statusCode == HttpStatus.BAD_REQUEST) {
-            throw new IOException(new EbayCreateInventoryItemException(
-                    "BAD REQUEST: " + statusCode + statusText + body));
-        } else {
-            throw new IOException(new EbayCreateInventoryItemException());
-        }
-
+        throw new IOException("ERROR: " + statusCode + " " + statusText + " " + body);
     }
 
     /**
@@ -47,21 +51,14 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
      */
     public final void loadErrorDetails(ClientHttpResponse clientHttpResponse) throws IOException {
         if (this.clientHttpResponse == null) {
-            return;
-        }
-
-        this.clientHttpResponse = clientHttpResponse;
-        try {
-            loadStatusCode(clientHttpResponse);
-            loadStatusText(clientHttpResponse);
-            loadBody(clientHttpResponse);
-        }
-        catch (IOException e) {
-            if (statusCode == null) {
-                throw e;
-            }
-            else if (statusText == null || body == null) {
-                // Not relevant to actually handling the issue, just to reporting.
+            this.clientHttpResponse = clientHttpResponse;
+            try {
+                loadStatusCode(clientHttpResponse);
+                loadStatusText(clientHttpResponse);
+                loadBody(clientHttpResponse);
+                parseEbayErrorId();
+                parseEbayMessage();
+            } catch (IOException e) {
             }
         }
     }
@@ -98,6 +95,22 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
         this.body = output;
     }
 
+    // Parses the eBay error ID out from the body.
+    private void parseEbayErrorId() {
+        Scanner scan = new Scanner(body);
+        scan.findInLine(ERROR_ID_TEXT);
+        scan.useDelimiter(",");
+        ebayErrorId = Integer.parseInt(scan.next());
+    }
+
+    // Parses the eBay error ID out from the body.
+    private void parseEbayMessage() {
+        Scanner scan = new Scanner(body);
+        scan.findInLine(ERROR_MESSAGE_TEXT);
+        scan.useDelimiter(",\"");
+        ebayMessage = scan.next();
+    }
+
     public HttpStatus getStatusCode() {
         return statusCode;
     }
@@ -108,5 +121,13 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
 
     public String getBody() {
         return body;
+    }
+
+    public int getEbayErrorId() {
+        return ebayErrorId;
+    }
+
+    public String getEbayMessage() {
+        return ebayMessage;
     }
 }

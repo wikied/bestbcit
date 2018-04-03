@@ -3,10 +3,12 @@ package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.*;
+import com.scriptofan.ecommerce.Platforms.Ebay.GenericEbayErrorHandler;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.*;
@@ -41,7 +43,7 @@ public class OfferService {
      * @param ebayoffer Source EbayLocalOffer to map to EbayRemoteOffer.
      * @return EbayRemoteOffer, based on provided EbayLocalOffer.
      */
-    public EbayRemoteOffer buildEbayOffer(EbayLocalOffer ebayoffer){
+    public EbayRemoteOffer buildEbayOffer(EbayLocalOffer ebayoffer) {
         EbayRemoteOffer ebayRemoteOffer     = new EbayRemoteOffer();
         Amount          amount              = new Amount();
         PricingSummary  pricingSummary      = new PricingSummary();
@@ -116,10 +118,10 @@ public class OfferService {
             throws EbayCreateOfferException
     {
         OfferResponse               offerResponse;
-        String                      response;
         RestTemplate                restTemplate;
         HttpHeaders                 httpHeaders;
         HttpEntity<EbayRemoteOffer> httpEntity;
+        String                      response = null;
 
         httpHeaders = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
@@ -131,17 +133,10 @@ public class OfferService {
         restTemplate.setErrorHandler(new CreateOfferHandler());
 
         try {
-            offerResponse = restTemplate.postForObject(
-                    POST_OFFERS_URL,
-                    httpEntity,
-                    OfferResponse.class);
-
-            assert(offerResponse != null);
-            response = offerResponse.getOfferId();
-
-            System.err.println(response);
+            offerResponse   = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
+            response        = offerResponse.getOfferId();
         }
-        catch (HttpServerErrorException ex) {
+        catch (ResourceAccessException | NullPointerException | HttpServerErrorException ex) {
             throw new EbayCreateOfferException(ex);
         }
 
@@ -153,29 +148,13 @@ public class OfferService {
      * Error response handler. At the time of writing, this is used mostly
      * for debugging.
      */
-    public static class CreateOfferHandler
-            implements ResponseErrorHandler
+    public static class CreateOfferHandler extends GenericEbayErrorHandler
     {
         @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) {
-
-            boolean hasError;
-            try {
-                hasError = !clientHttpResponse
-                        .getStatusCode()
-                        .is2xxSuccessful();
-            }
-            catch (IOException e) {
-                throw new ResourceAccessException("IO Exception reading clientHttpResponse");
-            }
-            return hasError;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse)
-                throws IOException
-        {
-            // TODO: Implement
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
+            loadErrorDetails(clientHttpResponse);
+            super.handleError(clientHttpResponse);
+            throw new IOException(getEbayMessage());
         }
     }
 }

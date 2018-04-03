@@ -1,8 +1,5 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
@@ -10,15 +7,13 @@ import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.Availability
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.InventoryItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.Product;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.ShipToLocationAvailability;
+import com.scriptofan.ecommerce.Platforms.Ebay.GenericEbayErrorHandler;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**

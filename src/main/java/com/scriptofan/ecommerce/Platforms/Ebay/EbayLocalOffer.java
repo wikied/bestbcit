@@ -35,18 +35,18 @@ public class EbayLocalOffer extends LocalOffer {
         itemSku         = getLocalItem().getField("sku");
 
         try {
-            System.err.println("\n" + TAG + " ~ Creating Inventory Item");
+            System.err.println(TAG + " ~ CREATE OR REPLACE INVENTORY ITEM");
             EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(
                     ebayOAuthToken,
                     itemSku,
                     this);
 
-            System.err.println("\n" + TAG + " ~ Creating EbayRemoteOffer");
+            System.err.println(TAG + " ~ CREATE REMOTE OFFER");
             ebayRemoteOffer = offerService.buildEbayOffer(this);
-            System.err.println(ebayRemoteOffer);
-            offerId = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
+            offerId         = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
+            System.err.println("Offer ID: " + offerId);
 
-            System.err.println("\n" + TAG + " ~ Publishing EbayRemoteOffer");
+            System.err.println(TAG + " ~ PUBLISH REMOTE OFFER");
             EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
         } catch (EbayPublishOfferException e) {
             e.printStackTrace();
