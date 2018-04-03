@@ -1,24 +1,16 @@
-package com.scriptofan.ecommerce.Platforms.Etsy;
+package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 
-public class EtsyListingBuilderRule {
+public class EbayItemRule {
     private final boolean   mustExist;
     private final String    keyInternal;
-    private final String    keyOnEtsy;
+    private final String    keyOnEbay;
 
-    /**
-     * Constructor. Sets the internal and remote keys, and whether or not the
-     * field must exist.
-     *
-     * @param keyInternal
-     * @param keyOnEtsy
-     * @param mustExist
-     */
-    public EtsyListingBuilderRule(String keyInternal, String keyOnEtsy, boolean mustExist) {
+    EbayItemRule(String keyInternal, String keyOnEbay, boolean mustExist) {
         this.mustExist   = mustExist;
         this.keyInternal = keyInternal;
-        this.keyOnEtsy   = keyOnEtsy;
+        this.keyOnEbay   = keyOnEbay;
     }
 
 
@@ -57,8 +49,8 @@ public class EtsyListingBuilderRule {
         return keyInternal;
     }
 
-    public final String getKeyOnEtsy() {
-        return keyOnEtsy;
+    public final String getKeyOnEbay() {
+        return keyOnEbay;
     }
 
 }
