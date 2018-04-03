@@ -1,4 +1,4 @@
-package com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer;
+package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Listing.EbayListing;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 /**
  * This class publishes the ebay offer
  */
-public class EbayPublishOffer {
+public class EbayPublishOfferService {
 
     private static final String PUBLISH_OFFER_URI   = "https://api.sandbox.ebay.com/sell/inventory/v1/offer/";
     private static final String URI_POSTFIX         = "/publish/";

@@ -3,7 +3,7 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.*;
 import com.scriptofan.ecommerce.Platforms.Ebay.Services.EbayCreateOrReplaceItemService;
-import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayPublishOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Services.EbayPublishOfferService;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayRemoteOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Services.OfferService;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
@@ -41,14 +41,14 @@ public class EbayLocalOffer extends LocalOffer {
                     itemSku,
                     this);
 
-            // Create offer on eBay - API call createOffer()
+            // Create offer on eBay - API call createOrUpdateOffer()
             System.err.println(TAG + " ~ CREATE REMOTE OFFER");
             ebayRemoteOffer = offerService.buildEbayOffer(this);
-            offerId         = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
+            offerId         = offerService.createOrUpdateOffer(ebayRemoteOffer, ebayOAuthToken);
 
             // Publish the offer on eBay - API call publishOffer()
             System.err.println(TAG + " ~ PUBLISH REMOTE OFFER");
-            EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
+            EbayPublishOfferService.publishEbayOffer(offerId, ebayOAuthToken);
 
 
 
@@ -60,7 +60,7 @@ public class EbayLocalOffer extends LocalOffer {
         }
         catch (EbayCreateOfferException e) {
             this.setState(OfferState.POST_FAILED);
-            this.log("createOffer failed: " + e.getMessage());
+            this.log("createOrUpdateOffer failed: " + e.getMessage());
         }
         catch (EbayPublishOfferException e) {
             this.setState(OfferState.POST_FAILED);

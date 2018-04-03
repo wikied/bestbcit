@@ -110,18 +110,41 @@ public class OfferService {
      * account these are associated with are determined by the provided access
      * token.
      *
-     * @param ebayRemoteOffer EbayRemoteOffer to send to eBay.
+     * @param offer EbayRemoteOffer to send to eBay.
      * @param token AccessToken to authorize the request with.
      * @return String with status.
      *
      * @throws EbayCreateOfferException
      */
-    public String createOffer(EbayRemoteOffer ebayRemoteOffer, String token)
-            throws EbayCreateOfferException, BadEbayTokenException, OfferAlreadyExistsException, Ebay500ServerException {
+    public String createOrUpdateOffer(EbayRemoteOffer offer, String token)
+            throws EbayCreateOfferException, BadEbayTokenException, Ebay500ServerException, OfferAlreadyExistsException {
+        String response;
+        try {
+            response = createOrUpdateOffer(offer, token, false, null);
+        }
+        catch (OfferAlreadyExistsException e) {
+            System.err.println("OFFER ALREADY EXISTS! HERE");
+            response = e.getMessage();
+            createOrUpdateOffer(offer, token, true, response);
+        }
+        return response;
+    }
+
+
+    /*
+     * Internal helper method. This lets us call either
+     */
+    private String createOrUpdateOffer(EbayRemoteOffer offer, String token, boolean update, String offerId)
+            throws  BadEbayTokenException,
+                    Ebay500ServerException,
+                    OfferAlreadyExistsException,
+                    EbayCreateOfferException
+    {
         int                         retries;
         OfferResponse               offerResponse;
         RestTemplate                restTemplate;
         HttpHeaders                 httpHeaders;
+        HttpMethod                  method;
         HttpEntity<EbayRemoteOffer> httpEntity;
         String                      response = null;
 
@@ -136,13 +159,19 @@ public class OfferService {
         {
             System.err.println("Try " + retries);
             retries--;
-            httpEntity = new HttpEntity<>(ebayRemoteOffer, httpHeaders);
+            httpEntity = new HttpEntity<>(offer, httpHeaders);
             restTemplate = new RestTemplate();
             restTemplate.setErrorHandler(new CreateOfferHandler());
 
             try {
-                offerResponse   = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
-                response        = offerResponse.getOfferId();
+                if (update) {
+                    restTemplate.put(POST_OFFERS_URL + "/" + offerId, httpEntity);
+                    response = "success";
+                }
+                else {
+                    offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
+                    response      = offerResponse.getOfferId();
+                }
             }
             catch (ResourceAccessException ex) {
                 Throwable rootEx = ex.getRootCause();
@@ -163,8 +192,13 @@ public class OfferService {
                 }
                 // The offer already exists. We should update the offer instead.
                 else if (rootEx instanceof OfferAlreadyExistsException) {
-                    response = rootEx.getMessage();
-                    throw (OfferAlreadyExistsException) rootEx;
+                    if (update == false) {
+                        response = rootEx.getMessage();
+                        throw (OfferAlreadyExistsException) rootEx;
+                    }
+                    else {
+                        throw new EbayCreateOfferException(rootEx.getMessage());
+                    }
                 }
             }
         }
