@@ -34,19 +34,25 @@ public class EbayLocalOffer extends LocalOffer {
         itemSku         = getLocalItem().getField("sku");
 
         try {
+            // Create item on eBay - API call createOrReplaceInventoryItem()
             System.err.println(TAG + " ~ CREATE OR REPLACE INVENTORY ITEM");
             EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(
                     ebayOAuthToken,
                     itemSku,
                     this);
 
+            // Create offer on eBay - API call createOffer()
             System.err.println(TAG + " ~ CREATE REMOTE OFFER");
             ebayRemoteOffer = offerService.buildEbayOffer(this);
             offerId         = offerService.createOffer(ebayRemoteOffer, ebayOAuthToken);
-            System.err.println("Offer ID: " + offerId);
 
+            // Publish the offer on eBay - API call publishOffer()
             System.err.println(TAG + " ~ PUBLISH REMOTE OFFER");
             EbayPublishOffer.publishEbayOffer(offerId, ebayOAuthToken);
+
+
+
+
         }
         catch (EbayCreateInventoryItemException e) {
             this.setState(OfferState.POST_FAILED);
@@ -61,7 +67,8 @@ public class EbayLocalOffer extends LocalOffer {
             this.log("publishOffer failed: " + e.getMessage());
         }
         catch (OfferAlreadyExistsException e) {
-            System.err.println("OFFER ALREADY EXISTS");
+            this.setState(OfferState.POST_FAILED);
+            this.log("publishOffer failed: Offer already exists (offerID is " + e.getMessage() + ")");
         }
         catch (BadEbayTokenException e) {
             this.setState(OfferState.POST_FAILED);

@@ -23,6 +23,7 @@ import java.util.ArrayList;
  **/
 public class EbayCreateOrReplaceItemService {
 
+    public static final int MAX_RETRIES = 3;
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final String CONTENT_LANGUAGE = "en-US";
     private static final String CREATE_OR_REPLACE_INVENTORY_ITEM_URI
@@ -32,32 +33,31 @@ public class EbayCreateOrReplaceItemService {
      * Creates or replaces a inventory item with a given sku
      * @param token - the ebay user token associated with the user
      * @param sku - the user defined sku
-     * @param ebayLocalOffer - the ebay offer
+     * @param offer - the ebay offer
      * @return - string
      */
     public static String createOrReplaceInventoryItem(
             String          token,
             String          sku,
-            EbayLocalOffer  ebayLocalOffer)
+            EbayLocalOffer  offer)
             throws EbayCreateInventoryItemException, BadEbayTokenException, Ebay500ServerException {
         InventoryItem               inventoryItem;
         HttpHeaders                 headers;
         HttpEntity<InventoryItem>   httpEntity;
         RestTemplate                template;
         String                      response = null;
-        int                         retries  = 3;
+        int                         tries    = 0;
 
-        inventoryItem   = createInventoryItem(ebayLocalOffer);
-        headers         = createHttpHeaders(ebayLocalOffer);
+        inventoryItem   = createInventoryItem(offer);
+        headers         = createHttpHeaders(offer);
         httpEntity      = new HttpEntity<>(inventoryItem, headers);
 
         template        = new RestTemplate();
         template.setErrorHandler(new CreateInventoryItemErrorHandler());
 
-        while (response == null && retries > 0) {
+        while (response == null && tries < MAX_RETRIES) {
             try {
-                System.err.println("Try " + retries);
-                retries--;
+                tries++;
                 template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
                 response = "success";
             }
@@ -68,8 +68,6 @@ public class EbayCreateOrReplaceItemService {
             }
             catch (ResourceAccessException e) {
                 Throwable rootEx = e.getRootCause();
-                System.err.println("Exception:  " + e);
-                System.err.println("Root Cause: " + rootEx);
 
                 // User's OAuth token is bad. Nothing we can do.
                 if (rootEx instanceof BadEbayTokenException) {
@@ -78,8 +76,8 @@ public class EbayCreateOrReplaceItemService {
                 // Ebay had a server error. Retry.
                 else if (rootEx instanceof Ebay500ServerException) {
                     // Retry
-                    System.err.println("Ebay Server Error");
-                    if (retries == 0) {
+                    offer.log("Ebay Server Error. Retry " + tries);
+                    if (tries == 0) {
                         throw (Ebay500ServerException) rootEx;
                     }
                     response = null;
