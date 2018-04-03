@@ -3,11 +3,9 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.Entity.ConditionEnum;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.MarketplaceEnum;
-import com.scriptofan.ecommerce.Platforms.Etsy.EtsyListingBuilderRule;
-import com.scriptofan.ecommerce.Platforms.Etsy.EtsyLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.ConditionEnum;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.CurrencyCode;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.MarketplaceEnum;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 
 import java.util.Map;
@@ -119,13 +117,32 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
     private void buildOffer(LocalItem localItem, Map<String, String> fields)
         throws RulesetCollisionException,
-               RulesetViolationException {
-
+               RulesetViolationException
+    {
         EbayLocalOffer ebayLocalOffer;
-
 
         ebayLocalOffer = new EbayLocalOffer(localItem);
         localItem.addOffer(ebayLocalOffer);
+    }
+
+
+    public static String getExternalKeyByInternal(String value) {
+        for (EbayItemRule rule : RULES) {
+            if (value.equals(rule.getKeyInternal())) {
+                return rule.getKeyOnEbay();
+            }
+        }
+        return null;
+    }
+
+
+    public static String getInternalKeyByExternal(String value) {
+        for (EbayItemRule rule : RULES) {
+            if (value.equals(rule.getKeyOnEbay())) {
+                return rule.getKeyInternal();
+            }
+        }
+        return null;
     }
 
 }

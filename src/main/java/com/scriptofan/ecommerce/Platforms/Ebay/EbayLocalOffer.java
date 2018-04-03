@@ -4,9 +4,10 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
-import com.scriptofan.ecommerce.Platforms.Ebay.InventoryItem.EbayCreateOrReplaceItemService;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayPublishOffer;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.EbayRemoteOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Services.EbayCreateOrReplaceItemService;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayPublishOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayRemoteOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Services.OfferService;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import org.springframework.scheduling.annotation.Async;
 
