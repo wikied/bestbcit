@@ -25,6 +25,7 @@ import java.util.Scanner;
 @Service
 public class OfferService {
 
+    public static final int MAX_RETRIES             = 3;
     private static final String POST_OFFERS_URL     = "https://api.sandbox.ebay.com/sell/inventory/v1/offer";
     private static final String GET_OFFERS_URL      = POST_OFFERS_URL + "?";
     private static final String CONTENT_LANGUAGE    = "en-US";
@@ -117,13 +118,16 @@ public class OfferService {
      * @throws EbayCreateOfferException
      */
     public String createOrUpdateOffer(EbayRemoteOffer offer, String token)
-            throws EbayCreateOfferException, BadEbayTokenException, Ebay500ServerException, OfferAlreadyExistsException {
+            throws  EbayCreateOfferException,
+                    BadEbayTokenException,
+                    Ebay500ServerException,
+                    OfferAlreadyExistsException
+    {
         String response;
         try {
             response = createOrUpdateOffer(offer, token, false, null);
         }
         catch (OfferAlreadyExistsException e) {
-            System.err.println("OFFER ALREADY EXISTS! HERE");
             response = e.getMessage();
             createOrUpdateOffer(offer, token, true, response);
         }
@@ -140,11 +144,10 @@ public class OfferService {
                     OfferAlreadyExistsException,
                     EbayCreateOfferException
     {
-        int                         retries;
+        int                         tries;
         OfferResponse               offerResponse;
         RestTemplate                restTemplate;
         HttpHeaders                 httpHeaders;
-        HttpMethod                  method;
         HttpEntity<EbayRemoteOffer> httpEntity;
         String                      response = null;
 
@@ -154,11 +157,10 @@ public class OfferService {
         httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
 
         // Ebay is flaky, so try a couple of times
-        retries = 3;
-        while (response == null && retries > 0)
+        tries = 1;
+        while (response == null && tries < MAX_RETRIES)
         {
-            System.err.println("Try " + retries);
-            retries--;
+            tries++;
             httpEntity = new HttpEntity<>(offer, httpHeaders);
             restTemplate = new RestTemplate();
             restTemplate.setErrorHandler(new CreateOfferHandler());
@@ -166,7 +168,7 @@ public class OfferService {
             try {
                 if (update) {
                     restTemplate.put(POST_OFFERS_URL + "/" + offerId, httpEntity);
-                    response = "success";
+                    response = offerId;
                 }
                 else {
                     offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
@@ -175,8 +177,6 @@ public class OfferService {
             }
             catch (ResourceAccessException ex) {
                 Throwable rootEx = ex.getRootCause();
-                System.err.println("Exception:  " + ex);
-                System.err.println("Root Cause: " + rootEx);
 
                 // User is unauthorized
                 if (rootEx instanceof BadEbayTokenException) {
@@ -184,8 +184,7 @@ public class OfferService {
                 }
                 // Some sort of server error happened. Retry.
                 else if (rootEx instanceof Ebay500ServerException) {
-                    System.err.println("500 server error. Retry.");
-                    if (retries == 0) {
+                    if (tries == 0) {
                         throw (Ebay500ServerException) rootEx;
                     }
                     response = null;
@@ -206,7 +205,6 @@ public class OfferService {
         if (response == null) {
             throw new EbayCreateOfferException("No response received.");
         }
-        System.err.println(response);
         return response;
     }
 

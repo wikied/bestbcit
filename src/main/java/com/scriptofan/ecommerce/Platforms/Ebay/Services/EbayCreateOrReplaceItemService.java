@@ -10,6 +10,7 @@ import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.InventoryIte
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.Product;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.ShipToLocationAvailability;
 import com.scriptofan.ecommerce.Platforms.Ebay.GenericEbayErrorHandler;
+import com.scriptofan.ecommerce.Platforms.Interface.OfferState;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpResponse;
@@ -36,11 +37,12 @@ public class EbayCreateOrReplaceItemService {
      * @param offer - the ebay offer
      * @return - string
      */
-    public static String createOrReplaceInventoryItem(
+    public static void createOrReplaceInventoryItem(
             String          token,
             String          sku,
             EbayLocalOffer  offer)
-            throws EbayCreateInventoryItemException, BadEbayTokenException, Ebay500ServerException {
+            throws EbayCreateInventoryItemException, BadEbayTokenException, Ebay500ServerException
+    {
         InventoryItem               inventoryItem;
         HttpHeaders                 headers;
         HttpEntity<InventoryItem>   httpEntity;
@@ -59,11 +61,8 @@ public class EbayCreateOrReplaceItemService {
             try {
                 tries++;
                 template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
-                response = "success";
             }
             catch (HttpServerErrorException ex) {
-                ex.printStackTrace();
-                response = ex.getMessage();
                 throw new EbayCreateInventoryItemException(ex);
             }
             catch (ResourceAccessException e) {
@@ -87,8 +86,6 @@ public class EbayCreateOrReplaceItemService {
                 }
             }
         }
-        System.err.println(response);
-        return response;
     }
 
 

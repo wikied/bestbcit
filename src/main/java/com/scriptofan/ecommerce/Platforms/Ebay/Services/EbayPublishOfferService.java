@@ -1,7 +1,11 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Listing.EbayListing;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.BadEbayTokenException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.Ebay500ServerException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.ListingAlreadyExistsException;
+import com.scriptofan.ecommerce.Platforms.Ebay.GenericEbayErrorHandler;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,9 +19,11 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
- * This class publishes the ebay offer
+ * This class publishes an EbayOffer to eBay and returns the
+ * listing ID associated with it.
  */
 public class EbayPublishOfferService {
 
@@ -26,8 +32,9 @@ public class EbayPublishOfferService {
     private static final String TOKEN_PREFIX        = "Bearer ";
     private static final String CONTENT_LANGUAGE    = "en-US";
 
-    public static String publishEbayOffer(String offerId, String token) throws EbayPublishOfferException {
-        String              response;
+    public static String publishEbayOffer(String offerId, String token)
+            throws EbayPublishOfferException, ListingAlreadyExistsException {
+        String              listingId;
         EbayListing         ebayListing = null;
 
         RestTemplate        restTemplate;
@@ -45,16 +52,27 @@ public class EbayPublishOfferService {
 
         httpEntity = new HttpEntity<>(offerId, httpHeaders);
 
-        response = "";
         try {
-            ebayListing = restTemplate.exchange(PUBLISH_OFFER_URI + offerId + URI_POSTFIX,
-                                   HttpMethod.POST, httpEntity, EbayListing.class).getBody();
-            System.err.println(ebayListing);
-            response += ebayListing.toString();
+            ebayListing = restTemplate.exchange(
+                    PUBLISH_OFFER_URI + offerId + URI_POSTFIX,
+                    HttpMethod.POST,
+                    httpEntity,
+                    EbayListing.class).getBody();
+            listingId = ebayListing.toString();
         }
         catch (HttpServerErrorException ex) {
-            ex.printStackTrace();
             throw new EbayPublishOfferException(ex);
+        }
+        catch (ResourceAccessException e) {
+            Throwable rootEx = e.getRootCause();
+
+            // Ebay had a server error. Retry.
+            if (rootEx instanceof ListingAlreadyExistsException) {
+                throw (ListingAlreadyExistsException) rootEx;
+            }
+            else {
+                throw e;
+            }
         }
         catch (NullPointerException e) {
             if (null == ebayListing) {
@@ -65,59 +83,21 @@ public class EbayPublishOfferService {
             }
         }
 
-        return response;
+        return listingId;
     }
 
     /**
      * Error handler.
      */
-    public static class PublishOfferHandler
-            implements ResponseErrorHandler
+    public static class PublishOfferHandler extends GenericEbayErrorHandler
     {
         @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            boolean hasError;
-            try {
-                hasError = !clientHttpResponse.getStatusCode().is2xxSuccessful();
-            }
-            catch (IOException e) {
-                throw new ResourceAccessException("IO Exception reading clientHttpResponse");
-            }
-            return hasError;
-        }
-
-        @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            System.err.println("Starting publishEbayOffer.handleError()");
+            loadErrorDetails(clientHttpResponse);
 
-            HttpStatus          statusCode;
-            String              statusText;
-            String              output;
-            String              line;
-            BufferedReader      bufferReader;
-            StringBuilder       stringBuilder;
-            InputStreamReader   responseBodyReader;
-
-            statusCode = clientHttpResponse.getStatusCode();
-            statusText = clientHttpResponse.getStatusText();
-
-            /* Generate debug output */
-            stringBuilder       = new StringBuilder();
-            responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
-            bufferReader        = new BufferedReader(responseBodyReader);
-
-            while ((line = bufferReader.readLine()) != null) {
-                stringBuilder.append(line);
+            if (getEbayErrorId() == 25002) {
+                throw new IOException(new ListingAlreadyExistsException(getEbayMessage()));
             }
-
-            output = "";
-            output += "clientHttpResponse error:\n";
-            output += statusCode + " " + statusText + "\n";
-            output += stringBuilder.toString() + "\n";
-
-            System.err.println(output);
-
-            System.err.println("Done publishEbayOffer.handleError()");
         }
     }
 }

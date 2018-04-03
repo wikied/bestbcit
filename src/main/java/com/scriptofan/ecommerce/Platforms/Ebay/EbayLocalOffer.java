@@ -35,24 +35,19 @@ public class EbayLocalOffer extends LocalOffer {
 
         try {
             // Create item on eBay - API call createOrReplaceInventoryItem()
-            System.err.println(TAG + " ~ CREATE OR REPLACE INVENTORY ITEM");
             EbayCreateOrReplaceItemService.createOrReplaceInventoryItem(
                     ebayOAuthToken,
                     itemSku,
                     this);
 
             // Create offer on eBay - API call createOrUpdateOffer()
-            System.err.println(TAG + " ~ CREATE REMOTE OFFER");
             ebayRemoteOffer = offerService.buildEbayOffer(this);
             offerId         = offerService.createOrUpdateOffer(ebayRemoteOffer, ebayOAuthToken);
 
             // Publish the offer on eBay - API call publishOffer()
-            System.err.println(TAG + " ~ PUBLISH REMOTE OFFER");
             EbayPublishOfferService.publishEbayOffer(offerId, ebayOAuthToken);
 
-
-
-
+            setState(OfferState.POST_SUCCESS);
         }
         catch (EbayCreateInventoryItemException e) {
             this.setState(OfferState.POST_FAILED);
@@ -77,6 +72,10 @@ public class EbayLocalOffer extends LocalOffer {
         catch (Ebay500ServerException e) {
             this.setState(OfferState.POST_FAILED);
             this.log("Failed: eBay had a server error.");
+        }
+        catch (ListingAlreadyExistsException e) {
+            this.setState(OfferState.POST_FAILED);
+            this.log("Failed: Listing already exists - " + e.getMessage());
         }
 
         for (String log : this.getFullLog()) {
