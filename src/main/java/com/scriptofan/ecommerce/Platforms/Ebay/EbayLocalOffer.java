@@ -25,11 +25,10 @@ public class EbayLocalOffer extends LocalOffer {
     @Override
     @Async
     public CompletableFuture<LocalOffer> post() {
+        String          offerId;
+        String          ebayOAuthToken;
+        String          itemSku;
         EbayRemoteOffer ebayRemoteOffer;
-
-        String  offerId;
-        String  ebayOAuthToken;
-        String  itemSku;
 
         offerService    = new OfferService();
         ebayOAuthToken  = getLocalItem().getUser().getUserToken();

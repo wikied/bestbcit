@@ -38,28 +38,30 @@ public class EbayCreateOrReplaceItemService {
      * @param ebayLocalOffer - the ebay offer
      * @return - string
      */
-    public static String createOrReplaceInventoryItem(String token, String sku, EbayLocalOffer ebayLocalOffer) throws EbayCreateInventoryItemException {
-        InventoryItem inventoryItem;
-        HttpHeaders headers;
-        HttpEntity<InventoryItem> httpEntity;
-        RestTemplate template;
-        String response = null;
+    public static String createOrReplaceInventoryItem(
+            String          token,
+            String          sku,
+            EbayLocalOffer  ebayLocalOffer)
+            throws EbayCreateInventoryItemException
+    {
+        InventoryItem               inventoryItem;
+        HttpHeaders                 headers;
+        HttpEntity<InventoryItem>   httpEntity;
+        RestTemplate                template;
+        String                      response = null;
 
-        headers = createHttpHeaders(ebayLocalOffer);
-        template = new RestTemplate();
-        template.setErrorHandler(new CreateInventoryItemErrorHandler());
-        inventoryItem   = EbayCreateOrReplaceItemService.createInventoryItem(ebayLocalOffer);
+        inventoryItem   = createInventoryItem(ebayLocalOffer);
+        headers         = createHttpHeaders(ebayLocalOffer);
         httpEntity      = new HttpEntity<>(inventoryItem, headers);
 
-        try {
-            ObjectMapper jacksonMapper = new ObjectMapper();
-            jacksonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            System.err.println(jacksonMapper.writeValueAsString(httpEntity));
-            System.err.println("Making request");
+        template        = new RestTemplate();
+        template.setErrorHandler(new CreateInventoryItemErrorHandler());
 
+        try {
             template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
             response = "success";
-        } catch (HttpServerErrorException ex) {
+        }
+        catch (HttpServerErrorException ex) {
             ex.printStackTrace();
             response = ex.getMessage();
             throw new EbayCreateInventoryItemException(ex);
@@ -69,68 +71,9 @@ public class EbayCreateOrReplaceItemService {
             System.err.println(e.getRootCause());
             throw new EbayCreateInventoryItemException(e);
         }
-        catch (JsonProcessingException e) {
-            throw new EbayCreateInventoryItemException(e);
-        }
         return response;
     }
 
-    /**
-     * Error handler.
-     */
-    public static class CreateInventoryItemErrorHandler
-            implements  ResponseErrorHandler
-    {
-        @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) {
-            try {
-                return clientHttpResponse.getStatusCode().is2xxSuccessful();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-            String              line;
-            String              output;
-            HttpStatus          statusCode;
-            String              statusText;
-
-            BufferedReader      bufferReader;
-            StringBuilder       stringBuilder;
-            InputStreamReader   responseBodyReader;
-
-            output          = "";
-            try {
-                /* Get response essentials */
-                statusCode = clientHttpResponse.getStatusCode();
-                statusText = clientHttpResponse.getStatusText();
-
-                /* Generate debugging output */
-                stringBuilder       = new StringBuilder();
-                responseBodyReader  = new InputStreamReader(clientHttpResponse.getBody());
-                bufferReader        = new BufferedReader(responseBodyReader);
-                while ((line = bufferReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-
-                output += "clientHttpResponse error:\n";
-                output += statusCode + " " + statusText + "\n";
-                output += stringBuilder.toString() + "\n";
-
-                /* Handle error */
-
-            }
-            catch (IOException e) {
-                /* IO Exception occured in clientHttpResponse.getBody() */
-                output += "IO Exception reading clientHttpResponse";
-                throw new ResourceAccessException(output);
-            }
-        }
-    }
 
     // Creates and sets the Http headers
     private static HttpHeaders createHttpHeaders(EbayLocalOffer ebayLocalOffer) {
@@ -194,4 +137,15 @@ public class EbayCreateOrReplaceItemService {
     }
 
 
+
+    /**
+     * Error handler.
+     */
+    public static class CreateInventoryItemErrorHandler extends GenericEbayErrorHandler
+    {
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
+            super.handleError(clientHttpResponse);
+        }
+    }
 }
