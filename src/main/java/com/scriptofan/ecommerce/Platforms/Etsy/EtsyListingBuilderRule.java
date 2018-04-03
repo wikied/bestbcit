@@ -1,9 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Etsy;
 
-import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
-
-import java.util.Map;
 
 public class EtsyListingBuilderRule {
     private final boolean   mustExist;
@@ -14,23 +11,6 @@ public class EtsyListingBuilderRule {
         this.mustExist   = mustExist;
         this.keyInternal = keyInternal;
         this.keyOnEtsy   = keyOnEtsy;
-    }
-
-
-    /**
-     * Populates the passed-in localItem with a validated value from the set of fields.
-     *
-     * @param fields
-     * @throws RulesetViolationException
-     * @throws RulesetCollisionException
-     */
-    public String retrieveForStorage(final Map<String, String> fields)
-            throws RulesetViolationException, RulesetCollisionException
-    {
-        String value = fields.get(keyInternal);
-        validate(value);
-        value = transform(value);
-        return value;
     }
 
 

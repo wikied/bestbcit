@@ -108,7 +108,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
                 internalKey = rule.getKeyInternal();
                 field       = fields.get(internalKey);
                 rule.validate(field);
-                localItem.addField(internalKey, field);
+                localItem.addField(internalKey, rule.transform(field));
             }
             // Handle ruleset violations by collecting all violations first before throwing.
             catch (RulesetViolationException e) {
