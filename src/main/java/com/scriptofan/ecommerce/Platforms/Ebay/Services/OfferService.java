@@ -153,7 +153,15 @@ public class OfferService {
         @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
             loadErrorDetails(clientHttpResponse);
-            super.handleError(clientHttpResponse);
+
+            int errorId = getEbayErrorId();
+            if (errorId == 25002) {
+                // Offer object already exists. Need to use updateOffer() instead.
+            }
+            else if (errorId == 25702) {
+                // SKU not found. CreateInventoryItem must have failed and we didn't catch it earlier.
+            }
+
             throw new IOException(getEbayMessage());
         }
     }
