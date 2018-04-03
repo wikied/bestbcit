@@ -63,7 +63,7 @@ public class Config {
         // Import PlatformRepositories here
         try {
             platformRegistry.registerPlatformRepository(new CoreRepository());
-            //platformRegistry.registerPlatformRepository(new EbayPlatformRepository());
+            platformRegistry.registerPlatformRepository(new EbayPlatformRepository());
             platformRegistry.registerPlatformRepository(new EtsyPlatformRepository());
         }
         catch (AlreadyRegisteredException e) {

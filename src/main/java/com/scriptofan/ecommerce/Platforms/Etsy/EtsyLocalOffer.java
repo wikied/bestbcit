@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Etsy;
 
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
@@ -18,7 +19,11 @@ public class EtsyLocalOffer extends LocalOffer {
     public CompletableFuture<LocalOffer> post() throws MalformedURLException, UnsupportedEncodingException {
 
         etsyListingService = new EtsyListingService();
-        etsyListingService.creatingListing(this);
+        try {
+            etsyListingService.creatingListing(this);
+        } catch (RulesetViolationException e) {
+            e.printStackTrace();
+        }
 
         return CompletableFuture.completedFuture(this);
     }

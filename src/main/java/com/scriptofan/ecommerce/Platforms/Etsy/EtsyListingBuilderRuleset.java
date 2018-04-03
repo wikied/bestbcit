@@ -1,11 +1,10 @@
 package com.scriptofan.ecommerce.Platforms.Etsy;
 
-import com.scriptofan.ecommerce.Config;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
-import com.scriptofan.ecommerce.Platforms.Ebay.Offer.CurrencyCode;
+
 import java.util.Map;
 
 /**
@@ -14,101 +13,121 @@ import java.util.Map;
  **/
 public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
 
-    private boolean validWhoMade = false;
+    private boolean validWhoMade    = false;
+    private static final String IS_SUPPLY_TRUE  = "true";
+    private static final String IS_SUPPLY_FALSE = "false";
 
-    private String isSupplyTrue = "true";
+    /**
+     * A collection of rules to apply to incoming LocalItem objects.
+     */
+    public static final EtsyListingBuilderRule[] RULES = {
+        new EtsyListingBuilderRule("title", "title", true),
+        new EtsyListingBuilderRule("description", "description", true),
+        new EtsyListingBuilderRule("value", "price", true),
+        new EtsyListingBuilderRule("shippingTemplateId", "shipping_template_id", true),
+        new EtsyListingBuilderRule("currencyCode", "currency_code", true),
+        new EtsyListingBuilderRule("whenMade", "when_made", true),
+        new EtsyListingBuilderRule("state", "state", true) {
+            /**
+             * Force "state" to be "draft" (so we don't spend money on Etsy).
+             * @param value
+             * @return
+             * @throws RulesetViolationException
+             */
+            @Override
+            public boolean validate(String value) throws RulesetViolationException {
+                if (!value.equals("draft")) {
+                    throw new RulesetViolationException(getKeyInternal() + " must be \"draft\" (is \"" + value + "\")");
+                }
+                return true;
+            }
+        },
+        new EtsyListingBuilderRule("whoMade", "who_made", true) {
+            /**
+             * WhoMade must be one of the values specified by WhoMadeEnum.
+             * @param value String to be validated.
+             * @return true if valid.
+             * @throws RulesetViolationException
+             */
+            @Override
+            public boolean validate(String value) throws RulesetViolationException {
+                super.validate(value);
+                for (WhoMadeEnum whoMadeEnum : WhoMadeEnum.values()) {
+                    if(value.equals(whoMadeEnum.toString())) {
+                        return true;
+                    }
+                }
+                throw new RulesetViolationException(getKeyInternal() + " is not valid.");
+            }
+        },
+        new EtsyListingBuilderRule("isSupply", "is_supply", true) {
+            /**
+             * "isSupply" must be either "true" or "false"
+             * @param value String to validate.
+             * @return true if valid
+             * @throws RulesetViolationException
+             */
+            @Override
+            public boolean validate(String value) throws RulesetViolationException {
+                super.validate(value);
+                if (value.equals(IS_SUPPLY_TRUE) || value.equals(IS_SUPPLY_FALSE)) {
+                    return true;
+                }
+                else {
+                    throw new RulesetViolationException(getKeyInternal() + " must be \"true\" or \"false\"");
+                }
+            }
+        }
+    };
 
-    private String isSupplyFalse = "false";
+
 
     @Override
     public LocalItem apply(LocalItem localItem, Map<String, String> fields)
             throws RulesetCollisionException,
                    RulesetViolationException {
-        buildListing(localItem, fields);
+        validateAndAttachFields(localItem, fields);
         return localItem;
     }
 
-    private void buildListing(LocalItem localItem, Map<String, String> fields)
-            throws RulesetCollisionException,
-                   RulesetViolationException {
 
-        if (fields == null) {
-            throw new NullPointerException("Fields is null");
-        }
 
-        // Title
-        if (fields.get("title") == null) {
-            throw new RulesetViolationException("Title is empty");
-        } else {
-            localItem.addField("title", fields.get("title"));
-        }
+    /*
+     * Validates and attaches fields to the LocalItem.
+     */
+    private void validateAndAttachFields(LocalItem localItem, Map<String, String> fields)
+            throws RulesetCollisionException, RulesetViolationException
+    {
+        String rulesetViolationReport = null;
 
-        // Description
-        if (fields.get("description") == null) {
-            throw new RulesetViolationException("Description is empty");
-        } else {
-            localItem.addField("description", fields.get("description"));
-        }
+        for (EtsyListingBuilderRule rule : RULES) {
+            final String field;
+            final String internalKey;
 
-        // Price
-        if (fields.get("value") == null) {
-            throw new RulesetViolationException("Price is empty");
-        } else {
-            localItem.addField("price", fields.get("value"));
-        }
-
-        // Shipping template id
-        if (fields.get("shippingTemplateId") == null) {
-            throw new RulesetViolationException("missing shipping_template id");
-        } else {
-            localItem.addField("shipping_template_id", fields.get("shippingTemplateId"));
-        }
-
-        // Who made
-        for (WhoMadeEnum whoMadeEnum : WhoMadeEnum.values()) {
-            if(fields.get("whoMade").equals(whoMadeEnum.toString())) {
-                validWhoMade = true;
-                break;
+            try {
+                internalKey = rule.getKeyInternal();
+                field       = fields.get(internalKey);
+                rule.validate(field);
+                localItem.addField(internalKey, field);
+            }
+            // Handle ruleset violations by collecting all violations first before throwing.
+            catch (RulesetViolationException e) {
+                if (rulesetViolationReport == null) {
+                    rulesetViolationReport = "";
+                }
+                else {
+                    rulesetViolationReport += "\n";
+                }
+                rulesetViolationReport += e.getMessage();
             }
         }
 
-        if (!validWhoMade) {
-            throw new RulesetViolationException("invalid who_made");
-        } else {
-            localItem.addField("who_made", fields.get("whoMade"));
+        if (rulesetViolationReport == null) {
+            EtsyLocalOffer etsyLocalOffer = new EtsyLocalOffer(localItem);
+            localItem.addOffer(etsyLocalOffer);
         }
-
-        // Currency Code
-        if (!CurrencyCode.currencies.contains(fields.get("currencyCode"))) {
-            throw new RulesetViolationException("Invalid currency code");
-        } else {
-            localItem.addField("currency_code", fields.get("currencyCode"));
+        else {
+            throw new RulesetViolationException(rulesetViolationReport);
         }
-
-        // When Made
-        if (!WhenMade.whenMade.contains(fields.get("whenMade"))) {
-            throw new RulesetViolationException("Invalid whenMade");
-        } else {
-            localItem.addField("when_made", fields.get("whenMade"));
-        }
-
-        // State
-        // Forces the listing to be in the draft state - change this later!!
-        if (Config.forceEtsyDraft) {
-            localItem.addField("state", "draft");
-        }
-
-        // Is supply
-        if (fields.get("isSupply") == null) {
-            throw new RulesetViolationException("isSupply is empty");
-        } else {
-            if (fields.get("isSupply").equals(isSupplyTrue) || fields.get("isSupply").equals(isSupplyFalse)) {
-                localItem.addField("is_supply", fields.get("isSupply"));
-            } else {
-                throw new RulesetViolationException("isSupply must be a boolean: true or false");
-            }
-        }
-        EtsyLocalOffer etsyLocalOffer = new EtsyLocalOffer(localItem);
-        localItem.addOffer(etsyLocalOffer);
     }
 }

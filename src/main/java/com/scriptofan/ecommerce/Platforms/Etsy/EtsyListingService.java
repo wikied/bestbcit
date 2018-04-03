@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.Platforms.Etsy;
 
 import com.scriptofan.ecommerce.DummyEtsyOAuthHeaderGen;
 
+import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,8 +33,9 @@ public class EtsyListingService {
      * @throws MalformedURLException URL is malformed
      * @throws UnsupportedEncodingException
      */
-    public void creatingListing(EtsyLocalOffer etsyLocalOffer) throws MalformedURLException {
-
+    public void creatingListing(EtsyLocalOffer etsyLocalOffer)
+            throws MalformedURLException, RulesetViolationException
+    {
         UriComponentsBuilder            uriComponentsBuilder;
         RestTemplate                    restTemplate;
         String                          completeURL;
@@ -46,10 +48,19 @@ public class EtsyListingService {
         dummyEtsyOAuthHeaderGen     = new DummyEtsyOAuthHeaderGen();
         uriComponentsBuilder        = UriComponentsBuilder.fromUriString(ETSY_POST_URL);
 
-        for(Map.Entry<String, String> entry : etsyLocalOffer.getLocalItem().getAllFields().entrySet()) {
-            uriComponentsBuilder = uriComponentsBuilder
-                    //Adding the parameters
-                    .queryParam(entry.getKey(), entry.getValue());
+        for (EtsyListingBuilderRule rule : EtsyListingBuilderRuleset.RULES) {
+            String value;
+            String keyInternal;
+            String keyOnEtsy;
+
+            keyInternal = rule.getKeyInternal();
+            keyOnEtsy   = rule.getKeyOnEtsy();
+            value       = etsyLocalOffer.getLocalItem().getField(keyInternal);
+
+            if (rule.validate(value) && value != null) {
+                uriComponentsBuilder = uriComponentsBuilder
+                        .queryParam(keyOnEtsy, value);
+            }
         }
 
         // Set quantity parameter for API call
