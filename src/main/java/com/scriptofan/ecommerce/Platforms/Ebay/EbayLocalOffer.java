@@ -1,9 +1,7 @@
 package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
-import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
-import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateOfferException;
-import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayPublishOfferException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.*;
 import com.scriptofan.ecommerce.Platforms.Ebay.Services.EbayCreateOrReplaceItemService;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayPublishOffer;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.EbayRemoteOffer;
@@ -53,6 +51,12 @@ public class EbayLocalOffer extends LocalOffer {
         } catch (EbayCreateOfferException e) {
             e.printStackTrace();
         } catch (EbayCreateInventoryItemException e) {
+            e.printStackTrace();
+        } catch (OfferAlreadyExistsException e) {
+            e.printStackTrace();
+        } catch (BadEbayTokenException e) {
+            e.printStackTrace();
+        } catch (Ebay500ServerException e) {
             e.printStackTrace();
         }
 

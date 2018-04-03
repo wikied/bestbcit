@@ -2,6 +2,8 @@ package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayItemBuilderRuleset;
 import com.scriptofan.ecommerce.Platforms.Ebay.EbayLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.BadEbayTokenException;
+import com.scriptofan.ecommerce.Platforms.Ebay.Exception.Ebay500ServerException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.Availability;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem.InventoryItem;
@@ -37,13 +39,13 @@ public class EbayCreateOrReplaceItemService {
             String          token,
             String          sku,
             EbayLocalOffer  ebayLocalOffer)
-            throws EbayCreateInventoryItemException
-    {
+            throws EbayCreateInventoryItemException, BadEbayTokenException, Ebay500ServerException {
         InventoryItem               inventoryItem;
         HttpHeaders                 headers;
         HttpEntity<InventoryItem>   httpEntity;
         RestTemplate                template;
         String                      response = null;
+        int                         retries  = 3;
 
         inventoryItem   = createInventoryItem(ebayLocalOffer);
         headers         = createHttpHeaders(ebayLocalOffer);
@@ -52,20 +54,42 @@ public class EbayCreateOrReplaceItemService {
         template        = new RestTemplate();
         template.setErrorHandler(new CreateInventoryItemErrorHandler());
 
-        try {
-            template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
-            response = "success";
+        while (response == null && retries > 0) {
+            try {
+                System.err.println("Try " + retries);
+                retries--;
+                template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
+                response = "success";
+            }
+            catch (HttpServerErrorException ex) {
+                ex.printStackTrace();
+                response = ex.getMessage();
+                throw new EbayCreateInventoryItemException(ex);
+            }
+            catch (ResourceAccessException e) {
+                Throwable rootEx = e.getRootCause();
+                System.err.println("Exception:  " + e);
+                System.err.println("Root Cause: " + rootEx);
+
+                // User's OAuth token is bad. Nothing we can do.
+                if (rootEx instanceof BadEbayTokenException) {
+                    throw (BadEbayTokenException) rootEx;
+                }
+                // Ebay had a server error. Retry.
+                else if (rootEx instanceof Ebay500ServerException) {
+                    // Retry
+                    System.err.println("Ebay Server Error");
+                    if (retries == 0) {
+                        throw (Ebay500ServerException) rootEx;
+                    }
+                    response = null;
+                }
+                else {
+                    throw e;
+                }
+            }
         }
-        catch (HttpServerErrorException ex) {
-            ex.printStackTrace();
-            response = ex.getMessage();
-            throw new EbayCreateInventoryItemException(ex);
-        }
-        catch (ResourceAccessException e) {
-            System.err.println("ResourceAccessException");
-            System.err.println(e.getRootCause());
-            throw new EbayCreateInventoryItemException(e);
-        }
+        System.err.println(response);
         return response;
     }
 
