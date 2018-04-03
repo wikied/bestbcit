@@ -78,10 +78,6 @@ public class EbayLocalOffer extends LocalOffer {
             this.log("Failed: Listing already exists - " + e.getMessage());
         }
 
-        for (String log : this.getFullLog()) {
-            System.err.println(log);
-        }
-
         return CompletableFuture.completedFuture(this);
     }
 }

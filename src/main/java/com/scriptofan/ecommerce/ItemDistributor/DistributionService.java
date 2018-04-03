@@ -2,6 +2,7 @@ package com.scriptofan.ecommerce.ItemDistributor;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
+import com.scriptofan.ecommerce.Platforms.Interface.OfferState;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -72,8 +73,14 @@ public class DistributionService {
 
             distributionScheme.calculateDistribution(item);
             for (LocalOffer localOffer : item.getLocalOffers()) {
-                item.log("Posting to " + localOffer);
                 localOffer.post();
+
+                if (!localOffer.getState().equals(OfferState.POST_SUCCESS)) {
+                    item.log("Failed to post to " + localOffer);
+                }
+                else {
+                    item.log("Successfully posted to " + localOffer);
+                }
             }
         }
         catch (NullPointerException e) {
