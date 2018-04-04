@@ -72,7 +72,7 @@ public class EbayCreateOrReplaceItemService {
                 else if (rootEx instanceof Ebay500ServerException) {
                     // Retry
                     offer.log("Ebay Server Error. Retry " + tries + ". " + rootEx.getMessage());
-                    if (tries == 0) {
+                    if (tries == MAX_RETRIES) {
                         throw (Ebay500ServerException) rootEx;
                     }
                     response = null;
