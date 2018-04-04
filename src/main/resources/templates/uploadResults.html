@@ -38,30 +38,19 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Item #</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Platform</th>
-                    <th scope="col">Result</th>
+                    <th scope="col">Item</th>
+                    <th scope="col" th:each="offer : ${items[0].getLocalOffers()}" th:text="${offer}">Offer</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Iphone</td>
-                    <td>Ebay</td>
-                    <td>Uploaded</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Macbook Pro</td>
-                    <td>Ebay</td>
-                    <td>Uploaded</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Ipad Pro</td>
-                    <td>Ebay</td>
-                    <td>Uploaded</td>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.getAllFields().title}">item name</td>
+                    <td th:each="offer : ${items[0].getLocalOffers()}">
+                        <p th:text="${offer.getState()}"></p>
+                        <ul>
+                            <li th:each="log : ${offer.getFullLog()}" th:text="${log}">log entry</li>
+                        </ul>
+                    </td>
                 </tr>
                 </tbody>
             </table>

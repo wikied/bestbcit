@@ -10,6 +10,7 @@ import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,7 @@ import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Map;
 
-@Controller("/upload")
+@Controller("/")
 public class UploadController {
 
     @Autowired
@@ -54,7 +55,7 @@ public class UploadController {
         The multipart is saved to the upload-dir folder in the CSVParser directory
         @param  file     multipart csv file
      */
-    @PostMapping("/index")
+    @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
@@ -69,12 +70,6 @@ public class UploadController {
             rawParsedItems  = parserCsvService.parseCsv(file);
 
             localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
-
-
-            for (LocalItem item : localItems) {
-                System.err.println(item);
-                System.err.println(item.fieldsToString());
-            }
 
             user = new User();
             for (LocalItem item : localItems) {
