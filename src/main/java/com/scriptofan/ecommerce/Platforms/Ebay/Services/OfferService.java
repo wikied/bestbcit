@@ -5,17 +5,14 @@ import com.scriptofan.ecommerce.Platforms.Ebay.Exception.*;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer.*;
 import com.scriptofan.ecommerce.Platforms.Ebay.GenericEbayErrorHandler;
 import com.scriptofan.ecommerce.User.User;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.*;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 
 /**
@@ -75,6 +72,7 @@ public class OfferService {
     }
 
 
+
     /**
      * Performs a REST call to eBay and returns a set of offers. The offers
      * returned are those belonging to the owner of the provided access token.
@@ -105,6 +103,7 @@ public class OfferService {
     }
 
 
+
     /**
      * Performs a REST call to eBay, creating a remote offer on their server.
      * The specific offer is determined by the provided EbayRemoteOffer. The
@@ -120,92 +119,198 @@ public class OfferService {
     public String createOrUpdateOffer(EbayRemoteOffer offer, String token)
             throws  EbayCreateOfferException,
                     BadEbayTokenException,
-                    Ebay500ServerException,
-                    OfferAlreadyExistsException
+                    Ebay500ServerException
     {
-        String response;
+        String offerId;
         try {
-            response = createOrUpdateOffer(offer, token, false, null);
+            offerId = createOffer(offer, token);
         }
         catch (OfferAlreadyExistsException e) {
-            response = e.getMessage();
-            createOrUpdateOffer(offer, token, true, response);
+            offerId = e.getMessage();
+            updateOffer(offer, token, offerId);
         }
-        return response;
+        return offerId;
+    }
+
+
+    private String createOffer(EbayRemoteOffer offer, String token)
+            throws  EbayCreateOfferException,
+                    OfferAlreadyExistsException,
+                    Ebay500ServerException,
+                    BadEbayTokenException
+    {
+        RestTemplate                    template;
+        HttpHeaders                     headers;
+        HttpEntity<EbayRemoteOffer>     entity;
+        String                          offerId = null;
+
+        headers     = buildHttpHeaders(token);
+        entity      = buildHttpEntity(offer, headers);
+        template    = buildRestTemplate();
+
+        for (int i = 1; i <= MAX_RETRIES; ++i) {
+            try {
+                offerId = performCreateOffer(template, entity);
+                if (offerId != null) {
+                    break;
+                }
+            }
+            catch (Ebay500ServerException e) {
+                if (i > MAX_RETRIES) {
+                    throw e;
+                }
+            }
+        }
+
+        if (offerId != null) {
+            return offerId;
+        } else {
+            throw new EbayCreateOfferException();
+        }
     }
 
 
     /*
-     * Internal helper method. This lets us call either
+     * Performs the createOffer call to eBay's API.
      */
-    private String createOrUpdateOffer(EbayRemoteOffer offer, String token, boolean update, String offerId)
-            throws  BadEbayTokenException,
-                    Ebay500ServerException,
-                    OfferAlreadyExistsException,
-                    EbayCreateOfferException
+    private String performCreateOffer(RestTemplate restTemplate, HttpEntity httpEntity)
+            throws Ebay500ServerException, OfferAlreadyExistsException, BadEbayTokenException
     {
-        int                         tries;
-        OfferResponse               offerResponse;
-        RestTemplate                restTemplate;
-        HttpHeaders                 httpHeaders;
-        HttpEntity<EbayRemoteOffer> httpEntity;
-        String                      response = null;
+        OfferResponse offerResponse = null;
 
+        try
+        {
+            offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
+        }
+        catch (ResourceAccessException e) {
+            unpackResourceAccessException(e);
+        }
+        return offerResponse.getOfferId();
+    }
+
+
+    /*
+     * Sequences the process of calling eBay's updateOffer endpoint.
+     */
+    private void updateOffer(EbayRemoteOffer offer, String token, String offerId)
+            throws BadEbayTokenException, Ebay500ServerException
+    {
+        RestTemplate                    template;
+        HttpHeaders                     headers;
+        HttpEntity<EbayRemoteOffer>     entity;
+
+        headers     = buildHttpHeaders(token);
+        entity      = buildHttpEntity(offer, headers);
+        template    = buildRestTemplate();
+
+        for (int i = 1; i <= MAX_RETRIES; ++i) {
+            try
+            {
+                performUpdateOffer(template, entity, offerId);
+                i = MAX_RETRIES; // Break
+            }
+            catch (Ebay500ServerException e) {
+                if (i > MAX_RETRIES) {
+                    throw e;
+                }
+            }
+        }
+    }
+
+
+    /*
+     * Performs the actual call to ebay's updateOffer endpoint.
+     */
+    private void performUpdateOffer(RestTemplate restTemplate, HttpEntity httpEntity, String offerId)
+            throws Ebay500ServerException, BadEbayTokenException
+    {
+        try
+        {
+            restTemplate.put(POST_OFFERS_URL + "/" + offerId, httpEntity);
+        }
+        catch (ResourceAccessException e) {
+            try {
+                unpackResourceAccessException(e);
+            }
+            catch (OfferAlreadyExistsException ex) {
+                /* This will never happen. */
+            }
+        }
+    }
+
+
+    /*
+     * Builds the HTTP Headers for PUT and POST requests to
+     * createOffer and performUpdateOffer.
+     */
+    private HttpHeaders buildHttpHeaders(String token) {
+        HttpHeaders httpHeaders;
         httpHeaders = new HttpHeaders();
         httpHeaders.set("authorization", TOKEN_PREFIX + token);
         httpHeaders.set("Content-Type", "application/json");
         httpHeaders.set("Content-Language", CONTENT_LANGUAGE);
+        return httpHeaders;
+    }
 
-        // Ebay is flaky, so try a couple of times
-        tries = 1;
-        while (response == null && tries < MAX_RETRIES)
-        {
-            tries++;
-            httpEntity = new HttpEntity<>(offer, httpHeaders);
-            restTemplate = new RestTemplate();
-            restTemplate.setErrorHandler(new CreateOfferHandler());
 
-            try {
-                if (update) {
-                    restTemplate.put(POST_OFFERS_URL + "/" + offerId, httpEntity);
-                    response = offerId;
-                }
-                else {
-                    offerResponse = restTemplate.postForObject(POST_OFFERS_URL, httpEntity, OfferResponse.class);
-                    response      = offerResponse.getOfferId();
-                }
+    /*
+     * Constructs an HttpEntity object. Encapsulated to keep things
+     * in the sequencing methods more readable.
+     */
+    private HttpEntity<EbayRemoteOffer> buildHttpEntity(EbayRemoteOffer offer, HttpHeaders httpHeaders) {
+        HttpEntity<EbayRemoteOffer> httpEntity = new HttpEntity<>(offer, httpHeaders);
+        return httpEntity;
+    }
+
+
+    /*
+     * Constructs a RestTemplate. This is usable in either createOffer
+     * or publishOffer.
+     */
+    private RestTemplate buildRestTemplate() {
+        RestTemplate restTemplate;
+        restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new CreateOfferHandler());
+        return restTemplate;
+    }
+
+
+    /*
+     * Unpacks the root exceptions contained in a ResourceAccessException.
+     *
+     * NOTE: This is definitely an ugly hack. It was implemented because,
+     * at the time of writing, handling errors in the CreateOfferHandler
+     * seemed unfeasible (early April, 2018 ~ Patrick Charles-Lundaahl).
+     *
+     * Basically, there's a huge variety of different things that could
+     * go wrong. In our current logic, they all need to be dealt with at
+     * different levels, and ResponseErrorHandler subclasses cannot throw
+     * anything except IOExceptions from handleError() or hasError().
+     */
+    private void unpackResourceAccessException(ResourceAccessException ex)
+            throws BadEbayTokenException, Ebay500ServerException, OfferAlreadyExistsException
+    {
+        Exception rootEx;
+        if (ex.getRootCause() instanceof Exception) {
+            rootEx = (Exception) ex.getRootCause();
+
+            // User is unauthorized
+            if (rootEx instanceof BadEbayTokenException) {
+                throw (BadEbayTokenException) rootEx;
             }
-            catch (ResourceAccessException ex) {
-                Throwable rootEx = ex.getRootCause();
-
-                // User is unauthorized
-                if (rootEx instanceof BadEbayTokenException) {
-                    throw (BadEbayTokenException) rootEx;
-                }
-                // Some sort of server error happened. Retry.
-                else if (rootEx instanceof Ebay500ServerException) {
-                    if (tries == 0) {
-                        throw (Ebay500ServerException) rootEx;
-                    }
-                    response = null;
-                }
-                // The offer already exists. We should update the offer instead.
-                else if (rootEx instanceof OfferAlreadyExistsException) {
-                    if (update == false) {
-                        response = rootEx.getMessage();
-                        throw (OfferAlreadyExistsException) rootEx;
-                    }
-                    else {
-                        throw new EbayCreateOfferException(rootEx.getMessage());
-                    }
-                }
+            // Some sort of server error happened. Retry.
+            else if (rootEx instanceof Ebay500ServerException) {
+                throw (Ebay500ServerException) rootEx;
+            }
+            // The offer already exists. We should update the offer instead.
+            else if (rootEx instanceof OfferAlreadyExistsException) {
+                throw (OfferAlreadyExistsException) rootEx;
+            }
+            else {
+                throw ex;
             }
         }
 
-        if (response == null) {
-            throw new EbayCreateOfferException("No response received.");
-        }
-        return response;
     }
 
 

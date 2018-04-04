@@ -41,8 +41,7 @@ public class EbayCreateOrReplaceItemService {
             String          token,
             String          sku,
             EbayLocalOffer  offer)
-            throws EbayCreateInventoryItemException, BadEbayTokenException, Ebay500ServerException
-    {
+            throws BadEbayTokenException, Ebay500ServerException, EbayCreateInventoryItemException {
         InventoryItem               inventoryItem;
         HttpHeaders                 headers;
         HttpEntity<InventoryItem>   httpEntity;
@@ -62,9 +61,6 @@ public class EbayCreateOrReplaceItemService {
                 tries++;
                 template.put(CREATE_OR_REPLACE_INVENTORY_ITEM_URI + sku, httpEntity);
             }
-            catch (HttpServerErrorException ex) {
-                throw new EbayCreateInventoryItemException(ex);
-            }
             catch (ResourceAccessException e) {
                 Throwable rootEx = e.getRootCause();
 
@@ -75,11 +71,14 @@ public class EbayCreateOrReplaceItemService {
                 // Ebay had a server error. Retry.
                 else if (rootEx instanceof Ebay500ServerException) {
                     // Retry
-                    offer.log("Ebay Server Error. Retry " + tries);
+                    offer.log("Ebay Server Error. Retry " + tries + ". " + rootEx.getMessage());
                     if (tries == 0) {
                         throw (Ebay500ServerException) rootEx;
                     }
                     response = null;
+                }
+                else if (rootEx instanceof EbayCreateInventoryItemException) {
+                    throw (EbayCreateInventoryItemException) rootEx;
                 }
                 else {
                     throw e;
@@ -159,6 +158,13 @@ public class EbayCreateOrReplaceItemService {
     {
         @Override
         public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
+            loadErrorDetails(clientHttpResponse);
+
+            if (getEbayErrorId() == 25019) {
+                // Listing already exists on eBay and is ended. You are not allowed to revise ended listings.
+                throw new IOException(new EbayCreateInventoryItemException(getEbayMessage()));
+            }
+
             super.handleError(clientHttpResponse);
         }
     }

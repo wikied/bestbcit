@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class GenericEbayErrorHandler implements ResponseErrorHandler
 {
     private static final String ERROR_ID_TEXT       = "errorId\":";
-    private static final String ERROR_MESSAGE_TEXT  = "message\":";
+    private static final String ERROR_MESSAGE_TEXT  = "message\":\"";
 
     private ClientHttpResponse  clientHttpResponse  = null;
     private HttpStatus          statusCode;
@@ -46,7 +46,7 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
         }
         else if (statusCode.is5xxServerError()) {
             // Something went bad on eBay's end. Usually best thing to do is retry.
-            throw new IOException(new Ebay500ServerException());
+            throw new IOException(new Ebay500ServerException(getEbayMessage()));
         }
 
         throw new IOException(getErrorString());
@@ -122,7 +122,7 @@ public class GenericEbayErrorHandler implements ResponseErrorHandler
 
     // Parses the eBay error ID out from the body.
     private void parseEbayMessage() {
-        ebayMessage = parse(ERROR_MESSAGE_TEXT, ",\"");
+        ebayMessage = parse(ERROR_MESSAGE_TEXT, "\"");
     }
 
     /**

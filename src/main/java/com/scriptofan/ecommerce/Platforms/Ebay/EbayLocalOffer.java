@@ -39,19 +39,22 @@ public class EbayLocalOffer extends LocalOffer {
                     ebayOAuthToken,
                     itemSku,
                     this);
+            this.log("Successfully called eBay - createOrReplaceInventoryItem");
 
             // Create offer on eBay - API call createOrUpdateOffer()
             ebayRemoteOffer = offerService.buildEbayOffer(this);
             offerId         = offerService.createOrUpdateOffer(ebayRemoteOffer, ebayOAuthToken);
+            this.log("Successfully called eBay - createOffer or updateOffer. OfferId: " + offerId);
 
             // Publish the offer on eBay - API call publishOffer()
             EbayPublishOfferService.publishEbayOffer(offerId, ebayOAuthToken);
+            this.log("Successfully called eBay - publishOffer.");
 
             setState(OfferState.POST_SUCCESS);
         }
         catch (EbayCreateInventoryItemException e) {
             this.setState(OfferState.POST_FAILED);
-            this.log("createInventoryItem failed: " + e.getMessage());
+            this.log("createOrReplaceInventoryItem failed: " + e.getMessage());
         }
         catch (EbayCreateOfferException e) {
             this.setState(OfferState.POST_FAILED);
@@ -60,10 +63,6 @@ public class EbayLocalOffer extends LocalOffer {
         catch (EbayPublishOfferException e) {
             this.setState(OfferState.POST_FAILED);
             this.log("publishOffer failed: " + e.getMessage());
-        }
-        catch (OfferAlreadyExistsException e) {
-            this.setState(OfferState.POST_FAILED);
-            this.log("publishOffer failed: Offer already exists (offerID is " + e.getMessage() + ")");
         }
         catch (BadEbayTokenException e) {
             this.setState(OfferState.POST_FAILED);
