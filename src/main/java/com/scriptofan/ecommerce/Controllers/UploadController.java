@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -53,7 +54,7 @@ public class UploadController {
         The multipart is saved to the upload-dir folder in the CSVParser directory
         @param  file     multipart csv file
      */
-    @PostMapping("/")
+    @PostMapping("/index")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
