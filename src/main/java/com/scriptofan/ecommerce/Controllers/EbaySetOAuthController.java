@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-@Controller
+@RestController
 @RequestMapping("/ebay-token")
 public class EbaySetOAuthController {
 
@@ -17,7 +17,8 @@ public class EbaySetOAuthController {
     }
 
     @RequestMapping("/{token}")
-    public void setEbayOAuthToken(@PathVariable("token") String token) {
+    public String setEbayOAuthToken(@PathVariable("token") String token) {
         DummyRequestData.ebayOAuthToken = token;
+        return "Ebay token set to: " + DummyRequestData.ebayOAuthToken;
     }
 }
