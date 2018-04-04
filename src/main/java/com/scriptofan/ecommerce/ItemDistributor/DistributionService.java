@@ -29,9 +29,6 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class DistributionService {
 
-    /* This message is added to LocalItems when they are run through this service */
-    public static final String LOG_DISTRIBUTED = "Item sent to DistributionService";
-
     @Autowired
     private PlatformRegistry platformRegistry;
 
@@ -66,20 +63,21 @@ public class DistributionService {
     @Async
     public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException, UnsupportedEncodingException {
         final Map<String, String> fields = item.getAllFields();
-        item.log(LOG_DISTRIBUTED);
 
         try {
             QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
 
+            item.log("Total quantity: " + item.getTotalQuantity());
             distributionScheme.calculateDistribution(item);
             for (LocalOffer localOffer : item.getLocalOffers()) {
+                localOffer.log("Distributing " + localOffer.getQuantity() + " to " + localOffer);
                 localOffer.post();
 
-                if (!localOffer.getState().equals(OfferState.POST_SUCCESS)) {
-                    item.log("Failed to post to " + localOffer);
+                if (localOffer.getState().equals(OfferState.POST_SUCCESS)) {
+                    localOffer.log("Success");
                 }
                 else {
-                    item.log("Successfully posted to " + localOffer);
+                    localOffer.log("Failed");
                 }
             }
         }

@@ -145,4 +145,8 @@ public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
         return null;
     }
 
+    public String toString() {
+        return "EbayItemBuilderRuleset";
+    }
+
 }

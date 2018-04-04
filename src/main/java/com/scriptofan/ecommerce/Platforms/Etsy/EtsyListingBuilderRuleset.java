@@ -130,4 +130,8 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
             throw new RulesetViolationException(rulesetViolationReport);
         }
     }
+
+    public String toString() {
+        return "EtsyListingBuilderRuleset";
+    }
 }

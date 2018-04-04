@@ -9,6 +9,7 @@ import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import com.scriptofan.ecommerce.User.User;
 import org.junit.Before;
@@ -84,11 +85,6 @@ public class UploadSequenceIntegrationTests {
 
         localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
 
-        for (LocalItem item : localItems) {
-            System.err.println(item);
-            System.err.println(item.fieldsToString());
-        }
-
         user = new User();
         for (LocalItem item : localItems) {
             item.associateUser(user);
@@ -100,8 +96,18 @@ public class UploadSequenceIntegrationTests {
         localItems = itemSyncService.sync(localItems);
 
         for (LocalItem item : localItems) {
+            System.err.println("ITEM: " + item);
             for (String log : item.getFullLog()) {
                 System.err.println(log);
+            }
+            System.err.println();
+
+            for (LocalOffer offer : item.getLocalOffers()) {
+                System.err.println("OFFER: " + offer);
+                for (String log : offer.getFullLog()) {
+                    System.err.println(log);
+                }
+                System.err.println();
             }
             System.err.println();
         }

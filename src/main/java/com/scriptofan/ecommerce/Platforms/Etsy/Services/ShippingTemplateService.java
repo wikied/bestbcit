@@ -1,7 +1,8 @@
-package com.scriptofan.ecommerce.Platforms.Etsy.Shipping;
+package com.scriptofan.ecommerce.Platforms.Etsy.Services;
 
 
 import com.scriptofan.ecommerce.Platforms.Etsy.EtsyLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Etsy.Shipping.ShippingTemplate;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

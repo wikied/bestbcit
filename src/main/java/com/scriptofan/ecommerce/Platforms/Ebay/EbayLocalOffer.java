@@ -80,4 +80,8 @@ public class EbayLocalOffer extends LocalOffer {
 
         return CompletableFuture.completedFuture(this);
     }
+
+    public String toString() {
+        return "EbayLocalOffer";
+    }
 }

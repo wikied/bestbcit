@@ -10,6 +10,6 @@ import java.util.Map;
 public interface ItemBuilderRuleset  {
 
     LocalItem apply(LocalItem localItem, final Map<String, String> fields) throws
-            RulesetCollisionException, RulesetViolationException, NotImplementedException;
+            RulesetCollisionException, RulesetViolationException;
 
 }

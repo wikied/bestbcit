@@ -1,8 +1,12 @@
-package com.scriptofan.ecommerce.Platforms.Etsy;
+package com.scriptofan.ecommerce.Platforms.Etsy.Services;
 
 import com.scriptofan.ecommerce.DummyEtsyOAuthHeaderGen;
 
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
+import com.scriptofan.ecommerce.Platforms.Etsy.EtsyListingBuilderRule;
+import com.scriptofan.ecommerce.Platforms.Etsy.EtsyListingBuilderRuleset;
+import com.scriptofan.ecommerce.Platforms.Etsy.EtsyLocalOffer;
+import com.scriptofan.ecommerce.Platforms.Etsy.Exception.EtsyCreateListingException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,8 +38,7 @@ public class EtsyListingService {
      * @throws UnsupportedEncodingException
      */
     public void creatingListing(EtsyLocalOffer etsyLocalOffer)
-            throws MalformedURLException, RulesetViolationException
-    {
+            throws MalformedURLException, RulesetViolationException, EtsyCreateListingException {
         UriComponentsBuilder            uriComponentsBuilder;
         RestTemplate                    restTemplate;
         String                          completeURL;
@@ -64,12 +67,12 @@ public class EtsyListingService {
         }
 
         // Set quantity parameter for API call
-        uriComponentsBuilder        = uriComponentsBuilder.queryParam("quantity", etsyLocalOffer.getQuantity());
+        uriComponentsBuilder    = uriComponentsBuilder.queryParam("quantity", etsyLocalOffer.getQuantity());
 
         // Build URL and compute and append OAuth headers
-        completeURL                 = uriComponentsBuilder.build().toUriString();
-        httpHeaders                 = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, httpMethod);
-        httpEntity                  = new HttpEntity(null, httpHeaders);
+        completeURL             = uriComponentsBuilder.build().toUriString();
+        httpHeaders             = dummyEtsyOAuthHeaderGen.addEtsyAuthorizationHeader(httpHeaders, completeURL, httpMethod);
+        httpEntity              = new HttpEntity(null, httpHeaders);
 
         try {
             restTemplate                = new RestTemplate();
@@ -77,9 +80,13 @@ public class EtsyListingService {
             restTemplate.exchange(completeURL, httpMethod, httpEntity, String.class);
         }
         catch(ResourceAccessException e){
-            System.err.println("Caught Resource access Exception");
-            e.getCause().printStackTrace();
-            System.exit(1);
+            Exception   root;
+            String      output = null;
+            if (e.getRootCause() instanceof Exception) {
+                root    = (Exception) e.getRootCause();
+                output  = root.getMessage();
+            }
+            throw new EtsyCreateListingException(output);
         }
 
     }
@@ -102,22 +109,14 @@ public class EtsyListingService {
             BufferedReader  bufferReader;
             StringBuilder   stringBuilder;
 
-            try {
-                bufferReader    = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
-                stringBuilder   = new StringBuilder();
+            bufferReader    = new BufferedReader(new InputStreamReader(clientHttpResponse.getBody()));
+            stringBuilder   = new StringBuilder();
 
-                while ((line = bufferReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
+            while ((line = bufferReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
 
-                // Print results to err log
-                System.err.println("clientHttpResponse error:");
-                System.err.println(clientHttpResponse.getStatusCode() + " " + clientHttpResponse.getStatusText());
-                System.err.println(stringBuilder.toString());
-            }
-            catch(IOException e){
-                System.err.println("COULDN'T READ BODY");
-            }
+            throw new IOException(stringBuilder.toString());
         }
     }
 
