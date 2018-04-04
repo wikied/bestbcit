@@ -66,9 +66,6 @@ public class LocalItem {
      * @return value of the field.
      */
     public String getField(String key) {
-        if(this.fields.get(key) == null){
-            throw new NullPointerException();
-        }
         return this.fields.get(key);
     }
 
