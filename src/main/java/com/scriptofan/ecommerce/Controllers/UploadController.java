@@ -54,7 +54,7 @@ public class UploadController {
         The multipart is saved to the upload-dir folder in the CSVParser directory
         @param  file     multipart csv file
      */
-    @PostMapping("/index")
+    @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
