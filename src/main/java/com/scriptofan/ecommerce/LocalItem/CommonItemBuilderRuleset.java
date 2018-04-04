@@ -23,7 +23,7 @@ public class CommonItemBuilderRuleset implements ItemBuilderRuleset {
      * @throws NotImplementedException
      */
     @Override
-    public LocalItem apply(LocalItem localItem, Map<String, String> fields) throws NotImplementedException {
-        throw new NotImplementedException();
+    public LocalItem apply(LocalItem localItem, Map<String, String> fields) {
+        return localItem;
     }
 }

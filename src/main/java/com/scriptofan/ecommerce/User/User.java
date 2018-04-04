@@ -11,7 +11,7 @@ public class User {
     }
 
     public String getUserToken() {
-        return DummyRequestData.TOKEN;
+        return DummyRequestData.ebayOAuthToken;
     }
     public String getPayementPolicy() {return DummyRequestData.PAYMENT_POLICY;}
     public String getReturnPolicy() {return DummyRequestData.RETURN_POLICY;}

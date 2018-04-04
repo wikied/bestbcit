@@ -2,11 +2,14 @@ package com.scriptofan.ecommerce.ItemDistributor;
 
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
+import com.scriptofan.ecommerce.Platforms.Interface.OfferState;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -26,9 +29,6 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class DistributionService {
 
-    /* This message is added to LocalItems when they are run through this service */
-    public static final String LOG_DISTRIBUTED = "Item sent to DistributionService";
-
     @Autowired
     private PlatformRegistry platformRegistry;
 
@@ -39,7 +39,7 @@ public class DistributionService {
      * list of items, with a log of all successes, failures, and issues for each
      * item.
      */
-    public List<LocalItem> distribute(List<LocalItem> items) {
+    public List<LocalItem> distribute(List<LocalItem> items) throws MalformedURLException, UnsupportedEncodingException {
 
         int nItems = items.size();
         CompletableFuture<LocalItem>[] itemFutures = new CompletableFuture[nItems];
@@ -61,17 +61,24 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     @Async
-    public CompletableFuture<LocalItem> distribute(LocalItem item) {
+    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException, UnsupportedEncodingException {
         final Map<String, String> fields = item.getAllFields();
-        item.log(LOG_DISTRIBUTED);
 
         try {
             QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
 
+            item.log("Total quantity: " + item.getTotalQuantity());
             distributionScheme.calculateDistribution(item);
             for (LocalOffer localOffer : item.getLocalOffers()) {
-                item.log("Posting to " + localOffer);
+                localOffer.log("Distributing " + localOffer.getQuantity() + " to " + localOffer);
                 localOffer.post();
+
+                if (localOffer.getState().equals(OfferState.POST_SUCCESS)) {
+                    localOffer.log("Success");
+                }
+                else {
+                    localOffer.log("Failed");
+                }
             }
         }
         catch (NullPointerException e) {

@@ -9,6 +9,7 @@ import com.scriptofan.ecommerce.ItemDistributor.DistributionService;
 import com.scriptofan.ecommerce.LocalItem.ItemSyncService;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
+import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 import com.scriptofan.ecommerce.Platforms.PlatformRegistry;
 import com.scriptofan.ecommerce.User.User;
 import org.junit.Before;
@@ -66,46 +67,50 @@ public class UploadSequenceIntegrationTests {
                     NotImplementedException,
                     IOException
     {
-//        String                      filename;
-//        File                        csvFile;
-//        final int                   rowsInFile;
-//        User                        user;
-//        List<Map<String, String>>   rawParsedItems;
-//        List<LocalItem>             localItems;
-//
-//        filename        = TEST_CSV_DIRECTORY + "test_01.csv";
-//        rowsInFile      = 2;
-//        csvFile         = new File(filename);
-//        assert(csvFile != null);
-//
-//        rawParsedItems  = parserCsvService.parseCsv(csvFile);
-//        assert(rawParsedItems != null);
-//        assert(rawParsedItems.size() == rowsInFile);
-//
-//        localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
-//        assert(localItems.size() == rowsInFile);
-//
-//        for (LocalItem item : localItems) {
-//            System.err.println(item);
-//            System.err.println(item.fieldsToString());
-//        }
-//
-//        user = new User();
-//        for (LocalItem item : localItems) {
-//            item.associateUser(user);
-//            assert(item.getUser() != null);
-//        }
-//
-//        localItems = itemSyncService.sync(localItems);
-//        localItems = distributionService.distribute(localItems);
-//        localItems = itemSyncService.sync(localItems);
-//
-//        for (LocalItem item : localItems) {
-//            for (String log : item.getFullLog()) {
-//                System.err.println(log);
-//            }
-//            System.err.println();
-//        }
+
+        String                      filename;
+        File                        csvFile;
+        User                        user;
+        List<Map<String, String>>   rawParsedItems;
+        List<LocalItem>             localItems;
+
+
+        filename        = TEST_CSV_DIRECTORY + "test_02.csv";
+        csvFile         = new File(filename);
+        assert(csvFile != null);
+
+        //Included the multipartFile parse
+        rawParsedItems  = parserCsvService.parseCsv(csvFile);
+        assert(rawParsedItems != null);
+
+        localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
+
+        user = new User();
+        for (LocalItem item : localItems) {
+            item.associateUser(user);
+            assert(item.getUser() != null);
+        }
+
+        localItems = itemSyncService.sync(localItems);
+        localItems = distributionService.distribute(localItems);
+        localItems = itemSyncService.sync(localItems);
+
+        for (LocalItem item : localItems) {
+            System.err.println("ITEM: " + item);
+            for (String log : item.getFullLog()) {
+                System.err.println(log);
+            }
+            System.err.println();
+
+            for (LocalOffer offer : item.getLocalOffers()) {
+                System.err.println("OFFER: " + offer);
+                for (String log : offer.getFullLog()) {
+                    System.err.println(log);
+                }
+                System.err.println();
+            }
+            System.err.println();
+        }
     }
 
 }

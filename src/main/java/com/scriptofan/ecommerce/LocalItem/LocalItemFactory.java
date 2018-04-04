@@ -61,9 +61,7 @@ public class LocalItemFactory {
      * @return New LocalItem created from fields.
      */
     private LocalItem createLocalItem(final Map<String, String> fields)
-            throws RulesetCollisionException,
-                    RulesetViolationException,
-                    NotImplementedException
+            throws RulesetCollisionException
     {
         LocalItem                       localItem;
         Collection<ItemBuilderRuleset>  rulesets;
@@ -76,11 +74,18 @@ public class LocalItemFactory {
         localItem = new LocalItem();
 
         // Run this item through each loaded Ruleset
-        rulesets = platformRegistry.getItemBuilderRulesets();
-        localItem.log("Applying " + rulesets.size() + " rulesets");
+        rulesets        = platformRegistry.getItemBuilderRulesets();
         if (rulesets != null) {
             for (ItemBuilderRuleset ruleset : rulesets) {
-                localItem = ruleset.apply(localItem, fields);
+                String rulesetLogEntry = "Applying " + ruleset;
+                try {
+                    localItem       = ruleset.apply(localItem, fields);
+                    rulesetLogEntry += " (Success)";
+                }
+                catch (RulesetViolationException e) {
+                    rulesetLogEntry += " (ERROR: RulesetViolationException. " + e.getMessage() + ")";
+                }
+                localItem.log(rulesetLogEntry);
             }
         }
         return localItem;
