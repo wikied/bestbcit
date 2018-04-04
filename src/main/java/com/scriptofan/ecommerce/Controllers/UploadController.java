@@ -12,6 +12,7 @@ import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.LocalItem.LocalItemFactory;
 import com.scriptofan.ecommerce.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +24,7 @@ import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Map;
 
-
-@Controller
+@Controller("/upload")
 public class UploadController {
 
     @Autowired
