@@ -1,11 +1,9 @@
 package com.scriptofan.ecommerce.Controllers;
 
 import com.scriptofan.ecommerce.DummyRequestData;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/ebay-token")
