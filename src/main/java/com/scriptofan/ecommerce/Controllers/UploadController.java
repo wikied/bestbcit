@@ -34,9 +34,6 @@ public class UploadController {
     private ParserCsvService parserCsvService;
 
     @Autowired
-    private StorageService storageService;
-
-    @Autowired
     private LocalItemFactory localItemFactory;
 
     @Autowired
@@ -45,15 +42,21 @@ public class UploadController {
     @Autowired
     private DistributionService distributionService;
 
+
+
     @GetMapping("/")
     public String homePage(){
         return "index";
     }
 
-    /*
-        The inventory CSV multipart file is uploaded through this end point.
-        The multipart is saved to the upload-dir folder in the CSVParser directory
-        @param  file     multipart csv file
+
+    /**
+     * The inventory CSV multipart file is uploaded through this end point.
+     * The multipart is saved to the upload-dir folder in the CSVParser directory
+     * @param file  Uploaded CSV file
+     * @param model Map< String, Object > to pass to Thymeleaf
+     * @param redirectAttributes n/a
+     * @return
      */
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
@@ -86,13 +89,17 @@ public class UploadController {
 
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
-        } catch (RulesetViolationException e) {
+        }
+        catch (RulesetViolationException e) {
             e.printStackTrace();
-        } catch (NotImplementedException e) {
+        }
+        catch (NotImplementedException e) {
             e.printStackTrace();
-        } catch (RulesetCollisionException e) {
+        }
+        catch (RulesetCollisionException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 

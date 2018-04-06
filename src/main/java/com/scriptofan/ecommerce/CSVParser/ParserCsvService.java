@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.CSVParser;
 
+import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
@@ -12,33 +13,72 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+/**
+ * Responsible for parsing CSV files.
+ */
 @Service
 public class ParserCsvService {
 
-    public List<Map<String, String>> parseCsv(MultipartFile file) throws IOException {
+    /**
+     * Parses a CSV file from a MultipartFile object.
+     * @param multipartFile multipart file to parse.
+     * @return a list of Map< String, String > objects to be passed to the LocalItemFactory.
+     * @throws IOException Error reading from file.
+     */
+    public List<Map<String, String>> parseCsv(MultipartFile multipartFile) throws IOException {
         List<Map<String, String>>   itemList;
-        BufferedReader              fileReader;
+        InputStream                 itemInputStream;
+        InputStream                 headerInputStream;
+        InputStreamReader           itemInputStreamReader;
+        InputStreamReader           headerInputStreamReader;
+        BufferedReader              itemReader;
         BufferedReader              headerReader;
 
-        fileReader      = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        headerReader    = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        itemList        = parseCsvBufferedReader(fileReader, headerReader);
+        itemInputStream         = multipartFile.getInputStream();
+        headerInputStream       = multipartFile.getInputStream();
 
+        itemInputStreamReader   = new InputStreamReader(itemInputStream);
+        headerInputStreamReader = new InputStreamReader(headerInputStream);
+
+        itemReader              = new BufferedReader(itemInputStreamReader);
+        headerReader            = new BufferedReader(headerInputStreamReader);
+
+        itemList                = parseCsvBufferedReader(itemReader, headerReader);
         return itemList;
     }
 
+
+
+    /**
+     * Parses a CSV file from a File object.
+     * @param file File to parse.
+     * @return a list of Map< String, String > objects to be passed to the LocalItemFactory.
+     * @throws IOException Error reading from file.
+     */
     public List<Map<String, String>> parseCsv(File file) throws IOException {
         List<Map<String, String>>   itemList;
-        BufferedReader              fileReader;
+        BufferedReader              itemReader;
         BufferedReader              headerReader;
+        FileReader                  itemFileReader;
+        FileReader                  headerFileReader;
 
-        fileReader      = new BufferedReader(new FileReader(file));
-        headerReader    = new BufferedReader(new FileReader(file));
-        itemList        = parseCsvBufferedReader(fileReader, headerReader);
+        itemFileReader      = new FileReader(file);
+        headerFileReader    = new FileReader(file);
 
+        itemReader      = new BufferedReader(itemFileReader);
+        headerReader    = new BufferedReader(headerFileReader);
+
+        itemList        = parseCsvBufferedReader(itemReader, headerReader);
         return itemList;
     }
 
+
+
+    /*
+     * Parses a CSV file from a BufferedReader. Returns a list of
+     * Map< String, String > objects to be passed to the
+     * LocalItemFactory.
+     */
     private List<Map<String, String>> parseCsvBufferedReader(
             BufferedReader fileReader,
             BufferedReader headerReader)
