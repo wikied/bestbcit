@@ -80,7 +80,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <compilerArgument>-XDignore.symbol.file</compilerArgument>
-                    <compilerArgument>-Xlint:deprecation f</compilerArgument>
+                    <compilerArgument>-e</compilerArgument>
                 </configuration>
             </plugin>
 		</plugins>
