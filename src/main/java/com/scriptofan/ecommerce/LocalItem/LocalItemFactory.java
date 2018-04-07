@@ -13,10 +13,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Responsible for building LocalItem objects from parsed CSV files
+ * (passed in as Map< String, String> objects).
+ */
 @Service
 public class LocalItemFactory {
-
-    public static final String LOG_APPLYING_RULESET = "Applying ruleset ";
 
     @Autowired
     private PlatformRegistry platformRegistry;
@@ -31,9 +33,7 @@ public class LocalItemFactory {
      * 5) Set the initial quantity
      */
     public List<LocalItem> createLocalItems(final List<Map<String, String>> itemFieldCollection)
-            throws  RulesetCollisionException,
-                    RulesetViolationException,
-                    NotImplementedException
+            throws  RulesetCollisionException
     {
         ArrayList<LocalItem> localItems;
 
