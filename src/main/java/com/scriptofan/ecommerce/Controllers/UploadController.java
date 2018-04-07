@@ -90,12 +90,6 @@ public class UploadController {
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
-        catch (RulesetViolationException e) {
-            e.printStackTrace();
-        }
-        catch (NotImplementedException e) {
-            e.printStackTrace();
-        }
         catch (RulesetCollisionException e) {
             e.printStackTrace();
         }
