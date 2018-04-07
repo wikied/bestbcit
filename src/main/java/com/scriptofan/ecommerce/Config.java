@@ -26,7 +26,8 @@ public class Config {
     private PlatformRegistry platformRegistry;
 
     /*
-     * Constructor.
+     * Constructor. Creates a new PlatformRegistry and calls the init()
+     * method.
      */
     public Config() {
         try {
@@ -47,8 +48,11 @@ public class Config {
 
 
     /**
-     * The platform initialization script.
-     * Import all platform repositories here.
+     * The platform initialization script. Adds repositories (wrappers
+     * for external ecommerce platforms) to the application's configuration.
+     *
+     * Please note: this is not done with Spring configuration, but that
+     * might be a better solution.
      *
      * @throws AlreadyInitializedException if init() was already called.
      */
@@ -72,8 +76,6 @@ public class Config {
         }
 
     }
-
-
 
 
     /**
