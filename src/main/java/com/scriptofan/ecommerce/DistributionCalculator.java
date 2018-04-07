@@ -4,9 +4,15 @@ import com.scriptofan.ecommerce.ItemDistributor.QuantityDistributionScheme;
 import com.scriptofan.ecommerce.LocalItem.LocalItem;
 import com.scriptofan.ecommerce.Platforms.Interface.LocalOffer;
 
-public class DistributionCalculator
-        implements QuantityDistributionScheme
+
+/**
+ * Responsible for distributing items between various platform wrappers.
+ * Divides total inventory quantity evenly among all attached LocalOffers.
+ */
+public class DistributionCalculator implements QuantityDistributionScheme
 {
+
+
     /*
      * Distributes quantity among offers for a LocalItem.
      */
