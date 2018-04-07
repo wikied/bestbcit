@@ -18,7 +18,7 @@ public class InventoryItem {
 
     //Constructor that accepts the end point SKU
     // @RequestMapping(value = "{sku}")
-    public InventoryItem inventoryItem(@PathVariable final int sku){
+    public InventoryItem inventoryItem(final int sku){
         InventoryItem item = new InventoryItem();
 
         return item;
