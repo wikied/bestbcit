@@ -16,10 +16,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import java.util.concurrent.Executor;
 
+
+/**
+ * Main running class for the application. Also currently handles
+ * configuration, though it may be advisable to move that elsewhere
+ * as the application grows.
+ */
 @SpringBootApplication
 @EnableAsync
 @Configuration
-public class EcommerceApplication extends WebSecurityConfigurerAdapter implements CommandLineRunner {
+public class EcommerceApplication extends WebSecurityConfigurerAdapter implements CommandLineRunner
+{
 
 	@Autowired
 	private StorageService storageService;
@@ -37,6 +44,15 @@ public class EcommerceApplication extends WebSecurityConfigurerAdapter implement
 		storageService.init();
 	}
 
+
+    /**
+     * Configures Spring Security to disable authentication across all
+     * endpoints. This was done to speed development, and should be
+     * replaced later.
+     *
+     * @param http
+     * @throws Exception
+     */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/**").anonymous();
@@ -44,6 +60,10 @@ public class EcommerceApplication extends WebSecurityConfigurerAdapter implement
 	}
 
 
+    /**
+     * Enables Async.
+     * @return
+     */
 	@Bean
 	public Executor asyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
