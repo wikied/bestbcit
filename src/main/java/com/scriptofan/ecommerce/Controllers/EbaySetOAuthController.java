@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce.Controllers;
 
-import com.scriptofan.ecommerce.DummyRequestData;
+import com.scriptofan.ecommerce.DummyEbayRequestData;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,12 +11,12 @@ public class EbaySetOAuthController {
 
     @RequestMapping
     public String getEbayOAuthToken() {
-        return "Ebay token is currently set to: " + DummyRequestData.ebayOAuthToken;
+        return "Ebay token is currently set to: " + DummyEbayRequestData.ebayOAuthToken;
     }
 
     @RequestMapping("/{token}")
     public String setEbayOAuthToken(@PathVariable("token") String token) {
-        DummyRequestData.ebayOAuthToken = token;
-        return "Ebay token set to: " + DummyRequestData.ebayOAuthToken;
+        DummyEbayRequestData.ebayOAuthToken = token;
+        return "Ebay token set to: " + DummyEbayRequestData.ebayOAuthToken;
     }
 }

@@ -1,6 +1,6 @@
 package com.scriptofan.ecommerce.User;
 
-import com.scriptofan.ecommerce.DummyRequestData;
+import com.scriptofan.ecommerce.DummyEbayRequestData;
 
 /**
  * Represents a user of this application. This is currently
@@ -16,9 +16,9 @@ public class User {
     }
 
     public String getUserToken() {
-        return DummyRequestData.ebayOAuthToken;
+        return DummyEbayRequestData.ebayOAuthToken;
     }
-    public String getPayementPolicy() {return DummyRequestData.PAYMENT_POLICY;}
-    public String getReturnPolicy() {return DummyRequestData.RETURN_POLICY;}
-    public String getFulfillmentPolicy() {return  DummyRequestData.FULFILLMENT_POLICY;}
+    public String getPayementPolicy() {return DummyEbayRequestData.PAYMENT_POLICY;}
+    public String getReturnPolicy() {return DummyEbayRequestData.RETURN_POLICY;}
+    public String getFulfillmentPolicy() {return  DummyEbayRequestData.FULFILLMENT_POLICY;}
 }
