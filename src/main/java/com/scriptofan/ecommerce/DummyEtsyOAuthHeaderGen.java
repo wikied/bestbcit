@@ -13,8 +13,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+/**
+ * Responsible for building OAuth headers for API calls to Etsy.
+ *
+ * By the time we got here in the project, we didn't have time to
+ * implement full OAuth security. This is a hacky workaround, and
+ * will need to be replaced at some point.
+ */
 @Service
 public class DummyEtsyOAuthHeaderGen {
+
+
 
     /**
      * Adds our dummy AccessToken to the provided HttpHeaders object.
@@ -35,6 +44,12 @@ public class DummyEtsyOAuthHeaderGen {
         return headers;
     }
 
+
+    /*
+     * Constructs the contents for an OAuth header, based on the passed
+     * URL string, HttpMethod, and the dummy secrets and keys we have
+     * associated with Etsy.
+     */
     private String getAuthHeader(String urlStr, HttpMethod method) throws MalformedURLException {
         CoreOAuthConsumerSupport    consumerSupport;
         ProtectedResourceDetails    details;
@@ -62,6 +77,9 @@ public class DummyEtsyOAuthHeaderGen {
     }
 
 
+    /*
+     * Adds the App key and secret to the ProtectedResourceDetails object.
+     */
     private ProtectedResourceDetails getDetails() {
         BaseProtectedResourceDetails details = new BaseProtectedResourceDetails();
         details.setConsumerKey("7brj55hkzgzmz5iqz9399q98");
@@ -70,6 +88,9 @@ public class DummyEtsyOAuthHeaderGen {
     }
 
 
+    /*
+     * Constructs a new OAuth token, set with our dummy Etsy value and secret.
+     */
     private OAuthConsumerToken getToken() {
         OAuthConsumerToken token = new OAuthConsumerToken();
         token.setValue("3c1d64df55ecc102368d33c809eb8b");
@@ -81,6 +102,7 @@ public class DummyEtsyOAuthHeaderGen {
     private URL getUrl(String urlString) throws MalformedURLException {
         return new URL(urlString);
     }
+
 
 
     private String getMethodString(HttpMethod method) {
