@@ -2,6 +2,11 @@ package com.scriptofan.ecommerce.User;
 
 import com.scriptofan.ecommerce.DummyRequestData;
 
+/**
+ * Represents a user of this application. This is currently
+ * basically just a placeholder object, and will need to be
+ * filled out further.
+ */
 public class User {
     private String userID;
     private String token;
