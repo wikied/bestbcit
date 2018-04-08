@@ -73,20 +73,19 @@ public class LocalItemFactory {
 
         localItem = new LocalItem();
 
-        // Run this item through each loaded Ruleset
-        rulesets        = platformRegistry.getItemBuilderRulesets();
-        if (rulesets != null) {
-            for (ItemBuilderRuleset ruleset : rulesets) {
-                String rulesetLogEntry = "Applying " + ruleset;
-                try {
-                    localItem       = ruleset.apply(localItem, fields);
-                    rulesetLogEntry += " (Success)";
+        try {
+            // Run this item through each loaded Ruleset
+            rulesets = platformRegistry.getItemBuilderRulesets();
+            if (rulesets != null) {
+                for (ItemBuilderRuleset ruleset : rulesets) {
+                    localItem = ruleset.apply(localItem, fields);
                 }
-                catch (RulesetViolationException e) {
-                    rulesetLogEntry += " (ERROR: RulesetViolationException. " + e.getMessage() + ")";
-                }
-                localItem.log(rulesetLogEntry);
             }
+            localItem.setState(LocalItem.LocalItemState.CREATED);
+        }
+        catch (RulesetViolationException e) {
+            localItem.log("Validation Error: " + e.getMessage());
+            localItem.setState(LocalItem.LocalItemState.CREATE_FAILED);
         }
         return localItem;
     }
