@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,21 +70,38 @@ public class UploadController {
             User                        user;
             List<Map<String, String>>   rawParsedItems;
             List<LocalItem>             localItems;
+            List<LocalItem>             erroredLocalItems;
 
-            rawParsedItems  = parserCsvService.parseCsv(file);
-
-            localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
+            rawParsedItems      = parserCsvService.parseCsv(file);
+            localItems          = this.localItemFactory.createLocalItems(rawParsedItems);
+            erroredLocalItems   = new ArrayList<>();
 
             user = new User();
             for (LocalItem item : localItems) {
                 item.associateUser(user);
-            }
 
+                if (item.getState() != LocalItem.LocalItemState.CREATED) {
+                    erroredLocalItems.add(item);
+                    localItems.remove(item);
+                }
+            }
             localItems = itemSyncService.sync(localItems);
+
+
+
             localItems = distributionService.distribute(localItems);
+            for (LocalItem item : localItems) {
+                if (item.getState() != LocalItem.LocalItemState.POSTED) {
+                    erroredLocalItems.add(item);
+                    localItems.remove(item);
+                }
+            }
             localItems = itemSyncService.sync(localItems);
+
+
 
             model.put("items", localItems);
+            model.put("items", erroredLocalItems);
 
             return "uploadResults";
 
