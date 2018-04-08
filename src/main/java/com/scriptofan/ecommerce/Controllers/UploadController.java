@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -78,12 +79,13 @@ public class UploadController {
             erroredLocalItems   = new ArrayList<>();
 
             user = new User();
-            for (LocalItem item : localItems) {
+            for (Iterator<LocalItem> i = localItems.iterator(); i.hasNext();) {
+                LocalItem item = i.next();
                 item.associateUser(user);
 
                 if (item.getState() != LocalItem.LocalItemState.CREATED) {
                     erroredLocalItems.add(item);
-                    localItems.remove(item);
+                    i.remove();
                 }
             }
             localItems = itemSyncService.sync(localItems);
@@ -91,18 +93,25 @@ public class UploadController {
 
 
             localItems = distributionService.distribute(localItems);
-            for (LocalItem item : localItems) {
+            for (Iterator<LocalItem> i = localItems.iterator(); i.hasNext();) {
+                LocalItem item = i.next();
+
                 if (item.getState() != LocalItem.LocalItemState.POSTED) {
                     erroredLocalItems.add(item);
-                    localItems.remove(item);
+                    i.remove();
                 }
             }
             localItems = itemSyncService.sync(localItems);
 
+            localItems.addAll(erroredLocalItems);
 
+            for (LocalItem item : localItems) {
+                if (!item.getAllFields().containsKey("title")) {
+                    item.addField("title", null);
+                }
+            }
 
             model.put("items", localItems);
-            model.put("items", erroredLocalItems);
 
             return "uploadResults";
 

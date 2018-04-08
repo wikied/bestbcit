@@ -83,13 +83,15 @@ public class ParserCsvService {
 
         itemList    = new ArrayList<>();
         records     = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(fileReader);
+        records.forEach(new Consumer<CSVRecord>() {
+            @Override
+            public void accept(CSVRecord strings) {
+                Map<String, String> currentItem;
+                currentItem = strings.toMap();
+                itemList.add(currentItem);
+            }
+        });
 
-        Iterator<CSVRecord> i = records.iterator();
-        while (i.hasNext()) {
-            Map<String, String> currentItem;
-            currentItem = i.next().toMap();
-            itemList.add(currentItem);
-        }
         return itemList;
     }
 }
