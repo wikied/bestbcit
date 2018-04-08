@@ -61,8 +61,9 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     @Async
-    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException, UnsupportedEncodingException {
-        final Map<String, String> fields = item.getAllFields();
+    public CompletableFuture<LocalItem> distribute(LocalItem item)
+            throws MalformedURLException, UnsupportedEncodingException
+    {
 
         try {
             QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
@@ -80,6 +81,7 @@ public class DistributionService {
                     localOffer.log("Failed");
                 }
             }
+            item.setState(LocalItem.LocalItemState.POSTED);
         }
         catch (NullPointerException e) {
             String output = "NullPointerException: " + e.getMessage() + "\n";
@@ -87,6 +89,7 @@ public class DistributionService {
                 output += element.toString() + "\n";
             }
             item.log(output);
+            item.setState(LocalItem.LocalItemState.POST_FAILED);
         }
 
         return CompletableFuture.completedFuture(item);

@@ -178,8 +178,6 @@ public class LocalItem {
     public enum LocalItemState {
         CREATED,
         CREATE_FAILED,
-        DISTRIBUTED,
-        DISTRIBUTION_FAILED,
         POSTED,
         POST_FAILED
     }
