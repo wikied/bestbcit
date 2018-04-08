@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.Controllers;
 
 import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import com.scriptofan.ecommerce.CSVParser.StorageService;
+import com.scriptofan.ecommerce.Exception.CsvParserException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +67,6 @@ public class UploadController {
                                    Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
 
-            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
-
             String                      filename;
             User                        user;
             List<Map<String, String>>   rawParsedItems;
@@ -105,20 +106,16 @@ public class UploadController {
 
             return "uploadResults";
 
-        } catch (AlreadyBoundException e) {
-            e.printStackTrace();
         }
-        catch (RulesetCollisionException e) {
+        catch (AlreadyBoundException
+             | RulesetCollisionException
+             | CsvParserException
+             | IOException e) {
             e.printStackTrace();
+
+            model.put("exception", e);
+            return "uploadError";
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.err.println(file.getOriginalFilename() + " uploaded successfully");
-
-        return "redirect:/";
-
     }
 
 }

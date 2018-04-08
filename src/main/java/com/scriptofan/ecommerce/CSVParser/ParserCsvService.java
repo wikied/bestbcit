@@ -1,11 +1,13 @@
 package com.scriptofan.ecommerce.CSVParser;
 
+import com.scriptofan.ecommerce.Exception.CsvParserException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class ParserCsvService {
      * @return a list of Map< String, String > objects to be passed to the LocalItemFactory.
      * @throws IOException Error reading from file.
      */
-    public List<Map<String, String>> parseCsv(MultipartFile multipartFile) throws IOException {
+    public List<Map<String, String>> parseCsv(MultipartFile multipartFile) throws IOException, CsvParserException {
         List<Map<String, String>>   itemList;
         InputStream                 itemInputStream;
         InputStream                 headerInputStream;
@@ -42,8 +44,17 @@ public class ParserCsvService {
         itemReader              = new BufferedReader(itemInputStreamReader);
         headerReader            = new BufferedReader(headerInputStreamReader);
 
-        itemList                = parseCsvBufferedReader(itemReader, headerReader);
-        return itemList;
+        try {
+            itemList = parseCsvBufferedReader(itemReader, headerReader);
+            return itemList;
+        }
+        catch (IOException e) {
+            throw new CsvParserException(e);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            throw new CsvParserException("Your CSV file appears to be malformed."
+                      + " Most likely, the rows have different numbers of cells.");
+        }
     }
 
 
