@@ -1,7 +1,8 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Entity.Offer;
 
 /**
- * Used to express amount and applicable currency
+ * Used to express amount and applicable currency for the
+ * offer on Ebay.
  */
 public class Amount {
 

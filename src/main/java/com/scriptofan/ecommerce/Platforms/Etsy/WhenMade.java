@@ -3,6 +3,10 @@ package com.scriptofan.ecommerce.Platforms.Etsy;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents all the values for the WhenMade field
+ * in the createListing API call for Etsy.
+ */
 public class WhenMade {
 
     public static final Set<String> whenMade = new HashSet<>();

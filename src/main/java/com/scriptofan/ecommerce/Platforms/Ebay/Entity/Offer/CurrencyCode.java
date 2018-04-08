@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The currency codes
+ * The list of valid currency codes
  */
 public class CurrencyCode {
 
