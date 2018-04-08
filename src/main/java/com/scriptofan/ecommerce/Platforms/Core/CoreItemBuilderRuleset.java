@@ -28,7 +28,7 @@ public class CoreItemBuilderRuleset implements ItemBuilderRuleset {
             throws  RulesetViolationException
     {
         String  quantityStr;
-        Integer quantityInt;
+        Integer quantityInt = 0;
 
         if (!fields.containsKey(TOTAL_QUANTITY)) {
             throw new RulesetViolationException(
@@ -36,9 +36,26 @@ public class CoreItemBuilderRuleset implements ItemBuilderRuleset {
         }
 
         quantityStr = fields.get(TOTAL_QUANTITY);
-        quantityInt = Integer.parseInt(quantityStr);
+        try {
+            quantityInt = Integer.parseInt(quantityStr);
+        }
+        catch (NullPointerException e) {
+            if (quantityStr == null) {
+                throw new RulesetViolationException("Must specify \"" + TOTAL_QUANTITY + "\" field.");
+            }
+            else {
+                throw e;
+            }
+        }
+        catch (NumberFormatException e) {
+            String message = e.getMessage();
 
-        if (quantityInt == null || quantityInt < 0) {
+            throw new RulesetViolationException(
+                    "\"" + TOTAL_QUANTITY + "\" must be a non-negative integer."
+                    + " Field instead contained \"" + message + "\"");
+        }
+
+        if (quantityInt < 0) {
             throw new RulesetViolationException(
                     "Field \"" + TOTAL_QUANTITY + "\" must be a non-negative integer.");
         }
