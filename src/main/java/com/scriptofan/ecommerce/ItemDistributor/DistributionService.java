@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.nio.channels.NotYetBoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -83,8 +84,8 @@ public class DistributionService {
             }
             item.setState(LocalItem.LocalItemState.POSTED);
         }
-        catch (NullPointerException e) {
-            String output = "NullPointerException: " + e.getMessage() + "\n";
+        catch (NullPointerException | NotYetBoundException e) {
+            String output = e.toString() + "\n";
             for (StackTraceElement element : e.getStackTrace()) {
                 output += element.toString() + "\n";
             }
