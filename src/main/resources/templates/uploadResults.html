@@ -44,7 +44,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="item : ${items}">
-                    <td th:text="${item.getAllFields().title}">item name</td>
+                    <td>
+                        <p th:text="${item.getAllFields().title}">item name</p>
+                        <p th:text="${item.getState()}"></p>
+                        <ul>
+                            <li th:each="log : ${item.getFullLog()}" th:text="${log}">log entry</li>
+                        </ul>
+                    </td>
                     <td th:each="offer : ${items[0].getLocalOffers()}">
                         <p th:text="${offer.getState()}"></p>
                         <ul>

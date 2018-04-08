@@ -72,6 +72,7 @@ public class LocalItemFactory {
         }
 
         localItem = new LocalItem();
+        localItem.setState(LocalItem.LocalItemState.CREATED);
 
         try {
             // Run this item through each loaded Ruleset
@@ -81,7 +82,6 @@ public class LocalItemFactory {
                     localItem = ruleset.apply(localItem, fields);
                 }
             }
-            localItem.setState(LocalItem.LocalItemState.CREATED);
         }
         catch (RulesetViolationException e) {
             localItem.log("Validation Error: " + e.getMessage());
