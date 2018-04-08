@@ -3,6 +3,7 @@ package com.scriptofan.ecommerce.Controllers;
 
 import com.scriptofan.ecommerce.CSVParser.ParserCsvService;
 import com.scriptofan.ecommerce.CSVParser.StorageService;
+import com.scriptofan.ecommerce.Exception.CsvParserException;
 import com.scriptofan.ecommerce.Exception.NotImplementedException;
 import com.scriptofan.ecommerce.Exception.RulesetCollisionException;
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
@@ -23,7 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,44 +68,63 @@ public class UploadController {
                                    Map<String, Object> model, RedirectAttributes redirectAttributes) {
         try {
 
-            redirectAttributes.addFlashAttribute("message", "You have successfully uploaded " + file.getOriginalFilename() + "!");
-
             String                      filename;
             User                        user;
             List<Map<String, String>>   rawParsedItems;
             List<LocalItem>             localItems;
+            List<LocalItem>             erroredLocalItems;
 
-            rawParsedItems  = parserCsvService.parseCsv(file);
-
-            localItems      = this.localItemFactory.createLocalItems(rawParsedItems);
+            rawParsedItems      = parserCsvService.parseCsv(file);
+            localItems          = this.localItemFactory.createLocalItems(rawParsedItems);
+            erroredLocalItems   = new ArrayList<>();
 
             user = new User();
-            for (LocalItem item : localItems) {
+            for (Iterator<LocalItem> i = localItems.iterator(); i.hasNext();) {
+                LocalItem item = i.next();
                 item.associateUser(user);
-            }
 
+                if (item.getState() != LocalItem.LocalItemState.CREATED) {
+                    erroredLocalItems.add(item);
+                    i.remove();
+                }
+            }
             localItems = itemSyncService.sync(localItems);
+
+
+
             localItems = distributionService.distribute(localItems);
+            for (Iterator<LocalItem> i = localItems.iterator(); i.hasNext();) {
+                LocalItem item = i.next();
+
+                if (item.getState() != LocalItem.LocalItemState.POSTED) {
+                    erroredLocalItems.add(item);
+                    i.remove();
+                }
+            }
             localItems = itemSyncService.sync(localItems);
+
+            localItems.addAll(erroredLocalItems);
+
+            for (LocalItem item : localItems) {
+                if (!item.getAllFields().containsKey("title")) {
+                    item.addField("title", null);
+                }
+            }
 
             model.put("items", localItems);
 
             return "uploadResults";
 
-        } catch (AlreadyBoundException e) {
-            e.printStackTrace();
         }
-        catch (RulesetCollisionException e) {
+        catch (AlreadyBoundException
+             | RulesetCollisionException
+             | CsvParserException
+             | IOException e) {
             e.printStackTrace();
+
+            model.put("exception", e);
+            return "uploadError";
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.err.println(file.getOriginalFilename() + " uploaded successfully");
-
-        return "redirect:/";
-
     }
 
 }

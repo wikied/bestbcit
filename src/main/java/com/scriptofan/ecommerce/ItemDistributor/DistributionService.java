@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.nio.channels.NotYetBoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -61,8 +62,9 @@ public class DistributionService {
      * updated log of successes, failures and issues.
      */
     @Async
-    public CompletableFuture<LocalItem> distribute(LocalItem item) throws MalformedURLException, UnsupportedEncodingException {
-        final Map<String, String> fields = item.getAllFields();
+    public CompletableFuture<LocalItem> distribute(LocalItem item)
+            throws MalformedURLException, UnsupportedEncodingException
+    {
 
         try {
             QuantityDistributionScheme distributionScheme = platformRegistry.getQuantityDistributionScheme();
@@ -80,13 +82,15 @@ public class DistributionService {
                     localOffer.log("Failed");
                 }
             }
+            item.setState(LocalItem.LocalItemState.POSTED);
         }
-        catch (NullPointerException e) {
-            String output = "NullPointerException: " + e.getMessage() + "\n";
+        catch (NullPointerException | NotYetBoundException e) {
+            String output = e.toString() + "\n";
             for (StackTraceElement element : e.getStackTrace()) {
                 output += element.toString() + "\n";
             }
             item.log(output);
+            item.setState(LocalItem.LocalItemState.POST_FAILED);
         }
 
         return CompletableFuture.completedFuture(item);

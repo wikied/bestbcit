@@ -18,6 +18,8 @@ public class LocalItem {
     private User                    user;               // User that owns this item
     private int                     totalQuantity;      // Total quantity to be distributed among all offers
     private ItemLog                 log;                // Log of events that happen to the item.
+    private LocalItemState          state;              // Current state of the item.
+
 
     /*
      * Constructor
@@ -161,4 +163,22 @@ public class LocalItem {
         return output;
     }
 
+
+    public LocalItemState getState() {
+        return state;
+    }
+
+    public void setState(LocalItemState state) {
+        this.state = state;
+    }
+
+    /**
+     * Responsible for tracking the current state of the LocalItem.
+     */
+    public enum LocalItemState {
+        CREATED,
+        CREATE_FAILED,
+        POSTED,
+        POST_FAILED
+    }
 }
