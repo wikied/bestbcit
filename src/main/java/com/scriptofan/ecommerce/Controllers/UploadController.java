@@ -24,6 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Facilitates uploading inventory to Etsy and Ebay via a CSV file,
+ * displaying results as a new page.
+ */
 @Controller("/")
 public class UploadController {
 
