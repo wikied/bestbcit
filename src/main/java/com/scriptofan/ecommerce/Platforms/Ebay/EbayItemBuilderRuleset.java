@@ -10,10 +10,18 @@ import com.scriptofan.ecommerce.Platforms.Interface.ItemBuilderRuleset;
 
 import java.util.Map;
 
+/**
+ * Validates fields required by Ebay, and populates LocalItems with them.
+ * Builds EbayLocalOffer objects and attaches them to LocalItems.
+ */
 public class EbayItemBuilderRuleset implements ItemBuilderRuleset {
 
     private static final String VALID_PRICE_FORMAT = "FIXED_PRICE";
 
+    /**
+     * Array of rules that will be applied to incoming fields and applied
+     * against LocalItems.
+     */
     public static final EbayItemRule[] RULES = {
             new EbayItemRule("title", "productTitle", true),
             new EbayItemRule("description", "productDescription", true),

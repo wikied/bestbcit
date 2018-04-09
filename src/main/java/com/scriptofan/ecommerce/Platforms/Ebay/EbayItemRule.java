@@ -2,6 +2,10 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Exception.RulesetViolationException;
 
+/**
+ * Validates fields to be included in LocalItem objects, as per eBay's
+ * requirements.
+ */
 public class EbayItemRule {
     private final boolean   mustExist;
     private final String    keyInternal;
