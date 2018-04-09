@@ -1,5 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Services;
 
+import com.scriptofan.ecommerce.DummyEbayRequestData;
 import com.scriptofan.ecommerce.Platforms.Ebay.Entity.Category.Category;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 @Service
 public class CategoryRetrievalService {
 
-    private static final String TOKEN = "AgAAAA**AQAAAA**aAAAAA**9N6SWg**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4GpAJWFqA+dj6x9nY+seQ**KHYEAA**AAMAAA**qSW0YZRiuS5EcekB0E8AmFJFxV5QaxUEcIiuLbFGGTWXwVBsZbQxmZFYjV1rL9zdZ06lOYPyzMmrVOfyZHOCOb8FviT0D3VT8OeIWX2h9+b0aV32HI5z5oeN6ELTxGG4aG5SdnCQThMEzs+56pePrl/IskZErd9vJDpErWD3P05JdsnJIT+nIq0A4lggjNmQIJrLzfkj6Mx9OnCeXzldGGhnuelWPVCEWzsuzyVeE8GRFPDnktBpW5XT27O7Teh/cmvd+C2oV7Gy7H51K3AvqOYfPayKFxTeWZNLVRcliAP1KuQvAW1R4zjKnuAF22wR1c8Um+rCwwL6NDd4O+i+qYUFw/2xbUgdNio7wlrZBx9AtRIV/9FvPV1kiaT/T795+Dx1Gt5HNMVPi/YX57NquDrS7h4wKK6HW6QoijPVVZCnPlFqAxAQvBjMF6L9rFLrlAvukc/x6UgxeM0OSyj8Z3SVfJBtvuJcBiZtazJnJtIiDlt6t5McUhAtx4J2G26nI06Pb/U9aoiyDrOmiwazJJ3ciF3ug192NsJGXR3BEHRAIJTA7eHsPtJDhhTOfyAuCG+BBulv2loYvKwcrCj+tTGIh1ExME28DxV36jodZA1WSjHic0sDVvYMwSmgkpkfP8TJ/7TjSDR5amyk4gM5WOlzeqf427FeKPq43d/SUTCFURsUF3pq+H5TgzG14LgUQJKN2r6zMU2zYk0ZTjP2BkqBviU6xzlXf46kyCxABFctmr6sw72BZ/wAY0rHdxYt";
+    private static final String TOKEN = DummyEbayRequestData.ebayOAuthToken;
     private static final String TRADING_API_URL = "https://api.sandbox.ebay.com/ws/api.dll";
 
     /**
