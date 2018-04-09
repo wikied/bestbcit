@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Platforms.Ebay;
 
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.BadEbayTokenException;
 import com.scriptofan.ecommerce.Platforms.Ebay.Exception.Ebay500ServerException;
-import com.scriptofan.ecommerce.Platforms.Ebay.Exception.EbayCreateInventoryItemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;

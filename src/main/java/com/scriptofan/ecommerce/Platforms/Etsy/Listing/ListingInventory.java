@@ -1,6 +1,5 @@
 package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListingInventory {

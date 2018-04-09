@@ -14,6 +14,12 @@ public class StorageService {
 
     private final Path rootLocation = Paths.get("src/main/java/com/scriptofan/ecommerce/CSVParser/upload-dir");
 
+
+    /**
+     * Saves a multipart file to the upload-dir folder
+     * @param file is a  multipart file to to be saved
+     * @throws RuntimeException if the file failed to store
+     */
     public void store(MultipartFile file){
         try {
             Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
@@ -22,10 +28,16 @@ public class StorageService {
         }
     }
 
+    /**
+     * Deletes all the existing files in the upload-dir folder
+     */
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
+    /**
+     * Create a root directory to store the uploaded files
+     */
     public void init() {
         try {
             Files.createDirectory(rootLocation);

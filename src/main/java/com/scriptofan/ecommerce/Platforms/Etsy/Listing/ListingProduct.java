@@ -2,7 +2,6 @@ package com.scriptofan.ecommerce.Platforms.Etsy.Listing;
 
 import groovy.lang.PropertyValue;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class ListingProduct {

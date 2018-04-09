@@ -1,7 +1,6 @@
 package com.scriptofan.ecommerce.Platforms.Ebay.Entity.InventoryItem;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
