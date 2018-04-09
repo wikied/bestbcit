@@ -14,6 +14,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Responsible for getting and creating inventory location details
+ * via eBay's API.
+ */
 @Service
 public class LocationService {
 
