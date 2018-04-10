@@ -70,6 +70,7 @@ public class EtsyListingBuilderRuleset implements ItemBuilderRuleset {
             @Override
             public boolean validate(String value) throws RulesetViolationException {
                 super.validate(value);
+                value = value.toLowerCase();
                 if (value.equals(IS_SUPPLY_TRUE) || value.equals(IS_SUPPLY_FALSE)) {
                     return true;
                 }
